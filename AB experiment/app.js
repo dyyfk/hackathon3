@@ -9,6 +9,7 @@ const refs = {
   summaryStats: document.getElementById("summaryStats"),
   metricGrid: document.getElementById("metricGrid"),
   evidenceTable: document.getElementById("evidenceTable"),
+  featurePanel: document.getElementById("featurePanel"),
   suggestionGrid: document.getElementById("suggestionGrid"),
   exportButton: document.getElementById("exportButton"),
   runnerButton: document.getElementById("runnerButton"),
@@ -75,6 +76,8 @@ function renderEmptyDashboard() {
   refs.summaryStats.replaceChildren();
   refs.metricGrid.replaceChildren(emptyPanel("Metric Matrix"));
   refs.evidenceTable.replaceChildren(emptyPanel("Attribution"));
+  refs.featurePanel.replaceChildren();
+  refs.featurePanel.classList.add("hidden");
   refs.suggestionGrid.replaceChildren(emptyPanel("Suggestions"));
   if (window.lucide) {
     window.lucide.createIcons();
@@ -100,6 +103,7 @@ function render(data) {
   renderSummaryStats(matrix.summary_stats);
   renderMetricMatrix(matrix.metrics);
   renderEvidence(matrix.attribution_conclusion);
+  renderFeatureCandidate(data);
   renderSuggestions(matrix.suggestions);
 
   if (window.lucide) {
@@ -209,6 +213,54 @@ function renderSuggestions(groups) {
     column.append(iconWrap, content);
     refs.suggestionGrid.append(column);
   });
+}
+
+function renderFeatureCandidate(data) {
+  const candidate = window.syntheticFeatureCandidate?.buildFeatureCandidate(data);
+  refs.featurePanel.replaceChildren();
+  if (!candidate) {
+    refs.featurePanel.classList.add("hidden");
+    return;
+  }
+  refs.featurePanel.classList.remove("hidden");
+  const header = el("div", "feature-header");
+  const iconWrap = el("div", "feature-icon");
+  iconWrap.append(icon("sparkles"));
+  const copy = el("div", "");
+  copy.append(el("h2", "", "Next Feature Candidate"), el("p", "", candidate.source));
+  header.append(iconWrap, copy, featureConfidence(candidate.confidence));
+
+  const body = el("div", "feature-body");
+  const brief = el("section", "feature-brief");
+  brief.append(el("h3", "", candidate.title), el("p", "", candidate.problem));
+  body.append(brief, featureList("MVP", candidate.mvp), featureList("Success Metrics", candidate.metrics));
+
+  const evidence = el("div", "feature-evidence");
+  candidate.evidence.forEach((item) => {
+    const row = el("span", "");
+    row.append(icon("check"), document.createTextNode(item));
+    evidence.append(row);
+  });
+  refs.featurePanel.append(header, body, evidence);
+}
+
+function featureConfidence(value) {
+  const badge = el("span", "feature-confidence");
+  badge.append(icon("gauge"), document.createTextNode(value));
+  return badge;
+}
+
+function featureList(title, items) {
+  const section = el("section", "feature-list");
+  section.append(el("strong", "", title));
+  const list = document.createElement("ul");
+  items.slice(0, 4).forEach((item) => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    list.append(li);
+  });
+  section.append(list);
+  return section;
 }
 
 function icon(name) {
