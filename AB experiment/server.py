@@ -164,8 +164,11 @@ def get_job(job_id: str) -> Dict[str, Any]:
 def run_job(job_id: str, config: Dict[str, Any]) -> None:
     update_job(job_id, status="running", started_at=datetime.now(timezone.utc).isoformat())
     try:
-        a_stdout = run_variant("A", config)
-        b_stdout = run_variant("B", config)
+        with ThreadPoolExecutor(max_workers=2) as variant_executor:
+            a_future = variant_executor.submit(run_variant, "A", config)
+            b_future = variant_executor.submit(run_variant, "B", config)
+            a_stdout = a_future.result()
+            b_stdout = b_future.result()
         (RUNS_DIR / f"{job_id}_A.out").write_text(a_stdout, encoding="utf-8")
         (RUNS_DIR / f"{job_id}_B.out").write_text(b_stdout, encoding="utf-8")
         result = normalize_ab_run(a_stdout=a_stdout, b_stdout=b_stdout, config=config, run_id=job_id)
@@ -190,6 +193,10 @@ def run_variant(label: str, config: Dict[str, Any]) -> str:
         str(SCRIPT_PATH),
         "--url",
         url,
+        "--variant",
+        label,
+        "--trace-mode",
+        "rule",
         "--profiles",
         str(config["profiles"]),
         "--runs",
@@ -204,7 +211,7 @@ def run_variant(label: str, config: Dict[str, Any]) -> str:
         cwd=str(BASE_DIR),
         text=True,
         capture_output=True,
-        timeout=max(120, int(config["codex_timeout"]) * 3),
+        timeout=max(120, int(config["codex_timeout"]) * 4),
         check=False,
     )
     if completed.returncode != 0:

@@ -1,0 +1,1406 @@
+
+=== 1) GENERATED_SYNTHETIC_USERS_JSON ===
+{
+  "profiles": [
+    {
+      "id": "airbnb_u_001",
+      "segment": "budget_weekend_couple",
+      "goal": "Find an affordable two-night Lake Tahoe stay for a couple and decide which listing is worth investigating further.",
+      "task": "On the Homes tab, search Lake Tahoe for 2 guests, compare the visible two-night prices and ratings, identify the best low-price option, and stop after recording whether the couple would continue to listing details.",
+      "constraints": {
+        "destination": "Lake Tahoe",
+        "guests": 2,
+        "budget_preference": "lowest total visible price with acceptable rating"
+      },
+      "behavior_style": {
+        "patience": 0.52,
+        "exploration": 0.38,
+        "price_sensitivity": 0.94,
+        "trust_sensitivity": 0.62,
+        "detail_orientation": 0.55
+      },
+      "success_criteria": [
+        "Search is submitted with Lake Tahoe and 2 guests.",
+        "Lowest visible price option is identified.",
+        "Rating and guest-favorite signals are considered.",
+        "No booking, account action, host message, or payment step is attempted."
+      ],
+      "frustration_triggers": [
+        "Fees are not visible in the comparison view.",
+        "Guest count controls are unclear.",
+        "Low-price listings lack enough detail to judge value."
+      ]
+    },
+    {
+      "id": "airbnb_u_002",
+      "segment": "budget_weekend_couple",
+      "goal": "Compare budget-friendly cabin options for a short weekend stay.",
+      "task": "Search for Lake Tahoe with 2 guests, focus on cabin listings, compare Cabin in Kings Beach and Cabin in South Lake Tahoe by visible price, rating, and Guest favorite signal, then stop with a preferred option.",
+      "constraints": {
+        "destination": "Lake Tahoe",
+        "guests": 2,
+        "budget_preference": "prefer cabin under the higher visible cabin price"
+      },
+      "behavior_style": {
+        "patience": 0.47,
+        "exploration": 0.44,
+        "price_sensitivity": 0.89,
+        "trust_sensitivity": 0.7,
+        "detail_orientation": 0.5
+      },
+      "success_criteria": [
+        "Relevant cabin listings are found or noted from visible cards.",
+        "Price difference is considered before rating.",
+        "A single preferred cabin is selected for further review.",
+        "Task stops at comparison or intent assessment."
+      ],
+      "frustration_triggers": [
+        "Cabin filters are unavailable or hard to find.",
+        "Total cost is ambiguous.",
+        "Guest favorite badge does not explain why it matters."
+      ]
+    },
+    {
+      "id": "airbnb_u_003",
+      "segment": "budget_weekend_couple",
+      "goal": "Decide whether a higher-rated listing justifies paying more for a weekend trip.",
+      "task": "Search Lake Tahoe for 2 guests, compare the $498 Cabin in Kings Beach against the $588 Condo in South Lake Tahoe, inspect any available listing details, and stop after deciding whether the cheaper cabin is sufficient.",
+      "constraints": {
+        "destination": "Lake Tahoe",
+        "guests": 2,
+        "budget_preference": "balance visible price against rating"
+      },
+      "behavior_style": {
+        "patience": 0.6,
+        "exploration": 0.5,
+        "price_sensitivity": 0.86,
+        "trust_sensitivity": 0.66,
+        "detail_orientation": 0.64
+      },
+      "success_criteria": [
+        "Both target listings are compared.",
+        "Visible rating and price are captured.",
+        "Any missing fee or detail information is noted.",
+        "No checkout submission or personal data entry occurs."
+      ],
+      "frustration_triggers": [
+        "Listing detail navigation is unclear.",
+        "Taxes or cleaning fees are hidden.",
+        "Price comparison requires too many clicks."
+      ]
+    },
+    {
+      "id": "airbnb_u_004",
+      "segment": "budget_weekend_couple",
+      "goal": "Quickly assess if Staybnb can support a spontaneous low-cost weekend plan.",
+      "task": "Use the search controls to enter Lake Tahoe, keep the trip to 2 guests, scan the first carousel of popular homes, and stop after rating confidence in finding a stay under a budget-conscious threshold.",
+      "constraints": {
+        "destination": "Lake Tahoe",
+        "guests": 2,
+        "budget_preference": "avoid listings above midrange visible prices"
+      },
+      "behavior_style": {
+        "patience": 0.35,
+        "exploration": 0.3,
+        "price_sensitivity": 0.97,
+        "trust_sensitivity": 0.52,
+        "detail_orientation": 0.4
+      },
+      "success_criteria": [
+        "Search path is completed without account creation.",
+        "At least three visible listings are price-compared.",
+        "Confidence to continue is assessed.",
+        "No wishlist action is used if it requires login."
+      ],
+      "frustration_triggers": [
+        "Search results do not clearly update.",
+        "Budget options are mixed with expensive listings.",
+        "Checkout costs are not previewed early."
+      ]
+    },
+    {
+      "id": "airbnb_u_005",
+      "segment": "family_planner",
+      "goal": "Find a Lake Tahoe stay that looks suitable for a small family and worth deeper comparison.",
+      "task": "Search Lake Tahoe for 4 guests, compare visible listings for rating, price, and trust signals, then stop after choosing up to two listings for a family shortlist.",
+      "constraints": {
+        "destination": "Lake Tahoe",
+        "guests": 4,
+        "budget_preference": "moderate price with strong trust signals"
+      },
+      "behavior_style": {
+        "patience": 0.78,
+        "exploration": 0.62,
+        "price_sensitivity": 0.68,
+        "trust_sensitivity": 0.88,
+        "detail_orientation": 0.84
+      },
+      "success_criteria": [
+        "Guest count is adjusted to 4 if controls allow.",
+        "At least two listings are compared.",
+        "Guest favorite and rating signals influence the shortlist.",
+        "Task ends before booking or account creation."
+      ],
+      "frustration_triggers": [
+        "Guest capacity is not visible on cards.",
+        "Family-relevant amenities are not obvious.",
+        "Fees and cancellation details are missing."
+      ]
+    },
+    {
+      "id": "airbnb_u_006",
+      "segment": "family_planner",
+      "goal": "Assess whether a higher-priced home is justified for a family stay.",
+      "task": "Search for Lake Tahoe with 4 guests, compare Home in Carnelian Bay against lower-priced options, look for visible reasons to justify the price, and stop with a continue-or-abandon decision.",
+      "constraints": {
+        "destination": "Lake Tahoe",
+        "guests": 4,
+        "budget_preference": "willing to pay more only for clear family value"
+      },
+      "behavior_style": {
+        "patience": 0.82,
+        "exploration": 0.55,
+        "price_sensitivity": 0.6,
+        "trust_sensitivity": 0.9,
+        "detail_orientation": 0.86
+      },
+      "success_criteria": [
+        "Higher-priced home is compared against at least two cheaper options.",
+        "Rating and Guest favorite badge are recorded.",
+        "Missing family suitability information is noted.",
+        "No checkout submission is attempted."
+      ],
+      "frustration_triggers": [
+        "Beds, rooms, or capacity are not visible early.",
+        "High price lacks explanation.",
+        "Trust signals are too vague."
+      ]
+    },
+    {
+      "id": "airbnb_u_007",
+      "segment": "family_planner",
+      "goal": "Create a cautious family shortlist without committing to a reservation.",
+      "task": "Use Lake Tahoe and 3 guests in the search, inspect the visible listing cards, avoid login-only actions, and stop after selecting the safest-looking option for later review.",
+      "constraints": {
+        "destination": "Lake Tahoe",
+        "guests": 3,
+        "budget_preference": "avoid extreme high prices unless trust is exceptional"
+      },
+      "behavior_style": {
+        "patience": 0.74,
+        "exploration": 0.58,
+        "price_sensitivity": 0.72,
+        "trust_sensitivity": 0.91,
+        "detail_orientation": 0.8
+      },
+      "success_criteria": [
+        "Search uses 3 guests.",
+        "Listings are compared by price and rating.",
+        "A single safest-looking option is chosen.",
+        "No real personal data or payment details are entered."
+      ],
+      "frustration_triggers": [
+        "Wishlist requires account access.",
+        "Safety or accessibility details are buried.",
+        "Checkout path appears before enough comparison detail."
+      ]
+    },
+    {
+      "id": "airbnb_u_008",
+      "segment": "family_planner",
+      "goal": "Determine whether the booking flow gives enough information for a family decision.",
+      "task": "Search Lake Tahoe for 5 guests, attempt to compare details for the visible homes, and stop after documenting whether the page provides enough information to continue toward mock checkout intent.",
+      "constraints": {
+        "destination": "Lake Tahoe",
+        "guests": 5,
+        "budget_preference": "value-oriented but flexible for the right fit"
+      },
+      "behavior_style": {
+        "patience": 0.86,
+        "exploration": 0.66,
+        "price_sensitivity": 0.64,
+        "trust_sensitivity": 0.87,
+        "detail_orientation": 0.92
+      },
+      "success_criteria": [
+        "Guest count is set or limitation is noted.",
+        "Comparison includes visible price, rating, and badge signals.",
+        "Readiness to continue is assessed without booking.",
+        "Any missing detail needed for a family is captured."
+      ],
+      "frustration_triggers": [
+        "Guest controls do not support desired party size clearly.",
+        "Listing cards omit family capacity.",
+        "Mock checkout appears before full price clarity."
+      ]
+    },
+    {
+      "id": "airbnb_u_009",
+      "segment": "remote_worker_business_traveler",
+      "goal": "Find a quiet, reliable Lake Tahoe stay for a short work trip.",
+      "task": "Search Lake Tahoe for 1 guest, compare listings by rating and visible professionalism signals, and stop after selecting the listing that seems most reliable for a solo work stay.",
+      "constraints": {
+        "destination": "Lake Tahoe",
+        "guests": 1,
+        "budget_preference": "midrange acceptable if rating is strong"
+      },
+      "behavior_style": {
+        "patience": 0.58,
+        "exploration": 0.42,
+        "price_sensitivity": 0.54,
+        "trust_sensitivity": 0.82,
+        "detail_orientation": 0.76
+      },
+      "success_criteria": [
+        "Search is completed for 1 guest.",
+        "Highest-confidence listing is chosen from visible cards.",
+        "Rating is prioritized over lowest price when justified.",
+        "No account, message, or payment action is attempted."
+      ],
+      "frustration_triggers": [
+        "Workspace or Wi-Fi details are not visible.",
+        "Listing details require too many clicks.",
+        "Total price is unclear for expense planning."
+      ]
+    },
+    {
+      "id": "airbnb_u_010",
+      "segment": "remote_worker_business_traveler",
+      "goal": "Quickly assess whether the site can support a reimbursable two-night business stay.",
+      "task": "Use the search controls for Lake Tahoe and 1 guest, compare visible two-night prices, identify an option that would be easy to justify on expenses, and stop at intent assessment.",
+      "constraints": {
+        "destination": "Lake Tahoe",
+        "guests": 1,
+        "budget_preference": "clear and defensible total price"
+      },
+      "behavior_style": {
+        "patience": 0.42,
+        "exploration": 0.28,
+        "price_sensitivity": 0.7,
+        "trust_sensitivity": 0.74,
+        "detail_orientation": 0.68
+      },
+      "success_criteria": [
+        "Visible two-night prices are compared.",
+        "A reimbursable-looking option is identified.",
+        "Unclear fees are noted as expense risk.",
+        "No checkout submission or payment entry occurs."
+      ],
+      "frustration_triggers": [
+        "Fees are hidden until late.",
+        "Search flow feels slower than expected.",
+        "Receipts or business details are not previewed."
+      ]
+    },
+    {
+      "id": "airbnb_u_011",
+      "segment": "remote_worker_business_traveler",
+      "goal": "Choose between convenience and trust signals for a solo work stay.",
+      "task": "Search Lake Tahoe for 1 guest, compare the condo and cabin listings, inspect available details if reachable, and stop after deciding which one is more suitable for work travel.",
+      "constraints": {
+        "destination": "Lake Tahoe",
+        "guests": 1,
+        "budget_preference": "reasonable price with high confidence"
+      },
+      "behavior_style": {
+        "patience": 0.55,
+        "exploration": 0.48,
+        "price_sensitivity": 0.58,
+        "trust_sensitivity": 0.8,
+        "detail_orientation": 0.72
+      },
+      "success_criteria": [
+        "Condo and cabin options are compared.",
+        "Rating and Guest favorite status are used in the decision.",
+        "A work-travel suitability judgment is recorded.",
+        "No real personal information is submitted."
+      ],
+      "frustration_triggers": [
+        "No business-friendly amenity information appears.",
+        "Guest favorite signal lacks context.",
+        "Mock checkout does not clarify final cost."
+      ]
+    },
+    {
+      "id": "airbnb_u_012",
+      "segment": "remote_worker_business_traveler",
+      "goal": "Evaluate whether a quick booking flow feels trustworthy enough for a business traveler.",
+      "task": "Search Lake Tahoe for 2 guests to simulate a colleague trip, compare visible listings, proceed only as far as a non-submitted mock checkout intent screen if available, and stop before entering personal or payment data.",
+      "constraints": {
+        "destination": "Lake Tahoe",
+        "guests": 2,
+        "budget_preference": "company-friendly price with strong rating"
+      },
+      "behavior_style": {
+        "patience": 0.5,
+        "exploration": 0.35,
+        "price_sensitivity": 0.63,
+        "trust_sensitivity": 0.86,
+        "detail_orientation": 0.7
+      },
+      "success_criteria": [
+        "Search is completed for 2 guests.",
+        "A preferred listing is selected based on visible evidence.",
+        "Mock checkout intent is assessed without submission.",
+        "No account, host message, or payment detail is used."
+      ],
+      "frustration_triggers": [
+        "Checkout path feels too committal.",
+        "Final price is not visible before intent assessment.",
+        "Trust and cancellation information are sparse."
+      ]
+    },
+    {
+      "id": "airbnb_u_013",
+      "segment": "experience_seeker",
+      "goal": "Explore whether Staybnb supports a memorable Lake Tahoe getaway beyond basic lodging.",
+      "task": "Start on the Experiences tab if available, note what experience options or limitations appear, return to Homes if needed, compare distinctive Lake Tahoe stays, and stop after choosing the most interesting option to explore later.",
+      "constraints": {
+        "destination": "Lake Tahoe",
+        "guests": 2,
+        "budget_preference": "flexible for distinctive stays"
+      },
+      "behavior_style": {
+        "patience": 0.7,
+        "exploration": 0.9,
+        "price_sensitivity": 0.42,
+        "trust_sensitivity": 0.64,
+        "detail_orientation": 0.66
+      },
+      "success_criteria": [
+        "Experiences entry point is tried or its absence is noted.",
+        "At least two homes are compared for uniqueness and rating.",
+        "A most-interesting option is selected.",
+        "No booking or account action is performed."
+      ],
+      "frustration_triggers": [
+        "Experiences tab does not expose useful content.",
+        "Listings feel generic.",
+        "Photos or detailed descriptions are unavailable."
+      ]
+    },
+    {
+      "id": "airbnb_u_014",
+      "segment": "experience_seeker",
+      "goal": "Find a high-rated cabin that feels special enough for a short trip.",
+      "task": "Search Lake Tahoe for 2 guests, compare cabin listings first, use ratings and Guest favorite badges to decide which cabin feels most appealing, and stop at comparison.",
+      "constraints": {
+        "destination": "Lake Tahoe",
+        "guests": 2,
+        "budget_preference": "secondary to experience quality"
+      },
+      "behavior_style": {
+        "patience": 0.65,
+        "exploration": 0.78,
+        "price_sensitivity": 0.38,
+        "trust_sensitivity": 0.7,
+        "detail_orientation": 0.62
+      },
+      "success_criteria": [
+        "Cabin listings are identified from visible cards.",
+        "Experience appeal is weighed with rating.",
+        "A preferred cabin is selected without checkout.",
+        "Missing experiential details are recorded."
+      ],
+      "frustration_triggers": [
+        "No photos or atmosphere details are visible.",
+        "Only price and rating are available.",
+        "Comparison controls are too shallow."
+      ]
+    },
+    {
+      "id": "airbnb_u_015",
+      "segment": "experience_seeker",
+      "goal": "Assess whether a premium Lake Tahoe home looks worth the splurge for a memorable stay.",
+      "task": "Search Lake Tahoe for 2 guests, compare Home in Carnelian Bay with cheaper alternatives, look for visible trust or uniqueness signals, and stop after deciding whether to continue exploring it.",
+      "constraints": {
+        "destination": "Lake Tahoe",
+        "guests": 2,
+        "budget_preference": "splurge acceptable if clearly justified"
+      },
+      "behavior_style": {
+        "patience": 0.73,
+        "exploration": 0.82,
+        "price_sensitivity": 0.45,
+        "trust_sensitivity": 0.72,
+        "detail_orientation": 0.74
+      },
+      "success_criteria": [
+        "Premium listing is compared against at least two cheaper listings.",
+        "Rating and Guest favorite signals are considered.",
+        "Continue intent is assessed without purchase action.",
+        "No personal data or payment step is entered."
+      ],
+      "frustration_triggers": [
+        "Premium price lacks visible justification.",
+        "Listing detail is too limited.",
+        "Fees are not transparent before intent assessment."
+      ]
+    },
+    {
+      "id": "airbnb_u_016",
+      "segment": "experience_seeker",
+      "goal": "Compare lodging versus new service or experience entry points without committing.",
+      "task": "Click through Homes, Experiences, and Services tabs if present, search Lake Tahoe where applicable, then stop after noting which path feels most relevant for planning a getaway.",
+      "constraints": {
+        "destination": "Lake Tahoe",
+        "guests": 2,
+        "budget_preference": "open-ended, experience-driven"
+      },
+      "behavior_style": {
+        "patience": 0.68,
+        "exploration": 0.95,
+        "price_sensitivity": 0.34,
+        "trust_sensitivity": 0.6,
+        "detail_orientation": 0.58
+      },
+      "success_criteria": [
+        "Primary tabs are explored safely.",
+        "No login or sign-up flow is started.",
+        "A preferred planning path is identified.",
+        "Task remains at browsing and intent assessment only."
+      ],
+      "frustration_triggers": [
+        "New tabs are labeled but not functional.",
+        "Navigation state is unclear.",
+        "Search context is lost between tabs."
+      ]
+    },
+    {
+      "id": "airbnb_u_017",
+      "segment": "first_time_cautious_user",
+      "goal": "Understand whether the Staybnb search flow feels safe and clear before considering a stay.",
+      "task": "Use the homepage controls to search Lake Tahoe for 1 guest, carefully inspect labels, visible prices, ratings, and footer trust links, then stop after deciding whether the site feels trustworthy enough to continue.",
+      "constraints": {
+        "destination": "Lake Tahoe",
+        "guests": 1,
+        "budget_preference": "low risk over lowest price"
+      },
+      "behavior_style": {
+        "patience": 0.8,
+        "exploration": 0.36,
+        "price_sensitivity": 0.64,
+        "trust_sensitivity": 0.96,
+        "detail_orientation": 0.88
+      },
+      "success_criteria": [
+        "Search controls are used without account creation.",
+        "Trust and safety or research standards links are noticed if visible.",
+        "At least one listing is evaluated for confidence.",
+        "No booking, host message, or payment step is attempted."
+      ],
+      "frustration_triggers": [
+        "The flow asks for commitment too early.",
+        "Trust information is hard to find.",
+        "Total price is incomplete."
+      ]
+    },
+    {
+      "id": "airbnb_u_018",
+      "segment": "first_time_cautious_user",
+      "goal": "Learn how guest count and search results work without making a reservation.",
+      "task": "Search Lake Tahoe, adjust Who to 2 guests if possible, observe how the results or listing cards respond, and stop after documenting whether the controls were understandable.",
+      "constraints": {
+        "destination": "Lake Tahoe",
+        "guests": 2,
+        "budget_preference": "clear cost before preference"
+      },
+      "behavior_style": {
+        "patience": 0.72,
+        "exploration": 0.32,
+        "price_sensitivity": 0.7,
+        "trust_sensitivity": 0.9,
+        "detail_orientation": 0.82
+      },
+      "success_criteria": [
+        "Guest control is attempted and result is observed.",
+        "Search is submitted or limitation is noted.",
+        "User confidence in the control flow is assessed.",
+        "No account, payment, or checkout submission occurs."
+      ],
+      "frustration_triggers": [
+        "Guest selector labels are ambiguous.",
+        "Results do not visibly change.",
+        "Buttons look like they may trigger booking."
+      ]
+    },
+    {
+      "id": "airbnb_u_019",
+      "segment": "first_time_cautious_user",
+      "goal": "Compare listings cautiously and avoid accidental booking actions.",
+      "task": "Search Lake Tahoe for 1 guest, open or inspect listing details only if clearly safe, avoid wishlist and account links, and stop after identifying the safest-looking listing to revisit.",
+      "constraints": {
+        "destination": "Lake Tahoe",
+        "guests": 1,
+        "budget_preference": "prefer transparent, lower-risk options"
+      },
+      "behavior_style": {
+        "patience": 0.76,
+        "exploration": 0.4,
+        "price_sensitivity": 0.66,
+        "trust_sensitivity": 0.94,
+        "detail_orientation": 0.9
+      },
+      "success_criteria": [
+        "At least two listings are compared cautiously.",
+        "Potentially account-gated actions are avoided.",
+        "A safest-looking listing is selected.",
+        "The task stops before mock checkout submission."
+      ],
+      "frustration_triggers": [
+        "Wishlist icons are unclear.",
+        "Listing clicks appear to move toward checkout.",
+        "Safety and cancellation details are not obvious."
+      ]
+    },
+    {
+      "id": "airbnb_u_020",
+      "segment": "first_time_cautious_user",
+      "goal": "Assess checkout intent without entering real information or making a booking.",
+      "task": "Search Lake Tahoe for 2 guests, select the listing that looks most trustworthy from visible ratings and badges, proceed only if the mock checkout path is clearly non-final, and stop immediately before any submit, personal data, or payment step.",
+      "constraints": {
+        "destination": "Lake Tahoe",
+        "guests": 2,
+        "budget_preference": "trust and transparency before price"
+      },
+      "behavior_style": {
+        "patience": 0.84,
+        "exploration": 0.45,
+        "price_sensitivity": 0.62,
+        "trust_sensitivity": 0.98,
+        "detail_orientation": 0.92
+      },
+      "success_criteria": [
+        "Preferred listing is chosen using visible trust signals.",
+        "Checkout intent is assessed without completing checkout.",
+        "No real personal data, account action, host message, or payment detail is entered.",
+        "Any unclear final-submit risk is documented."
+      ],
+      "frustration_triggers": [
+        "Mock checkout is not clearly labeled as safe.",
+        "Final price is still hidden.",
+        "The page pressures the user to continue before enough review."
+      ]
+    }
+  ]
+}
+
+=== 2) SYNTHETIC_USER_BEHAVIOR_TRACES_JSON ===
+{
+  "page_context": {
+    "schema_version": "browser_page_context_v1",
+    "observation_source": "urllib_html",
+    "url": "http://127.0.0.1:3000/versionA",
+    "final_url": "http://127.0.0.1:3000/versionA",
+    "page_kind": "staybnb_booking",
+    "page_type": "Staybnb booking flow",
+    "title": "staybnb",
+    "headings": [
+      "staybnb",
+      "Search stays",
+      "Compare details",
+      "Mock checkout",
+      "About",
+      "Community",
+      "Host",
+      "Support"
+    ],
+    "buttons": [
+      "Explore",
+      "Menu",
+      "Events",
+      "Guests",
+      "1 guest",
+      "Search"
+    ],
+    "links": [
+      "S",
+      "staybnb",
+      "Places to stay",
+      "Experiences",
+      "Online experiences",
+      "Become a host",
+      "Sign up",
+      "Log in",
+      "How staybnb works",
+      "Research standards",
+      "Careers",
+      "Guest stories",
+      "Accessibility",
+      "Invite a friend",
+      "Host your place",
+      "Responsible hosting",
+      "Resources",
+      "Help center",
+      "Flexible policies",
+      "Trust and safety"
+    ],
+    "labels": [
+      "Location",
+      "Check in",
+      "Check out"
+    ],
+    "visible_text_excerpt": "staybnb\nS\nPlaces to stay\nExperiences\nOnline experiences\nBecome a host\nSign up\nLog in\nExplore\nMenu\nVariant A baseline\nA compact single-page booking lab for search, comparison, checkout, and UX event capture.\nEvents\nLocation\nCheck in\nCheck out\nGuests\n1 guest\nSearch\n0\n1\nSearch stays\n2\nCompare details\n3\nMock checkout\nAbout\nHow staybnb works\nResearch standards\nCareers\nCommunity\nGuest stories\nAccessibility\nInvite a friend\nHost\nHost your place\nResponsible hosting\nResources\nSupport\nHelp center\nFlexible policies\nTrust and safety"
+  },
+  "traces": [
+    {
+      "persona_id": "airbnb_u_001",
+      "segment": "budget_weekend_couple",
+      "goal": "Find an affordable two-night Lake Tahoe stay for a couple and decide which listing is worth investigating further.",
+      "steps": [
+        {
+          "step": 1,
+          "observation": "Staybnb shows a compact booking-oriented homepage with search, comparison, and mock checkout stages.",
+          "persona_thought": "I can see this is meant for finding a stay near Lake Tahoe.",
+          "intent": "orient_on_staybnb",
+          "action": "scan header, hero copy, and booking workflow",
+          "target_ui": "Staybnb homepage",
+          "expected_result": "Confirm that the page supports stay discovery.",
+          "friction": 0.08,
+          "event_type": "view",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 9
+        },
+        {
+          "step": 2,
+          "observation": "The form exposes LOCATION, CHECK IN, CHECK OUT, and GUESTS in one row.",
+          "persona_thought": "I will set Lake Tahoe and 2 guest(s) without leaving the page.",
+          "intent": "configure_trip",
+          "action": "fill location, dates, and guests",
+          "target_ui": "Search form",
+          "expected_result": "Trip context is ready for search.",
+          "friction": 0.14,
+          "event_type": "input",
+          "clicked": true,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 24
+        },
+        {
+          "step": 3,
+          "observation": "Search is the clear primary action, and the page labels the next phases as Search stays, Compare details, and Mock checkout.",
+          "persona_thought": "The flow tells me what will happen after search.",
+          "intent": "submit_search",
+          "action": "click Search",
+          "target_ui": "Search button",
+          "expected_result": "Move from trip setup into stay comparison.",
+          "friction": 0.1,
+          "event_type": "primary_click",
+          "clicked": true,
+          "like_signal": false,
+          "primary_action": true,
+          "detail_action": false,
+          "elapsed_seconds": 8
+        },
+        {
+          "step": 4,
+          "observation": "The page is instrumented for events, which supports measuring friction during the experiment.",
+          "persona_thought": "I expect the team can capture where I hesitate.",
+          "intent": "notice_tracking",
+          "action": "scan Events counter and flow stage labels",
+          "target_ui": "Events and stage indicators",
+          "expected_result": "Understand that behavior can be measured without a real booking.",
+          "friction": 0.16,
+          "event_type": "scroll",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 16
+        },
+        {
+          "step": 5,
+          "observation": "Search results expose listing cards with View details actions, prices, ratings, beds, and guest capacity.",
+          "persona_thought": "I can open a listing and use that as my shortlist/like signal.",
+          "intent": "compare_details",
+          "action": "click View details on the best matching listing",
+          "target_ui": "Listing card View details button",
+          "expected_result": "Decide whether the visible details are enough to continue.",
+          "friction": 0.33,
+          "event_type": "detail_open",
+          "clicked": true,
+          "like_signal": true,
+          "primary_action": false,
+          "detail_action": true,
+          "elapsed_seconds": 30
+        },
+        {
+          "step": 6,
+          "observation": "The detail page offers a Reserve CTA and clarifies that fees are calculated at checkout.",
+          "persona_thought": "I can express intent without entering payment or sending host messages.",
+          "intent": "assess_checkout_intent",
+          "action": "activate mock checkout intent CTA",
+          "target_ui": "Reserve button",
+          "expected_result": "Measure purchase intent safely.",
+          "friction": 0.16,
+          "event_type": "primary_click",
+          "clicked": true,
+          "like_signal": false,
+          "primary_action": true,
+          "detail_action": false,
+          "elapsed_seconds": 18
+        }
+      ],
+      "final_feedback": {
+        "task_success": true,
+        "scores": {
+          "ease_of_search": 8,
+          "price_clarity": 4,
+          "trust": 8,
+          "purchase_intent": 6
+        },
+        "liked_features": [
+          "The single-page flow makes search, comparison, and mock checkout easy to understand.",
+          "Event capture signals make the experiment instrumentation visible to the team."
+        ],
+        "confusion_points": [
+          "Final cost and listing detail need to be clearer before users move into checkout intent."
+        ],
+        "friction_themes": [
+          "price_clarity"
+        ],
+        "recommendation": "Keep the compact search-to-mock-checkout path, but expose total price and listing detail earlier."
+      },
+      "variant": "A",
+      "trace_source": "rule_ui_specific",
+      "task_seconds": 105,
+      "converted": true,
+      "dropoff": false,
+      "satisfaction": 4.0
+    },
+    {
+      "persona_id": "airbnb_u_005",
+      "segment": "family_planner",
+      "goal": "Find a Lake Tahoe stay that looks suitable for a small family and worth deeper comparison.",
+      "steps": [
+        {
+          "step": 1,
+          "observation": "Staybnb shows a compact booking-oriented homepage with search, comparison, and mock checkout stages.",
+          "persona_thought": "I can see this is meant for finding a stay near Lake Tahoe.",
+          "intent": "orient_on_staybnb",
+          "action": "scan header, hero copy, and booking workflow",
+          "target_ui": "Staybnb homepage",
+          "expected_result": "Confirm that the page supports stay discovery.",
+          "friction": 0.08,
+          "event_type": "view",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 9
+        },
+        {
+          "step": 2,
+          "observation": "The form exposes LOCATION, CHECK IN, CHECK OUT, and GUESTS in one row.",
+          "persona_thought": "I will set Lake Tahoe and 4 guest(s) without leaving the page.",
+          "intent": "configure_trip",
+          "action": "fill location, dates, and guests",
+          "target_ui": "Search form",
+          "expected_result": "Trip context is ready for search.",
+          "friction": 0.14,
+          "event_type": "input",
+          "clicked": true,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 24
+        },
+        {
+          "step": 3,
+          "observation": "Search is the clear primary action, and the page labels the next phases as Search stays, Compare details, and Mock checkout.",
+          "persona_thought": "The flow tells me what will happen after search.",
+          "intent": "submit_search",
+          "action": "click Search",
+          "target_ui": "Search button",
+          "expected_result": "Move from trip setup into stay comparison.",
+          "friction": 0.1,
+          "event_type": "primary_click",
+          "clicked": true,
+          "like_signal": false,
+          "primary_action": true,
+          "detail_action": false,
+          "elapsed_seconds": 8
+        },
+        {
+          "step": 4,
+          "observation": "The page is instrumented for events, which supports measuring friction during the experiment.",
+          "persona_thought": "I expect the team can capture where I hesitate.",
+          "intent": "notice_tracking",
+          "action": "scan Events counter and flow stage labels",
+          "target_ui": "Events and stage indicators",
+          "expected_result": "Understand that behavior can be measured without a real booking.",
+          "friction": 0.19,
+          "event_type": "scroll",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 16
+        },
+        {
+          "step": 5,
+          "observation": "Search results expose listing cards with View details actions, prices, ratings, beds, and guest capacity.",
+          "persona_thought": "I can open a listing and use that as my shortlist/like signal.",
+          "intent": "compare_details",
+          "action": "click View details on the best matching listing",
+          "target_ui": "Listing card View details button",
+          "expected_result": "Decide whether the visible details are enough to continue.",
+          "friction": 0.29,
+          "event_type": "detail_open",
+          "clicked": true,
+          "like_signal": true,
+          "primary_action": false,
+          "detail_action": true,
+          "elapsed_seconds": 30
+        },
+        {
+          "step": 6,
+          "observation": "The detail page offers a Reserve CTA and clarifies that fees are calculated at checkout.",
+          "persona_thought": "I can express intent without entering payment or sending host messages.",
+          "intent": "assess_checkout_intent",
+          "action": "activate mock checkout intent CTA",
+          "target_ui": "Reserve button",
+          "expected_result": "Measure purchase intent safely.",
+          "friction": 0.19,
+          "event_type": "primary_click",
+          "clicked": true,
+          "like_signal": false,
+          "primary_action": true,
+          "detail_action": false,
+          "elapsed_seconds": 18
+        }
+      ],
+      "final_feedback": {
+        "task_success": true,
+        "scores": {
+          "ease_of_search": 8,
+          "price_clarity": 5,
+          "trust": 8,
+          "purchase_intent": 6
+        },
+        "liked_features": [
+          "The single-page flow makes search, comparison, and mock checkout easy to understand.",
+          "Event capture signals make the experiment instrumentation visible to the team."
+        ],
+        "confusion_points": [
+          "Final cost and listing detail need to be clearer before users move into checkout intent."
+        ],
+        "friction_themes": [
+          "price_clarity"
+        ],
+        "recommendation": "Keep the compact search-to-mock-checkout path, but expose total price and listing detail earlier."
+      },
+      "variant": "A",
+      "trace_source": "rule_ui_specific",
+      "task_seconds": 105,
+      "converted": true,
+      "dropoff": false,
+      "satisfaction": 4.0
+    },
+    {
+      "persona_id": "airbnb_u_009",
+      "segment": "remote_worker_business_traveler",
+      "goal": "Find a quiet, reliable Lake Tahoe stay for a short work trip.",
+      "steps": [
+        {
+          "step": 1,
+          "observation": "Staybnb shows a compact booking-oriented homepage with search, comparison, and mock checkout stages.",
+          "persona_thought": "I can see this is meant for finding a stay near Lake Tahoe.",
+          "intent": "orient_on_staybnb",
+          "action": "scan header, hero copy, and booking workflow",
+          "target_ui": "Staybnb homepage",
+          "expected_result": "Confirm that the page supports stay discovery.",
+          "friction": 0.08,
+          "event_type": "view",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 9
+        },
+        {
+          "step": 2,
+          "observation": "The form exposes LOCATION, CHECK IN, CHECK OUT, and GUESTS in one row.",
+          "persona_thought": "I will set Lake Tahoe and 1 guest(s) without leaving the page.",
+          "intent": "configure_trip",
+          "action": "fill location, dates, and guests",
+          "target_ui": "Search form",
+          "expected_result": "Trip context is ready for search.",
+          "friction": 0.14,
+          "event_type": "input",
+          "clicked": true,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 24
+        },
+        {
+          "step": 3,
+          "observation": "Search is the clear primary action, and the page labels the next phases as Search stays, Compare details, and Mock checkout.",
+          "persona_thought": "The flow tells me what will happen after search.",
+          "intent": "submit_search",
+          "action": "click Search",
+          "target_ui": "Search button",
+          "expected_result": "Move from trip setup into stay comparison.",
+          "friction": 0.1,
+          "event_type": "primary_click",
+          "clicked": true,
+          "like_signal": false,
+          "primary_action": true,
+          "detail_action": false,
+          "elapsed_seconds": 8
+        },
+        {
+          "step": 4,
+          "observation": "The page is instrumented for events, which supports measuring friction during the experiment.",
+          "persona_thought": "I expect the team can capture where I hesitate.",
+          "intent": "notice_tracking",
+          "action": "scan Events counter and flow stage labels",
+          "target_ui": "Events and stage indicators",
+          "expected_result": "Understand that behavior can be measured without a real booking.",
+          "friction": 0.18,
+          "event_type": "scroll",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 16
+        },
+        {
+          "step": 5,
+          "observation": "Search results expose listing cards with View details actions, prices, ratings, beds, and guest capacity.",
+          "persona_thought": "I can open a listing and use that as my shortlist/like signal.",
+          "intent": "compare_details",
+          "action": "click View details on the best matching listing",
+          "target_ui": "Listing card View details button",
+          "expected_result": "Decide whether the visible details are enough to continue.",
+          "friction": 0.27,
+          "event_type": "detail_open",
+          "clicked": true,
+          "like_signal": true,
+          "primary_action": false,
+          "detail_action": true,
+          "elapsed_seconds": 30
+        },
+        {
+          "step": 6,
+          "observation": "The detail page offers a Reserve CTA and clarifies that fees are calculated at checkout.",
+          "persona_thought": "I can express intent without entering payment or sending host messages.",
+          "intent": "assess_checkout_intent",
+          "action": "activate mock checkout intent CTA",
+          "target_ui": "Reserve button",
+          "expected_result": "Measure purchase intent safely.",
+          "friction": 0.18,
+          "event_type": "primary_click",
+          "clicked": true,
+          "like_signal": false,
+          "primary_action": true,
+          "detail_action": false,
+          "elapsed_seconds": 18
+        }
+      ],
+      "final_feedback": {
+        "task_success": true,
+        "scores": {
+          "ease_of_search": 8,
+          "price_clarity": 6,
+          "trust": 8,
+          "purchase_intent": 7
+        },
+        "liked_features": [
+          "The single-page flow makes search, comparison, and mock checkout easy to understand.",
+          "Event capture signals make the experiment instrumentation visible to the team."
+        ],
+        "confusion_points": [
+          "Final cost and listing detail need to be clearer before users move into checkout intent."
+        ],
+        "friction_themes": [
+          "price_clarity"
+        ],
+        "recommendation": "Keep the compact search-to-mock-checkout path, but expose total price and listing detail earlier."
+      },
+      "variant": "A",
+      "trace_source": "rule_ui_specific",
+      "task_seconds": 105,
+      "converted": true,
+      "dropoff": false,
+      "satisfaction": 4.0
+    },
+    {
+      "persona_id": "airbnb_u_013",
+      "segment": "experience_seeker",
+      "goal": "Explore whether Staybnb supports a memorable Lake Tahoe getaway beyond basic lodging.",
+      "steps": [
+        {
+          "step": 1,
+          "observation": "Staybnb shows a compact booking-oriented homepage with search, comparison, and mock checkout stages.",
+          "persona_thought": "I can see this is meant for finding a stay near Lake Tahoe.",
+          "intent": "orient_on_staybnb",
+          "action": "scan header, hero copy, and booking workflow",
+          "target_ui": "Staybnb homepage",
+          "expected_result": "Confirm that the page supports stay discovery.",
+          "friction": 0.08,
+          "event_type": "view",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 9
+        },
+        {
+          "step": 2,
+          "observation": "The form exposes LOCATION, CHECK IN, CHECK OUT, and GUESTS in one row.",
+          "persona_thought": "I will set Lake Tahoe and 2 guest(s) without leaving the page.",
+          "intent": "configure_trip",
+          "action": "fill location, dates, and guests",
+          "target_ui": "Search form",
+          "expected_result": "Trip context is ready for search.",
+          "friction": 0.14,
+          "event_type": "input",
+          "clicked": true,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 24
+        },
+        {
+          "step": 3,
+          "observation": "Search is the clear primary action, and the page labels the next phases as Search stays, Compare details, and Mock checkout.",
+          "persona_thought": "The flow tells me what will happen after search.",
+          "intent": "submit_search",
+          "action": "click Search",
+          "target_ui": "Search button",
+          "expected_result": "Move from trip setup into stay comparison.",
+          "friction": 0.1,
+          "event_type": "primary_click",
+          "clicked": true,
+          "like_signal": false,
+          "primary_action": true,
+          "detail_action": false,
+          "elapsed_seconds": 8
+        },
+        {
+          "step": 4,
+          "observation": "The page is instrumented for events, which supports measuring friction during the experiment.",
+          "persona_thought": "I expect the team can capture where I hesitate.",
+          "intent": "notice_tracking",
+          "action": "scan Events counter and flow stage labels",
+          "target_ui": "Events and stage indicators",
+          "expected_result": "Understand that behavior can be measured without a real booking.",
+          "friction": 0.17,
+          "event_type": "scroll",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 16
+        },
+        {
+          "step": 5,
+          "observation": "Search results expose listing cards with View details actions, prices, ratings, beds, and guest capacity.",
+          "persona_thought": "I can open a listing and use that as my shortlist/like signal.",
+          "intent": "compare_details",
+          "action": "click View details on the best matching listing",
+          "target_ui": "Listing card View details button",
+          "expected_result": "Decide whether the visible details are enough to continue.",
+          "friction": 0.25,
+          "event_type": "detail_open",
+          "clicked": true,
+          "like_signal": true,
+          "primary_action": false,
+          "detail_action": true,
+          "elapsed_seconds": 30
+        },
+        {
+          "step": 6,
+          "observation": "The detail page offers a Reserve CTA and clarifies that fees are calculated at checkout.",
+          "persona_thought": "I can express intent without entering payment or sending host messages.",
+          "intent": "assess_checkout_intent",
+          "action": "activate mock checkout intent CTA",
+          "target_ui": "Reserve button",
+          "expected_result": "Measure purchase intent safely.",
+          "friction": 0.17,
+          "event_type": "primary_click",
+          "clicked": true,
+          "like_signal": false,
+          "primary_action": true,
+          "detail_action": false,
+          "elapsed_seconds": 18
+        }
+      ],
+      "final_feedback": {
+        "task_success": true,
+        "scores": {
+          "ease_of_search": 8,
+          "price_clarity": 6,
+          "trust": 8,
+          "purchase_intent": 7
+        },
+        "liked_features": [
+          "The single-page flow makes search, comparison, and mock checkout easy to understand.",
+          "Event capture signals make the experiment instrumentation visible to the team."
+        ],
+        "confusion_points": [
+          "Final cost and listing detail need to be clearer before users move into checkout intent."
+        ],
+        "friction_themes": [
+          "price_clarity",
+          "experiences_discoverability"
+        ],
+        "recommendation": "Keep the compact search-to-mock-checkout path, but expose total price and listing detail earlier."
+      },
+      "variant": "A",
+      "trace_source": "rule_ui_specific",
+      "task_seconds": 105,
+      "converted": true,
+      "dropoff": false,
+      "satisfaction": 4.0
+    },
+    {
+      "persona_id": "airbnb_u_017",
+      "segment": "first_time_cautious_user",
+      "goal": "Understand whether the Staybnb search flow feels safe and clear before considering a stay.",
+      "steps": [
+        {
+          "step": 1,
+          "observation": "Staybnb shows a compact booking-oriented homepage with search, comparison, and mock checkout stages.",
+          "persona_thought": "I can see this is meant for finding a stay near Lake Tahoe.",
+          "intent": "orient_on_staybnb",
+          "action": "scan header, hero copy, and booking workflow",
+          "target_ui": "Staybnb homepage",
+          "expected_result": "Confirm that the page supports stay discovery.",
+          "friction": 0.08,
+          "event_type": "view",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 9
+        },
+        {
+          "step": 2,
+          "observation": "The form exposes LOCATION, CHECK IN, CHECK OUT, and GUESTS in one row.",
+          "persona_thought": "I will set Lake Tahoe and 1 guest(s) without leaving the page.",
+          "intent": "configure_trip",
+          "action": "fill location, dates, and guests",
+          "target_ui": "Search form",
+          "expected_result": "Trip context is ready for search.",
+          "friction": 0.14,
+          "event_type": "input",
+          "clicked": true,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 24
+        },
+        {
+          "step": 3,
+          "observation": "Search is the clear primary action, and the page labels the next phases as Search stays, Compare details, and Mock checkout.",
+          "persona_thought": "The flow tells me what will happen after search.",
+          "intent": "submit_search",
+          "action": "click Search",
+          "target_ui": "Search button",
+          "expected_result": "Move from trip setup into stay comparison.",
+          "friction": 0.1,
+          "event_type": "primary_click",
+          "clicked": true,
+          "like_signal": false,
+          "primary_action": true,
+          "detail_action": false,
+          "elapsed_seconds": 8
+        },
+        {
+          "step": 4,
+          "observation": "The page is instrumented for events, which supports measuring friction during the experiment.",
+          "persona_thought": "I expect the team can capture where I hesitate.",
+          "intent": "notice_tracking",
+          "action": "scan Events counter and flow stage labels",
+          "target_ui": "Events and stage indicators",
+          "expected_result": "Understand that behavior can be measured without a real booking.",
+          "friction": 0.19,
+          "event_type": "scroll",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 16
+        },
+        {
+          "step": 5,
+          "observation": "Search results expose listing cards with View details actions, prices, ratings, beds, and guest capacity.",
+          "persona_thought": "I can open a listing and use that as my shortlist/like signal.",
+          "intent": "compare_details",
+          "action": "click View details on the best matching listing",
+          "target_ui": "Listing card View details button",
+          "expected_result": "Decide whether the visible details are enough to continue.",
+          "friction": 0.28,
+          "event_type": "detail_open",
+          "clicked": true,
+          "like_signal": true,
+          "primary_action": false,
+          "detail_action": true,
+          "elapsed_seconds": 30
+        },
+        {
+          "step": 6,
+          "observation": "The detail page offers a Reserve CTA and clarifies that fees are calculated at checkout.",
+          "persona_thought": "I can express intent without entering payment or sending host messages.",
+          "intent": "assess_checkout_intent",
+          "action": "activate mock checkout intent CTA",
+          "target_ui": "Reserve button",
+          "expected_result": "Measure purchase intent safely.",
+          "friction": 0.19,
+          "event_type": "primary_click",
+          "clicked": true,
+          "like_signal": false,
+          "primary_action": true,
+          "detail_action": false,
+          "elapsed_seconds": 18
+        }
+      ],
+      "final_feedback": {
+        "task_success": true,
+        "scores": {
+          "ease_of_search": 8,
+          "price_clarity": 5,
+          "trust": 9,
+          "purchase_intent": 7
+        },
+        "liked_features": [
+          "The single-page flow makes search, comparison, and mock checkout easy to understand.",
+          "Event capture signals make the experiment instrumentation visible to the team."
+        ],
+        "confusion_points": [
+          "Final cost and listing detail need to be clearer before users move into checkout intent."
+        ],
+        "friction_themes": [
+          "price_clarity"
+        ],
+        "recommendation": "Keep the compact search-to-mock-checkout path, but expose total price and listing detail earlier."
+      },
+      "variant": "A",
+      "trace_source": "rule_ui_specific",
+      "task_seconds": 105,
+      "converted": true,
+      "dropoff": false,
+      "satisfaction": 4.2
+    }
+  ]
+}
+
+=== 3) SYNTHETIC_FEEDBACK_SUMMARY_JSON ===
+{
+  "top_findings": [
+    {
+      "theme": "Compact flow performed well",
+      "affected_users": 5,
+      "severity": "low",
+      "evidence": "5 runs completed successfully: task_success_rate 1.0, conversion_rate 1.0, dropoff_rate 0.0, avg_task_seconds 105.0, avg_steps 6.0, avg_satisfaction 4.04.",
+      "suggestion": "Keep the single-page search, comparison, detail, and mock checkout structure as the demo baseline."
+    },
+    {
+      "theme": "Price clarity is the main blocker",
+      "affected_users": 5,
+      "severity": "high",
+      "evidence": "price_clarity appeared in friction_counts for 5 users, and avg price_clarity was 5.2 versus ease_of_search 8.0 and trust 8.2.",
+      "suggestion": "Show total estimated stay cost, taxes, cleaning fees, and fee timing before the Reserve or mock checkout CTA."
+    },
+    {
+      "theme": "Detail view drives intent",
+      "affected_users": 5,
+      "severity": "medium",
+      "evidence": "detail_open_rate 1.0, like_rate 1.0, primary_cta_rate 1.0, and purchase_intent averaged 6.6 after users opened a listing detail page.",
+      "suggestion": "Strengthen listing detail cards with capacity, beds, amenities, cancellation, and trust rationale so intent is based on enough evidence."
+    },
+    {
+      "theme": "Experiences path is underdeveloped",
+      "affected_users": 1,
+      "severity": "medium",
+      "evidence": "experiences_discoverability appeared in friction_counts for 1 user, tied to the experience_seeker segment.",
+      "suggestion": "Make Experiences and Services tabs visibly functional or clearly label them as coming soon during the hackathon demo."
+    }
+  ],
+  "segment_notes": [
+    {
+      "segment": "budget_weekend_couple",
+      "note": "The budget user converted, but price_clarity scored 4; this segment needs total cost earlier than checkout intent."
+    },
+    {
+      "segment": "family_planner",
+      "note": "The family planner completed the flow with trust 8, but needs richer family suitability details before deeper comparison."
+    },
+    {
+      "segment": "remote_worker_business_traveler",
+      "note": "The business traveler had purchase_intent 7 and price_clarity 6; expense-friendly totals and Wi-Fi/workspace cues would improve confidence."
+    },
+    {
+      "segment": "experience_seeker",
+      "note": "The experience seeker converted with purchase_intent 7, but experiences_discoverability was the unique segment-specific friction."
+    },
+    {
+      "segment": "first_time_cautious_user",
+      "note": "The cautious user reported the highest trust score at 9, suggesting the mock flow feels safe when commitment is clearly bounded."
+    }
+  ],
+  "recommendations": [
+    "Prioritize an upfront price breakdown on listing cards and detail pages.",
+    "Add trust explanations behind Guest favorite, ratings, cancellation, and fee language.",
+    "Expose family and work-trip decision details directly in comparison: guest capacity, beds, Wi-Fi, workspace, parking, and cancellation.",
+    "Clarify that Reserve is a mock checkout intent action before any personal data or payment step.",
+    "For the demo, emphasize the strong funnel metrics: run_count 5, completion_rate 1.0, conversion_rate 1.0, avg_dwell_seconds 105.0, avg_clicks_per_user 4.0."
+  ],
+  "demo_readout": "Across 5 synthetic users, Staybnb’s compact Airbnb-style flow worked: task_success_rate 1.0, conversion_rate 1.0, dropoff_rate 0.0, and avg_satisfaction 4.04. The strongest product message is that users understand the search-to-detail-to-intent path, but every trace flagged price clarity, making upfront total cost the clearest next improvement.",
+  "metrics": {
+    "run_count": 5,
+    "task_success_rate": 1.0,
+    "conversion_rate": 1.0,
+    "dropoff_rate": 0.0,
+    "avg_task_seconds": 105.0,
+    "avg_satisfaction": 4.04,
+    "avg_steps": 6.0,
+    "avg_scores": {
+      "ease_of_search": 8.0,
+      "price_clarity": 5.2,
+      "trust": 8.2,
+      "purchase_intent": 6.6
+    },
+    "interaction_metrics": {
+      "click_rate": 1.0,
+      "primary_cta_rate": 1.0,
+      "like_rate": 1.0,
+      "detail_open_rate": 1.0,
+      "completion_rate": 1.0,
+      "avg_dwell_seconds": 105.0,
+      "avg_clicks_per_user": 4.0,
+      "friction_step_rate": 0.0
+    },
+    "friction_counts": {
+      "experiences_discoverability": 1,
+      "price_clarity": 5
+    },
+    "segments_run": [
+      "budget_weekend_couple",
+      "experience_seeker",
+      "family_planner",
+      "first_time_cautious_user",
+      "remote_worker_business_traveler"
+    ]
+  }
+}
+
+=== READABLE_SUMMARY ===
+Ran 5 synthetic users; success rate=1.0; avg steps=6.0.
+Average scores: {"ease_of_search": 8.0, "price_clarity": 5.2, "trust": 8.2, "purchase_intent": 6.6}
+
+Top findings:
+- [low] Compact flow performed well: 5 users. Keep the single-page search, comparison, detail, and mock checkout structure as the demo baseline.
+- [high] Price clarity is the main blocker: 5 users. Show total estimated stay cost, taxes, cleaning fees, and fee timing before the Reserve or mock checkout CTA.
+- [medium] Detail view drives intent: 5 users. Strengthen listing detail cards with capacity, beds, amenities, cancellation, and trust rationale so intent is based on enough evidence.
+- [medium] Experiences path is underdeveloped: 1 users. Make Experiences and Services tabs visibly functional or clearly label them as coming soon during the hackathon demo.
+
+Demo readout:
+Across 5 synthetic users, Staybnb’s compact Airbnb-style flow worked: task_success_rate 1.0, conversion_rate 1.0, dropoff_rate 0.0, and avg_satisfaction 4.04. The strongest product message is that users understand the search-to-detail-to-intent path, but every trace flagged price clarity, making upfront total cost the clearest next improvement.

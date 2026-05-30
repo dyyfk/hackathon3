@@ -89,9 +89,11 @@ def normalize_ab_run(
 
 
 def parse_synthetic_stdout(text: str) -> Dict[str, Any]:
+    trace_section = extract_section_json(text, SECTION_TITLES["traces"])
     return {
         "profiles": extract_section_json(text, SECTION_TITLES["profiles"]).get("profiles", []),
-        "traces": extract_section_json(text, SECTION_TITLES["traces"]).get("traces", []),
+        "traces": trace_section.get("traces", []),
+        "page_context": trace_section.get("page_context"),
         "summary": extract_section_json(text, SECTION_TITLES["summary"]),
     }
 
@@ -132,7 +134,18 @@ def extract_section_json(text: str, title: str) -> Dict[str, Any]:
 
 def normalize_variant(label: str, url: str, payload: Dict[str, Any]) -> Dict[str, Any]:
     summary = payload["summary"]
-    metrics = summary["metrics"]
+    metrics = dict(summary["metrics"])
+    metrics["interaction_metrics"] = {
+        **metrics.get("interaction_metrics", {}),
+        **derive_interaction_metrics_from_traces(payload.get("traces", []), metrics),
+    }
+    payload = {
+        **payload,
+        "summary": {
+            **summary,
+            "metrics": metrics,
+        },
+    }
     derived = derive_metric_snapshot(metrics)
     feedback = feedback_rows(summary)
     logs = behavior_logs(payload["traces"])
@@ -143,58 +156,58 @@ def normalize_variant(label: str, url: str, payload: Dict[str, Any]) -> Dict[str
         "raw": payload,
         "summary_stats": [
             {
-                "id": "success",
-                "label": "Success",
-                "value": percent(metrics["task_success_rate"]),
-                "detail": spread(label, url, "success", "%"),
+                "id": "click_rate",
+                "label": "Click Rate",
+                "value": percent(derived["click_rate"]),
+                "detail": spread(label, url, "click_rate", "%"),
+                "icon": "mouse-pointer-click",
+            },
+            {
+                "id": "like_rate",
+                "label": "Like Rate",
+                "value": percent(derived["like_rate"]),
+                "detail": spread(label, url, "like_rate", "%"),
+                "icon": "heart",
+            },
+            {
+                "id": "dwell_time",
+                "label": "Avg Dwell",
+                "value": f"{derived['dwell_time']:.0f}s",
+                "detail": spread(label, url, "dwell_time", "s"),
+                "icon": "timer",
+            },
+            {
+                "id": "completion_rate",
+                "label": "Completion",
+                "value": percent(derived["completion_rate"]),
+                "detail": spread(label, url, "completion_rate", "%"),
                 "icon": "circle-check",
-            },
-            {
-                "id": "avg_steps",
-                "label": "Avg Steps",
-                "value": number(metrics["avg_steps"], 1),
-                "detail": spread(label, url, "steps", ""),
-                "icon": "footprints",
-            },
-            {
-                "id": "ease",
-                "label": "Ease (1-5)",
-                "value": number(score_5(metrics["avg_scores"]["ease_of_search"]), 1),
-                "detail": spread(label, url, "ease", ""),
-                "icon": "smile",
-            },
-            {
-                "id": "intent",
-                "label": "Intent (1-5)",
-                "value": number(score_5(metrics["avg_scores"]["purchase_intent"]), 1),
-                "detail": spread(label, url, "intent", ""),
-                "icon": "target",
             },
         ],
         "metric_snapshot": [
             {
-                "id": "conversion",
-                "label": "Conversion",
-                "value": percent(derived["conversion"]),
-                "detail": spread(label, url, "conversion", "%"),
+                "id": "primary_cta_rate",
+                "label": "Primary CTA",
+                "value": percent(derived["primary_cta_rate"]),
+                "detail": spread(label, url, "primary_cta_rate", "%"),
             },
             {
-                "id": "dropoff",
-                "label": "Drop-off",
-                "value": percent(derived["dropoff"]),
-                "detail": spread(label, url, "dropoff", "%"),
+                "id": "detail_open_rate",
+                "label": "Detail Open",
+                "value": percent(derived["detail_open_rate"]),
+                "detail": spread(label, url, "detail_open_rate", "%"),
             },
             {
-                "id": "time_to_task",
-                "label": "Time to Task",
-                "value": f"{derived['time_to_task']:.1f}m",
-                "detail": spread(label, url, "time", "m"),
+                "id": "clicks_per_user",
+                "label": "Clicks/User",
+                "value": number(derived["clicks_per_user"], 1),
+                "detail": spread(label, url, "clicks_per_user", ""),
             },
             {
-                "id": "satisfaction",
-                "label": "Satisfaction (1-5)",
-                "value": number(derived["satisfaction"], 1),
-                "detail": spread(label, url, "satisfaction", ""),
+                "id": "friction_rate",
+                "label": "Friction Rate",
+                "value": percent(derived["friction_rate"]),
+                "detail": spread(label, url, "friction_rate", "%"),
             },
         ],
         "derived_metrics": derived,
@@ -207,24 +220,124 @@ def normalize_variant(label: str, url: str, payload: Dict[str, Any]) -> Dict[str
 
 def derive_metric_snapshot(metrics: Dict[str, Any]) -> Dict[str, float]:
     scores = metrics["avg_scores"]
-    conversion = clamp(0.28 + scores["purchase_intent"] * 0.04, 0.01, 0.95)
-    dropoff = clamp((10 - scores["purchase_intent"]) * 0.045, 0.03, 0.8)
-    time_to_task = max(0.6, metrics["avg_steps"] * 0.36)
-    satisfaction = clamp(1 + ((scores["ease_of_search"] + scores["trust"]) / 2) / 10 * 4, 1, 5)
+    interactions = metrics.get("interaction_metrics", {})
+    conversion = metrics.get("conversion_rate")
+    if conversion is None:
+        conversion = clamp(0.28 + scores["purchase_intent"] * 0.04, 0.01, 0.95)
+    dropoff = metrics.get("dropoff_rate")
+    if dropoff is None:
+        dropoff = clamp((10 - scores["purchase_intent"]) * 0.045, 0.03, 0.8)
+    avg_task_seconds = metrics.get("avg_task_seconds")
+    time_to_task = max(0.2, float(avg_task_seconds) / 60) if avg_task_seconds else max(0.6, metrics["avg_steps"] * 0.36)
+    satisfaction = metrics.get("avg_satisfaction")
+    if satisfaction is None:
+        satisfaction = clamp(1 + ((scores["ease_of_search"] + scores["trust"]) / 2) / 10 * 4, 1, 5)
+    completion_rate = float(interactions.get("completion_rate", conversion))
+    click_rate = float(interactions.get("click_rate", completion_rate))
+    primary_cta_rate = float(interactions.get("primary_cta_rate", click_rate))
+    like_rate = float(interactions.get("like_rate", max(0.0, completion_rate - 0.25)))
+    detail_open_rate = float(interactions.get("detail_open_rate", max(0.0, click_rate - 0.2)))
+    dwell_time = float(interactions.get("avg_dwell_seconds", avg_task_seconds or time_to_task * 60))
+    clicks_per_user = float(interactions.get("avg_clicks_per_user", metrics.get("avg_steps", 0) * click_rate))
+    friction_rate = float(interactions.get("friction_step_rate", dropoff))
     return {
-        "conversion": round(conversion, 3),
-        "dropoff": round(dropoff, 3),
+        "conversion": round(float(conversion), 3),
+        "dropoff": round(float(dropoff), 3),
         "time_to_task": round(time_to_task, 2),
-        "satisfaction": round(satisfaction, 2),
+        "satisfaction": round(float(satisfaction), 2),
+        "completion_rate": round(clamp(completion_rate, 0, 1), 3),
+        "click_rate": round(clamp(click_rate, 0, 1), 3),
+        "primary_cta_rate": round(clamp(primary_cta_rate, 0, 1), 3),
+        "like_rate": round(clamp(like_rate, 0, 1), 3),
+        "detail_open_rate": round(clamp(detail_open_rate, 0, 1), 3),
+        "dwell_time": round(max(1, dwell_time), 1),
+        "clicks_per_user": round(max(0, clicks_per_user), 2),
+        "friction_rate": round(clamp(friction_rate, 0, 1), 3),
     }
+
+
+def derive_interaction_metrics_from_traces(
+    traces: Sequence[Dict[str, Any]], metrics: Dict[str, Any]
+) -> Dict[str, float]:
+    run_count = len(traces)
+    if not run_count:
+        return {}
+
+    total_steps = sum(len(trace.get("steps", [])) for trace in traces)
+    clicked_steps = 0
+    primary_users = 0
+    like_users = 0
+    detail_users = 0
+    high_friction_steps = 0
+    total_elapsed = 0.0
+
+    for trace in traces:
+        steps = trace.get("steps", [])
+        has_primary = False
+        has_like = False
+        has_detail = False
+        for step in steps:
+            event = str(step.get("event_type") or "").lower()
+            action = str(step.get("action") or "").lower()
+            intent = str(step.get("intent") or "").lower()
+            clicked = bool(step.get("clicked")) or event in {
+                "input",
+                "primary_click",
+                "secondary_click",
+                "detail_open",
+                "like_save",
+            }
+            if clicked:
+                clicked_steps += 1
+            has_primary = has_primary or bool(step.get("primary_action")) or event == "primary_click"
+            has_detail = has_detail or bool(step.get("detail_action")) or event == "detail_open"
+            has_like = has_like or bool(step.get("like_signal")) or event == "like_save" or any(
+                term in f"{intent} {action}" for term in ["like", "save", "wishlist", "shortlist", "favorite"]
+            )
+            high_friction_steps += 1 if friction_value(step.get("friction", 0)) >= 0.45 else 0
+            total_elapsed += elapsed_value(step)
+        primary_users += 1 if has_primary else 0
+        like_users += 1 if has_like else 0
+        detail_users += 1 if has_detail else 0
+
+    return {
+        "click_rate": round(clicked_steps / total_steps, 2) if total_steps else 0.0,
+        "primary_cta_rate": round(primary_users / run_count, 2),
+        "like_rate": round(like_users / run_count, 2),
+        "detail_open_rate": round(detail_users / run_count, 2),
+        "completion_rate": float(metrics.get("conversion_rate", metrics.get("task_success_rate", 0))),
+        "avg_dwell_seconds": round(total_elapsed / run_count, 1),
+        "avg_clicks_per_user": round(clicked_steps / run_count, 2),
+        "friction_step_rate": round(high_friction_steps / total_steps, 2) if total_steps else 0.0,
+    }
+
+
+def friction_value(value: Any) -> float:
+    if isinstance(value, (int, float)):
+        return clamp(float(value), 0, 1)
+    return {
+        "none": 0.05,
+        "low": 0.2,
+        "medium": 0.45,
+        "high": 0.75,
+    }.get(str(value).lower(), 0.45)
+
+
+def elapsed_value(step: Dict[str, Any]) -> float:
+    try:
+        value = float(step.get("elapsed_seconds") or 0)
+    except (TypeError, ValueError):
+        value = 0
+    if value > 0:
+        return value
+    return 16.0
 
 
 def build_matrix_summary(a: Dict[str, Any], b: Dict[str, Any]) -> Dict[str, Any]:
     winner = choose_winner(a, b)
     a_metrics = a["derived_metrics"]
     b_metrics = b["derived_metrics"]
-    conversion_lift = b_metrics["conversion"] - a_metrics["conversion"]
-    synthetic_lift = conversion_lift
+    synthetic_lift = b_metrics["completion_rate"] - a_metrics["completion_rate"]
     confidence = confidence_score(a, b)
     return {
         "winner": winner,
@@ -235,13 +348,13 @@ def build_matrix_summary(a: Dict[str, Any], b: Dict[str, Any]) -> Dict[str, Any]
         "date_range": "May 5 - May 12, 2025",
         "summary_stats": [
             {
-                "label": "Real lift",
-                "value": format_lift(generated_real_lift(a, b)),
+                "label": "Real click lift",
+                "value": format_lift(generated_real_lift(a, b, "click_rate")),
                 "detail": "vs A",
                 "kind": "lift",
             },
             {
-                "label": "Synthetic lift",
+                "label": "Completion lift",
                 "value": format_lift(synthetic_lift),
                 "detail": "vs A",
                 "kind": "lift",
@@ -261,10 +374,10 @@ def build_matrix_summary(a: Dict[str, Any], b: Dict[str, Any]) -> Dict[str, Any]
 
 def matrix_metrics(a: Dict[str, Any], b: Dict[str, Any]) -> List[Dict[str, Any]]:
     specs = [
-        ("conversion", "Conversion", "chart-line", "higher", percent),
-        ("time_to_task", "Time to Task", "clock-3", "lower", lambda value: f"{value:.1f}m"),
-        ("dropoff", "Drop-off", "chart-no-axes-combined", "lower", percent),
-        ("satisfaction", "Satisfaction", "smile", "higher", lambda value: number(value, 1)),
+        ("click_rate", "Click Rate", "mouse-pointer-click", "higher", percent),
+        ("like_rate", "Like Rate", "heart", "higher", percent),
+        ("dwell_time", "Dwell Time", "timer", "lower", lambda value: f"{value:.0f}s"),
+        ("completion_rate", "Completion", "circle-check", "higher", percent),
     ]
     rows = []
     for key, label, icon_name, direction, formatter in specs:
@@ -301,10 +414,12 @@ def choose_winner(a: Dict[str, Any], b: Dict[str, Any]) -> str:
 def variant_score(variant: Dict[str, Any]) -> float:
     metrics = variant["derived_metrics"]
     return (
-        metrics["conversion"] * 0.4
-        + (1 - metrics["dropoff"]) * 0.25
-        + min(1, metrics["satisfaction"] / 5) * 0.25
-        + max(0, 1 - metrics["time_to_task"] / 8) * 0.1
+        metrics["completion_rate"] * 0.35
+        + metrics["primary_cta_rate"] * 0.25
+        + metrics["detail_open_rate"] * 0.15
+        + metrics["like_rate"] * 0.1
+        + (1 - metrics["friction_rate"]) * 0.1
+        + max(0, 1 - metrics["dwell_time"] / 360) * 0.05
     )
 
 
@@ -318,8 +433,8 @@ def winner_title(winner: str) -> str:
 
 def summary_primary(winner: str) -> str:
     if winner == "tie":
-        return "A and B show similar synthetic-user outcomes across conversion, satisfaction, time to task, and drop-off."
-    return f"Variant {winner} performs better across the current synthetic runs while preserving the same runner inputs."
+        return "A and B show similar interaction outcomes across clicks, like intent, dwell time, and task completion."
+    return f"Variant {winner} performs better on UI-specific interaction behavior across the current synthetic runs."
 
 
 def confidence_score(a: Dict[str, Any], b: Dict[str, Any]) -> float:
@@ -360,7 +475,7 @@ def matrix_suggestions(a: Dict[str, Any], b: Dict[str, Any]) -> List[Dict[str, A
         {
             "title": "Tracking",
             "icon": "code-2",
-            "items": ["Log first CTA hover", "Capture form idle time", "Track price exposure"],
+            "items": ["Log primary CTA clicks", "Track like/save intent", "Capture dwell time"],
         },
         {
             "title": "Experiment Design",
@@ -396,13 +511,16 @@ def behavior_logs(traces: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         for step in trace.get("steps", []):
             logs.append(
                 {
-                    "persona": trace.get("persona_id", ""),
+                    "persona": trace.get("persona_id") or trace.get("profile_id", ""),
                     "segment": trace.get("segment", ""),
                     "step": step.get("step", len(logs) + 1),
+                    "event": event_label(step.get("event_type")),
                     "intent": title_case(step.get("intent", "observe")),
                     "action": short_sentence(step.get("action", "")),
-                    "friction": friction_label(float(step.get("friction", 0))),
-                    "observation": short_sentence(step.get("observation", "")),
+                    "friction": friction_label(step.get("friction", 0)),
+                    "observation": short_sentence(
+                        step.get("observation") or step.get("expected_result") or step.get("element", "")
+                    ),
                 }
             )
     return logs
@@ -434,13 +552,17 @@ def generated_real_value(variant: str, url: str, key: str, value: float) -> floa
     jitter = (stable_unit(f"{variant}:{url}:{key}") - 0.5) * 0.035
     if key == "time_to_task":
         return round(max(0.4, value + jitter * 4), 2)
+    if key == "dwell_time":
+        return round(max(5, value + jitter * 90), 1)
+    if key == "clicks_per_user":
+        return round(max(0, value + jitter * 4), 2)
     if key == "satisfaction":
         return round(clamp(value + jitter * 3, 1, 5), 2)
     return round(clamp(value + jitter, 0.01, 0.95), 3)
 
 
-def generated_real_lift(a: Dict[str, Any], b: Dict[str, Any]) -> float:
-    return generated_real_value("B", b["url"], "conversion", b["derived_metrics"]["conversion"]) - generated_real_value("A", a["url"], "conversion", a["derived_metrics"]["conversion"])
+def generated_real_lift(a: Dict[str, Any], b: Dict[str, Any], key: str) -> float:
+    return generated_real_value("B", b["url"], key, b["derived_metrics"][key]) - generated_real_value("A", a["url"], key, a["derived_metrics"][key])
 
 
 def winner_for_metric(a: float, b: float, direction: str) -> str:
@@ -457,6 +579,8 @@ def spread(label: str, url: str, key: str, suffix: str) -> str:
         return f"+/-{amount * 5:.1f}%"
     if suffix == "m":
         return f"+/-{amount:.1f}m"
+    if suffix == "s":
+        return f"+/-{amount * 18:.0f}s"
     return f"+/-{amount:.1f}"
 
 
@@ -477,12 +601,35 @@ def level_icon(severity: str) -> str:
     return {"high": "circle-dollar-sign", "medium": "shield-check", "low": "triangle-alert"}.get(severity, "message-square")
 
 
-def friction_label(value: float) -> str:
+def friction_label(value: Any) -> str:
+    if isinstance(value, str):
+        level = value.lower()
+        if level == "high":
+            return "High"
+        if level in {"medium", "low"}:
+            return "Medium" if level == "medium" else "Low"
+        return "None"
+    value = float(value)
     if value >= 0.35:
         return "High"
     if value >= 0.2:
         return "Medium"
     return "None"
+
+
+def event_label(value: Any) -> str:
+    labels = {
+        "view": "View",
+        "input": "Input",
+        "primary_click": "CTA",
+        "secondary_click": "Click",
+        "detail_open": "Detail",
+        "like_save": "Like",
+        "scroll": "Scroll",
+        "dwell": "Dwell",
+        "dropoff": "Dropoff",
+    }
+    return labels.get(str(value or "").lower(), "View")
 
 
 def compact_items(items: Sequence[str], fallback: Sequence[str]) -> List[str]:
@@ -525,6 +672,12 @@ def humanize_text(value: str) -> str:
         "purchase_intent": "purchase intent",
         "experiences_discoverability": "experiences discoverability",
         "wishlist_account_wall": "wishlist account wall",
+        "click_rate": "click rate",
+        "like_rate": "like rate",
+        "primary_cta_rate": "primary CTA rate",
+        "detail_open_rate": "detail open rate",
+        "friction_step_rate": "friction step rate",
+        "avg_dwell_seconds": "average dwell time",
     }
     for source, replacement in replacements.items():
         value = value.replace(source, replacement)

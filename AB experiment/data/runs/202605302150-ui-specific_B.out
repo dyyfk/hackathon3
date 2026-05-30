@@ -1,0 +1,1325 @@
+
+=== 1) GENERATED_SYNTHETIC_USERS_JSON ===
+{
+  "profiles": [
+    {
+      "id": "airbnb_u_001",
+      "segment": "budget_weekend_couple",
+      "goal": "Find a low-cost two-night weekend stay option and assess whether the page supports a normal search flow.",
+      "task": "Open the Airbnb archive page, look for destination, date, guest, and search controls, then compare any visible two-night prices or city/listing links without signing in or booking.",
+      "constraints": {
+        "destination": "Lake Tahoe",
+        "guests": 2,
+        "budget_preference": "Prefer under $550 total for 2 nights"
+      },
+      "behavior_style": {
+        "patience": 0.45,
+        "exploration": 0.55,
+        "price_sensitivity": 0.95,
+        "trust_sensitivity": 0.55,
+        "detail_orientation": 0.6
+      },
+      "success_criteria": [
+        "Identifies whether destination/date/guest search is available",
+        "Compares at least two visible low-price options if present",
+        "Stops after deciding whether the page is useful for budget trip planning"
+      ],
+      "frustration_triggers": [
+        "No working Where searchbox",
+        "Prices are archive examples rather than searchable stays",
+        "Sign up or sign in appears necessary"
+      ]
+    },
+    {
+      "id": "airbnb_u_002",
+      "segment": "budget_weekend_couple",
+      "goal": "Check whether a cheap city weekend stay can be found from the visible archive content.",
+      "task": "Use only visible links and controls to look for a New York or San Francisco stay for two guests, compare any displayed prices, and stop after judging whether the page supports comparison shopping.",
+      "constraints": {
+        "destination": "New York",
+        "guests": 2,
+        "budget_preference": "Lowest visible nightly or weekend price"
+      },
+      "behavior_style": {
+        "patience": 0.38,
+        "exploration": 0.48,
+        "price_sensitivity": 0.98,
+        "trust_sensitivity": 0.5,
+        "detail_orientation": 0.52
+      },
+      "success_criteria": [
+        "Finds visible city or listing links",
+        "Records the cheapest visible option",
+        "Confirms whether there is a path to refine dates or guests"
+      ],
+      "frustration_triggers": [
+        "City links do not lead to usable search results",
+        "Date controls are labels only",
+        "No clear total price comparison"
+      ]
+    },
+    {
+      "id": "airbnb_u_003",
+      "segment": "budget_weekend_couple",
+      "goal": "Evaluate whether a couple can shortlist an affordable cabin-style weekend stay.",
+      "task": "Scan the page for cabin, condo, or simple room listings, compare price and rating signals when visible, and decide whether any option is worth wishlisting or further research without using account features.",
+      "constraints": {
+        "destination": "South Lake Tahoe",
+        "guests": 2,
+        "budget_preference": "Prefer the cheapest stay with a rating signal"
+      },
+      "behavior_style": {
+        "patience": 0.5,
+        "exploration": 0.6,
+        "price_sensitivity": 0.92,
+        "trust_sensitivity": 0.62,
+        "detail_orientation": 0.58
+      },
+      "success_criteria": [
+        "Identifies cabin or condo options if visible",
+        "Compares price against rating or guest favorite signals",
+        "Avoids wishlist actions that require an account"
+      ],
+      "frustration_triggers": [
+        "Wishlist requires sign-in",
+        "Archive timeline distracts from listing comparison",
+        "Listings are not clickable or filterable"
+      ]
+    },
+    {
+      "id": "airbnb_u_004",
+      "segment": "budget_weekend_couple",
+      "goal": "Determine whether the page can support a last-minute budget getaway search.",
+      "task": "Attempt to set or find check-in, check-out, and guest information for a two-person weekend trip, then summarize whether visible content is enough to choose a candidate stay.",
+      "constraints": {
+        "destination": "Paris",
+        "guests": 2,
+        "budget_preference": "Budget-first, willing to trade amenities for price"
+      },
+      "behavior_style": {
+        "patience": 0.32,
+        "exploration": 0.42,
+        "price_sensitivity": 1.0,
+        "trust_sensitivity": 0.45,
+        "detail_orientation": 0.46
+      },
+      "success_criteria": [
+        "Locates date and guest entry points or confirms they are unavailable",
+        "Finds at least one visible destination or listing reference",
+        "Stops at intent assessment without booking"
+      ],
+      "frustration_triggers": [
+        "Cannot enter travel dates",
+        "No active search submission path",
+        "Archive content looks unrelated to current booking"
+      ]
+    },
+    {
+      "id": "airbnb_u_005",
+      "segment": "family_planner",
+      "goal": "Assess whether a family can search for a practical multi-guest stay with clear dates and enough trust signals.",
+      "task": "Try to use the page to plan a family stay by locating guest controls, date controls, listing details, ratings, and any family-suitable options; stop after evaluating feasibility.",
+      "constraints": {
+        "destination": "Lake Tahoe",
+        "guests": 4,
+        "budget_preference": "Prefer reasonable total price over cheapest option"
+      },
+      "behavior_style": {
+        "patience": 0.72,
+        "exploration": 0.55,
+        "price_sensitivity": 0.72,
+        "trust_sensitivity": 0.86,
+        "detail_orientation": 0.88
+      },
+      "success_criteria": [
+        "Finds whether guest count can be set",
+        "Compares visible homes for family suitability cues",
+        "Notes rating or guest favorite signals where available"
+      ],
+      "frustration_triggers": [
+        "Guest control does not open or accept counts",
+        "No bedroom, amenity, or capacity details",
+        "Archive page blocks normal family planning"
+      ]
+    },
+    {
+      "id": "airbnb_u_006",
+      "segment": "family_planner",
+      "goal": "Compare safe-looking family options without creating an account.",
+      "task": "Review visible listings and city links for a family trip, prioritizing ratings, recognizable destinations, and clear pricing, then decide whether a parent would continue on this page.",
+      "constraints": {
+        "destination": "San Francisco",
+        "guests": 5,
+        "budget_preference": "Moderate budget with strong trust signals"
+      },
+      "behavior_style": {
+        "patience": 0.78,
+        "exploration": 0.5,
+        "price_sensitivity": 0.68,
+        "trust_sensitivity": 0.93,
+        "detail_orientation": 0.82
+      },
+      "success_criteria": [
+        "Identifies visible trust signals such as rating or guest favorite",
+        "Avoids sign-up, sign-in, and payment paths",
+        "Determines whether family-critical information is missing"
+      ],
+      "frustration_triggers": [
+        "No capacity or bed information",
+        "Trust signals are sparse or historical",
+        "Account prompts interrupt comparison"
+      ]
+    },
+    {
+      "id": "airbnb_u_007",
+      "segment": "family_planner",
+      "goal": "Find whether the archive page gives enough information to shortlist a family-friendly home.",
+      "task": "Look for homes rather than single rooms, compare total price and ratings if shown, and stop after selecting the most plausible family option or concluding none are usable.",
+      "constraints": {
+        "destination": "Carnelian Bay",
+        "guests": 4,
+        "budget_preference": "Can pay more for a full home and high rating"
+      },
+      "behavior_style": {
+        "patience": 0.68,
+        "exploration": 0.62,
+        "price_sensitivity": 0.58,
+        "trust_sensitivity": 0.9,
+        "detail_orientation": 0.9
+      },
+      "success_criteria": [
+        "Distinguishes full-home options from simple rooms",
+        "Compares at least two visible options if available",
+        "Documents whether details are sufficient for family planning"
+      ],
+      "frustration_triggers": [
+        "Only room-style archive listing is visible",
+        "No filters for entire place or family needs",
+        "Unable to inspect listing details"
+      ]
+    },
+    {
+      "id": "airbnb_u_008",
+      "segment": "family_planner",
+      "goal": "Evaluate date and guest selection clarity for a family vacation search.",
+      "task": "Attempt to add check-in, check-out, and guest count for a four-person family trip, then inspect any resulting listing or error state without booking.",
+      "constraints": {
+        "destination": "New York",
+        "guests": 4,
+        "budget_preference": "Needs transparent total cost before considering a stay"
+      },
+      "behavior_style": {
+        "patience": 0.74,
+        "exploration": 0.46,
+        "price_sensitivity": 0.75,
+        "trust_sensitivity": 0.88,
+        "detail_orientation": 0.86
+      },
+      "success_criteria": [
+        "Confirms whether dates can be added",
+        "Confirms whether four guests can be represented",
+        "Stops after assessing whether the flow feels reliable"
+      ],
+      "frustration_triggers": [
+        "Controls are static labels",
+        "No clear search results page",
+        "Pricing lacks fees or total cost context"
+      ]
+    },
+    {
+      "id": "airbnb_u_009",
+      "segment": "remote_worker_business_traveler",
+      "goal": "Check whether the page can support a work-trip stay search with quick comparison.",
+      "task": "Try to find a stay for one business traveler by locating destination search, dates, guest count, and listing details; compare visible options for reliability signals and stop before reservation steps.",
+      "constraints": {
+        "destination": "San Francisco",
+        "guests": 1,
+        "budget_preference": "Company budget, prioritize convenience and rating over lowest price"
+      },
+      "behavior_style": {
+        "patience": 0.42,
+        "exploration": 0.35,
+        "price_sensitivity": 0.48,
+        "trust_sensitivity": 0.8,
+        "detail_orientation": 0.7
+      },
+      "success_criteria": [
+        "Quickly determines whether search controls are functional",
+        "Finds ratings or other reliability cues",
+        "Assesses whether the page is efficient enough for business travel"
+      ],
+      "frustration_triggers": [
+        "Archive navigation slows task completion",
+        "No location-specific search results",
+        "Missing Wi-Fi, workspace, or check-in details"
+      ]
+    },
+    {
+      "id": "airbnb_u_010",
+      "segment": "remote_worker_business_traveler",
+      "goal": "Determine whether a short-notice work stay can be evaluated from visible content.",
+      "task": "Scan the page for a clear destination field, date inputs, and listing cards, then compare any visible price and rating information for a one-person weekday stay.",
+      "constraints": {
+        "destination": "New York",
+        "guests": 1,
+        "budget_preference": "Prefer under $250 per night if visible"
+      },
+      "behavior_style": {
+        "patience": 0.36,
+        "exploration": 0.4,
+        "price_sensitivity": 0.6,
+        "trust_sensitivity": 0.76,
+        "detail_orientation": 0.66
+      },
+      "success_criteria": [
+        "Identifies available path to set dates or confirms none",
+        "Compares visible price signals",
+        "Stops after deciding whether to continue using the page"
+      ],
+      "frustration_triggers": [
+        "No weekday date selection",
+        "Only historical listing content appears",
+        "Cannot filter by business-relevant amenities"
+      ]
+    },
+    {
+      "id": "airbnb_u_011",
+      "segment": "remote_worker_business_traveler",
+      "goal": "Assess whether the page has enough listing quality information for a remote-work stay.",
+      "task": "Look for high-rated homes or rooms, inspect available listing text and links, and determine whether ratings plus page context are enough to shortlist one option.",
+      "constraints": {
+        "destination": "Kings Beach",
+        "guests": 1,
+        "budget_preference": "Flexible if rating is high and stay seems reliable"
+      },
+      "behavior_style": {
+        "patience": 0.5,
+        "exploration": 0.52,
+        "price_sensitivity": 0.42,
+        "trust_sensitivity": 0.84,
+        "detail_orientation": 0.74
+      },
+      "success_criteria": [
+        "Finds highest visible rating if listing cards are present",
+        "Notes absence of remote-work amenities if missing",
+        "Avoids account creation and booking actions"
+      ],
+      "frustration_triggers": [
+        "No Wi-Fi or workspace details",
+        "Rating context is incomplete",
+        "Listing path does not provide more detail"
+      ]
+    },
+    {
+      "id": "airbnb_u_012",
+      "segment": "remote_worker_business_traveler",
+      "goal": "Evaluate whether the page supports fast destination-based browsing for a business trip.",
+      "task": "Use visible city links or destination controls to look for Paris stays, then assess whether the resulting page state provides enough information to compare options for a solo traveler.",
+      "constraints": {
+        "destination": "Paris",
+        "guests": 1,
+        "budget_preference": "Moderate business budget with preference for clear pricing"
+      },
+      "behavior_style": {
+        "patience": 0.39,
+        "exploration": 0.5,
+        "price_sensitivity": 0.52,
+        "trust_sensitivity": 0.78,
+        "detail_orientation": 0.62
+      },
+      "success_criteria": [
+        "Uses visible navigation without signing in",
+        "Determines whether destination browsing changes the content",
+        "Summarizes whether comparison is possible"
+      ],
+      "frustration_triggers": [
+        "City links are not search filters",
+        "No clear search results update",
+        "Archive timeline competes with task flow"
+      ]
+    },
+    {
+      "id": "airbnb_u_013",
+      "segment": "experience_seeker",
+      "goal": "Find whether the page offers experiences or unique local stays worth exploring.",
+      "task": "Look for Experiences, Services, city links, or unusual stay content, then compare what is available against normal home listings without making a purchase or account.",
+      "constraints": {
+        "destination": "Paris",
+        "guests": 2,
+        "budget_preference": "Flexible for distinctive local experiences"
+      },
+      "behavior_style": {
+        "patience": 0.65,
+        "exploration": 0.9,
+        "price_sensitivity": 0.38,
+        "trust_sensitivity": 0.58,
+        "detail_orientation": 0.64
+      },
+      "success_criteria": [
+        "Finds whether Experiences or Services tabs exist or are absent",
+        "Identifies any unique local stay content",
+        "Stops after assessing discovery value"
+      ],
+      "frustration_triggers": [
+        "Tabs mentioned in model are not visible in live page",
+        "Archive chronology is not relevant to trip discovery",
+        "No photos or activity details"
+      ]
+    },
+    {
+      "id": "airbnb_u_014",
+      "segment": "experience_seeker",
+      "goal": "Explore historically themed Airbnb content while checking whether it can lead to a travel idea.",
+      "task": "Browse the archive timeline buttons, then look for any destination, listing, or experience-like content that could inspire a trip, stopping after an intent assessment.",
+      "constraints": {
+        "destination": "New York",
+        "guests": 2,
+        "budget_preference": "Price is secondary to novelty"
+      },
+      "behavior_style": {
+        "patience": 0.82,
+        "exploration": 0.95,
+        "price_sensitivity": 0.28,
+        "trust_sensitivity": 0.5,
+        "detail_orientation": 0.72
+      },
+      "success_criteria": [
+        "Interacts with archive/timeline navigation",
+        "Finds at least one destination or listing cue",
+        "States whether the page inspires travel planning despite not being a booking flow"
+      ],
+      "frustration_triggers": [
+        "Timeline entries do not expose stay details",
+        "No current experiences inventory",
+        "Navigation lacks clear next step"
+      ]
+    },
+    {
+      "id": "airbnb_u_015",
+      "segment": "experience_seeker",
+      "goal": "Compare Lake Tahoe listings for a memorable getaway rather than the cheapest option.",
+      "task": "Review visible Lake Tahoe homes if present, prioritizing guest favorite, rating, and cabin-style signals, then shortlist the most appealing option without wishlisting or booking.",
+      "constraints": {
+        "destination": "Lake Tahoe",
+        "guests": 2,
+        "budget_preference": "Flexible up to premium pricing for a standout cabin"
+      },
+      "behavior_style": {
+        "patience": 0.6,
+        "exploration": 0.78,
+        "price_sensitivity": 0.35,
+        "trust_sensitivity": 0.66,
+        "detail_orientation": 0.68
+      },
+      "success_criteria": [
+        "Compares multiple visible listing cards if available",
+        "Prioritizes standout rating or guest favorite signals",
+        "Avoids wishlist actions that require sign-in"
+      ],
+      "frustration_triggers": [
+        "Listing cards are absent from live archive view",
+        "No photos or descriptive amenities",
+        "Cannot open rich listing detail"
+      ]
+    },
+    {
+      "id": "airbnb_u_016",
+      "segment": "experience_seeker",
+      "goal": "Assess whether Services or local activities are discoverable from the page.",
+      "task": "Search the visible navigation and content for Services, Experiences, or activity-related paths, then decide whether the page can support planning beyond lodging.",
+      "constraints": {
+        "destination": "San Francisco",
+        "guests": 2,
+        "budget_preference": "Open budget for activities, needs clear offering details"
+      },
+      "behavior_style": {
+        "patience": 0.58,
+        "exploration": 0.86,
+        "price_sensitivity": 0.3,
+        "trust_sensitivity": 0.6,
+        "detail_orientation": 0.6
+      },
+      "success_criteria": [
+        "Finds or confirms absence of Services and Experiences access",
+        "Does not attempt payment or account creation",
+        "Reports whether non-lodging discovery is possible"
+      ],
+      "frustration_triggers": [
+        "Services or Experiences are advertised but not usable",
+        "Archive links replace travel product navigation",
+        "No prices, times, or provider details for activities"
+      ]
+    },
+    {
+      "id": "airbnb_u_017",
+      "segment": "first_time_cautious_user",
+      "goal": "Determine whether the page feels trustworthy enough to start searching without signing up.",
+      "task": "Inspect the page for clear search controls, ratings, sign-in prompts, company links, and safe navigation, then stop after deciding whether to proceed as a first-time visitor.",
+      "constraints": {
+        "destination": "Lake Tahoe",
+        "guests": 2,
+        "budget_preference": "Needs clear price and trust signals before continuing"
+      },
+      "behavior_style": {
+        "patience": 0.7,
+        "exploration": 0.4,
+        "price_sensitivity": 0.7,
+        "trust_sensitivity": 0.98,
+        "detail_orientation": 0.82
+      },
+      "success_criteria": [
+        "Identifies whether browsing is possible without an account",
+        "Notes visible trust signals and missing safety details",
+        "Avoids sign-up and sign-in"
+      ],
+      "frustration_triggers": [
+        "Prominent account links",
+        "Archive branding looks unfamiliar",
+        "No modern booking protections or cancellation details"
+      ]
+    },
+    {
+      "id": "airbnb_u_018",
+      "segment": "first_time_cautious_user",
+      "goal": "Safely test whether destination and date search can be started without personal data.",
+      "task": "Try to locate and use destination, check-in, check-out, and guest controls for a simple trip, but do not enter real personal data or continue into booking.",
+      "constraints": {
+        "destination": "New York",
+        "guests": 1,
+        "budget_preference": "Prefers transparent low-to-moderate pricing"
+      },
+      "behavior_style": {
+        "patience": 0.76,
+        "exploration": 0.32,
+        "price_sensitivity": 0.76,
+        "trust_sensitivity": 0.96,
+        "detail_orientation": 0.88
+      },
+      "success_criteria": [
+        "Confirms whether search can start without account creation",
+        "Checks if any input asks for personal data",
+        "Stops before any reservation, host contact, or payment step"
+      ],
+      "frustration_triggers": [
+        "Unclear what buttons do",
+        "Sign-up prompts appear early",
+        "No explanation of fees or policies"
+      ]
+    },
+    {
+      "id": "airbnb_u_019",
+      "segment": "first_time_cautious_user",
+      "goal": "Compare visible options only if the page clearly shows ratings and prices.",
+      "task": "Scan visible listings or featured stay content, compare price and rating details, and stop if the page requires login or lacks enough information to evaluate safety.",
+      "constraints": {
+        "destination": "South Lake Tahoe",
+        "guests": 2,
+        "budget_preference": "Moderate budget, trust matters more than saving money"
+      },
+      "behavior_style": {
+        "patience": 0.66,
+        "exploration": 0.38,
+        "price_sensitivity": 0.62,
+        "trust_sensitivity": 1.0,
+        "detail_orientation": 0.84
+      },
+      "success_criteria": [
+        "Finds price and rating signals if present",
+        "Selects the safest-looking candidate only as a shortlist item",
+        "Does not use wishlist, booking, or contact-host actions"
+      ],
+      "frustration_triggers": [
+        "Ratings are missing or lack review counts",
+        "Wishlist implies account dependency",
+        "Cannot verify listing legitimacy"
+      ]
+    },
+    {
+      "id": "airbnb_u_020",
+      "segment": "first_time_cautious_user",
+      "goal": "Assess whether the page provides a clear and safe path for a first Airbnb-style search.",
+      "task": "Start from the homepage/archive view, inspect headings, links, labels, and any search or listing actions, then decide whether a cautious new user would continue.",
+      "constraints": {
+        "destination": "Paris",
+        "guests": 2,
+        "budget_preference": "Willing to compare prices only after trust is established"
+      },
+      "behavior_style": {
+        "patience": 0.8,
+        "exploration": 0.35,
+        "price_sensitivity": 0.58,
+        "trust_sensitivity": 0.97,
+        "detail_orientation": 0.9
+      },
+      "success_criteria": [
+        "Understands the purpose of the page from visible content",
+        "Identifies whether current search controls are usable",
+        "Stops after confidence assessment without creating an account"
+      ],
+      "frustration_triggers": [
+        "Archive/timeline purpose is confusing",
+        "Modern search tabs are absent or inconsistent",
+        "Company and social links do not answer booking safety questions"
+      ]
+    }
+  ]
+}
+
+=== 2) SYNTHETIC_USER_BEHAVIOR_TRACES_JSON ===
+{
+  "page_context": {
+    "schema_version": "browser_page_context_v1",
+    "observation_source": "urllib_html",
+    "url": "http://127.0.0.1:3000/versionB",
+    "final_url": "http://127.0.0.1:3000/versionB",
+    "page_kind": "airbnb_archive",
+    "page_type": "Airbnb archive page",
+    "title": "staybnb",
+    "headings": [
+      "Stay with a local when traveling",
+      "New York couch near Union Square",
+      "Biggest Deals",
+      "Socially bookmark us",
+      "Company"
+    ],
+    "buttons": [
+      "Airbnb Archive",
+      "2009 AirBed",
+      "Feb 4, 2009",
+      "2010 Human",
+      "Jan 2, 2010",
+      "2012 Global",
+      "Jan 1, 2012",
+      "2012 Discovery",
+      "Dec 3, 2012",
+      "2014 Belo",
+      "Jul 17, 2014",
+      "2016 Live There",
+      "Nov 17, 2016",
+      "2017 Trips",
+      "Jan 1, 2017",
+      "2019 Trips",
+      "Jun 1, 2019",
+      "2020 Online",
+      "May 1, 2020",
+      "2021 Flexible"
+    ],
+    "links": [
+      "Sign Up",
+      "Sign In",
+      "New York",
+      "San Francisco",
+      "Paris",
+      "Twitter",
+      "Facebook",
+      "Delicious",
+      "About",
+      "FAQ",
+      "Contact",
+      "Wayback source"
+    ],
+    "labels": [
+      "Check in",
+      "Add dates",
+      "Check out",
+      "Guests",
+      "Add guests"
+    ],
+    "visible_text_excerpt": "staybnb\nAirbnb Archive\n2009 AirBed\nFeb 4, 2009\n2010 Human\nJan 2, 2010\n2012 Global\nJan 1, 2012\n2012 Discovery\nDec 3, 2012\n2014 Belo\nJul 17, 2014\n2016 Live There\nNov 17, 2016\n2017 Trips\nJan 1, 2017\n2019 Trips\nJun 1, 2019\n2020 Online\nMay 1, 2020\n2021 Flexible\nDec 1, 2021\n2022 Categories\nMay 14, 2022\n2023 Rooms\nDec 31, 2023\n2025 Services\nJun 1, 2025\n2026 Services\nMay 1, 2026\nAirBed & Breakfast\nSign Up\nSign In\nAirBed & Breakfast - Forget hotels.\nStay with a local when traveling\nYou can stay in 715 cities in 71 countries.\nCheck in\nCheck out\nGuests\nSee listing\nFeatured\nNew York couch near Union Square\nNew York\n$45\nsimple room\nBiggest Deals\nSan Francisco\nParis\nSocially bookmark us\nTwitter\nFacebook\nDelicious\nCompany\nAbout\nFAQ\nContact\nDynamic React route\nWayback source"
+  },
+  "traces": [
+    {
+      "persona_id": "airbnb_u_001",
+      "segment": "budget_weekend_couple",
+      "goal": "Find a low-cost two-night weekend stay option and assess whether the page supports a normal search flow.",
+      "steps": [
+        {
+          "step": 1,
+          "observation": "The page opens as Airbnb Archive with a chronological product-history navigation.",
+          "persona_thought": "This looks like brand history, not a place to book a stay.",
+          "intent": "orient_on_archive",
+          "action": "scan timeline and hero content",
+          "target_ui": "Archive timeline",
+          "expected_result": "Understand the page purpose before trying to search.",
+          "friction": 0.48,
+          "event_type": "view",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 22
+        },
+        {
+          "step": 2,
+          "observation": "Timeline entries such as 2009 AirBed, 2010 Human, and later product eras dominate the first screen.",
+          "persona_thought": "The historical content is interesting, but it does not answer my trip-planning goal.",
+          "intent": "scan_history",
+          "action": "read visible archive milestones",
+          "target_ui": "Timeline list",
+          "expected_result": "Determine whether any milestone leads to a stay search.",
+          "friction": 0.62,
+          "event_type": "scroll",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 42
+        },
+        {
+          "step": 3,
+          "observation": "The archive navigation offers many era buttons, so users click around the timeline instead of progressing toward a stay task.",
+          "persona_thought": "I will try another era, but this is exploration rather than booking progress.",
+          "intent": "timeline_click",
+          "action": "click a timeline era such as 2025 Services",
+          "target_ui": "Archive timeline button",
+          "expected_result": "Switch archive era, not booking context.",
+          "friction": 0.58,
+          "event_type": "secondary_click",
+          "clicked": true,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 18
+        },
+        {
+          "step": 4,
+          "observation": "Some archived eras expose SearchSurface forms, but they feel like historical examples rather than the primary current booking flow.",
+          "persona_thought": "I am unsure whether this search will produce useful current listings.",
+          "intent": "probe_archive_search",
+          "action": "scan archived search form without committing",
+          "target_ui": "Archive SearchSurface",
+          "expected_result": "Recognize that the CTA is not clearly tied to the task.",
+          "friction": 0.72,
+          "event_type": "dwell",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 38
+        },
+        {
+          "step": 5,
+          "observation": "No clear listing cards, price comparison, or mock checkout path is visible from the archive experience.",
+          "persona_thought": "I cannot evaluate price, trust, or purchase intent from this page.",
+          "intent": "abandon_booking_task",
+          "action": "stop before any account or personal-data step",
+          "target_ui": "Archive page",
+          "expected_result": "Exit with low booking confidence.",
+          "friction": 0.86,
+          "event_type": "dropoff",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 20
+        }
+      ],
+      "final_feedback": {
+        "task_success": false,
+        "scores": {
+          "ease_of_search": 4,
+          "price_clarity": 3,
+          "trust": 7,
+          "purchase_intent": 2
+        },
+        "liked_features": [
+          "The timeline communicates brand evolution clearly."
+        ],
+        "confusion_points": [
+          "The page reads as a historical archive rather than a booking or comparison experience.",
+          "Destination, date, guest, listing, and price controls are not available in the expected place."
+        ],
+        "friction_themes": [
+          "price_clarity",
+          "date_picker_friction"
+        ],
+        "recommendation": "Do not send booking-intent traffic to the archive page; route users to a searchable stay flow or add a clear booking CTA."
+      },
+      "variant": "B",
+      "trace_source": "rule_ui_specific",
+      "task_seconds": 140,
+      "converted": false,
+      "dropoff": true,
+      "satisfaction": 2.8
+    },
+    {
+      "persona_id": "airbnb_u_005",
+      "segment": "family_planner",
+      "goal": "Assess whether a family can search for a practical multi-guest stay with clear dates and enough trust signals.",
+      "steps": [
+        {
+          "step": 1,
+          "observation": "The page opens as Airbnb Archive with a chronological product-history navigation.",
+          "persona_thought": "This looks like brand history, not a place to book a stay.",
+          "intent": "orient_on_archive",
+          "action": "scan timeline and hero content",
+          "target_ui": "Archive timeline",
+          "expected_result": "Understand the page purpose before trying to search.",
+          "friction": 0.48,
+          "event_type": "view",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 22
+        },
+        {
+          "step": 2,
+          "observation": "Timeline entries such as 2009 AirBed, 2010 Human, and later product eras dominate the first screen.",
+          "persona_thought": "The historical content is interesting, but it does not answer my trip-planning goal.",
+          "intent": "scan_history",
+          "action": "read visible archive milestones",
+          "target_ui": "Timeline list",
+          "expected_result": "Determine whether any milestone leads to a stay search.",
+          "friction": 0.62,
+          "event_type": "scroll",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 42
+        },
+        {
+          "step": 3,
+          "observation": "The archive navigation offers many era buttons, so users click around the timeline instead of progressing toward a stay task.",
+          "persona_thought": "I will try another era, but this is exploration rather than booking progress.",
+          "intent": "timeline_click",
+          "action": "click a timeline era such as 2025 Services",
+          "target_ui": "Archive timeline button",
+          "expected_result": "Switch archive era, not booking context.",
+          "friction": 0.58,
+          "event_type": "secondary_click",
+          "clicked": true,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 18
+        },
+        {
+          "step": 4,
+          "observation": "Some archived eras expose SearchSurface forms, but they feel like historical examples rather than the primary current booking flow.",
+          "persona_thought": "I am unsure whether this search will produce useful current listings.",
+          "intent": "probe_archive_search",
+          "action": "scan archived search form without committing",
+          "target_ui": "Archive SearchSurface",
+          "expected_result": "Recognize that the CTA is not clearly tied to the task.",
+          "friction": 0.72,
+          "event_type": "dwell",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 38
+        },
+        {
+          "step": 5,
+          "observation": "No clear listing cards, price comparison, or mock checkout path is visible from the archive experience.",
+          "persona_thought": "I cannot evaluate price, trust, or purchase intent from this page.",
+          "intent": "abandon_booking_task",
+          "action": "stop before any account or personal-data step",
+          "target_ui": "Archive page",
+          "expected_result": "Exit with low booking confidence.",
+          "friction": 0.86,
+          "event_type": "dropoff",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 20
+        }
+      ],
+      "final_feedback": {
+        "task_success": false,
+        "scores": {
+          "ease_of_search": 4,
+          "price_clarity": 4,
+          "trust": 7,
+          "purchase_intent": 2
+        },
+        "liked_features": [
+          "The timeline communicates brand evolution clearly."
+        ],
+        "confusion_points": [
+          "The page reads as a historical archive rather than a booking or comparison experience.",
+          "Destination, date, guest, listing, and price controls are not available in the expected place."
+        ],
+        "friction_themes": [
+          "price_clarity",
+          "date_picker_friction"
+        ],
+        "recommendation": "Do not send booking-intent traffic to the archive page; route users to a searchable stay flow or add a clear booking CTA."
+      },
+      "variant": "B",
+      "trace_source": "rule_ui_specific",
+      "task_seconds": 140,
+      "converted": false,
+      "dropoff": true,
+      "satisfaction": 2.8
+    },
+    {
+      "persona_id": "airbnb_u_009",
+      "segment": "remote_worker_business_traveler",
+      "goal": "Check whether the page can support a work-trip stay search with quick comparison.",
+      "steps": [
+        {
+          "step": 1,
+          "observation": "The page opens as Airbnb Archive with a chronological product-history navigation.",
+          "persona_thought": "This looks like brand history, not a place to book a stay.",
+          "intent": "orient_on_archive",
+          "action": "scan timeline and hero content",
+          "target_ui": "Archive timeline",
+          "expected_result": "Understand the page purpose before trying to search.",
+          "friction": 0.48,
+          "event_type": "view",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 22
+        },
+        {
+          "step": 2,
+          "observation": "Timeline entries such as 2009 AirBed, 2010 Human, and later product eras dominate the first screen.",
+          "persona_thought": "The historical content is interesting, but it does not answer my trip-planning goal.",
+          "intent": "scan_history",
+          "action": "read visible archive milestones",
+          "target_ui": "Timeline list",
+          "expected_result": "Determine whether any milestone leads to a stay search.",
+          "friction": 0.62,
+          "event_type": "scroll",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 42
+        },
+        {
+          "step": 3,
+          "observation": "The archive navigation offers many era buttons, so users click around the timeline instead of progressing toward a stay task.",
+          "persona_thought": "I will try another era, but this is exploration rather than booking progress.",
+          "intent": "timeline_click",
+          "action": "click a timeline era such as 2025 Services",
+          "target_ui": "Archive timeline button",
+          "expected_result": "Switch archive era, not booking context.",
+          "friction": 0.58,
+          "event_type": "secondary_click",
+          "clicked": true,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 18
+        },
+        {
+          "step": 4,
+          "observation": "Some archived eras expose SearchSurface forms, but they feel like historical examples rather than the primary current booking flow.",
+          "persona_thought": "I am unsure whether this search will produce useful current listings.",
+          "intent": "probe_archive_search",
+          "action": "scan archived search form without committing",
+          "target_ui": "Archive SearchSurface",
+          "expected_result": "Recognize that the CTA is not clearly tied to the task.",
+          "friction": 0.72,
+          "event_type": "dwell",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 38
+        },
+        {
+          "step": 5,
+          "observation": "No clear listing cards, price comparison, or mock checkout path is visible from the archive experience.",
+          "persona_thought": "I cannot evaluate price, trust, or purchase intent from this page.",
+          "intent": "abandon_booking_task",
+          "action": "stop before any account or personal-data step",
+          "target_ui": "Archive page",
+          "expected_result": "Exit with low booking confidence.",
+          "friction": 0.86,
+          "event_type": "dropoff",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 20
+        }
+      ],
+      "final_feedback": {
+        "task_success": false,
+        "scores": {
+          "ease_of_search": 4,
+          "price_clarity": 5,
+          "trust": 7,
+          "purchase_intent": 3
+        },
+        "liked_features": [
+          "The timeline communicates brand evolution clearly."
+        ],
+        "confusion_points": [
+          "The page reads as a historical archive rather than a booking or comparison experience.",
+          "Destination, date, guest, listing, and price controls are not available in the expected place."
+        ],
+        "friction_themes": [
+          "price_clarity",
+          "date_picker_friction"
+        ],
+        "recommendation": "Do not send booking-intent traffic to the archive page; route users to a searchable stay flow or add a clear booking CTA."
+      },
+      "variant": "B",
+      "trace_source": "rule_ui_specific",
+      "task_seconds": 140,
+      "converted": false,
+      "dropoff": true,
+      "satisfaction": 2.8
+    },
+    {
+      "persona_id": "airbnb_u_013",
+      "segment": "experience_seeker",
+      "goal": "Find whether the page offers experiences or unique local stays worth exploring.",
+      "steps": [
+        {
+          "step": 1,
+          "observation": "The page opens as Airbnb Archive with a chronological product-history navigation.",
+          "persona_thought": "This looks like brand history, not a place to book a stay.",
+          "intent": "orient_on_archive",
+          "action": "scan timeline and hero content",
+          "target_ui": "Archive timeline",
+          "expected_result": "Understand the page purpose before trying to search.",
+          "friction": 0.48,
+          "event_type": "view",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 22
+        },
+        {
+          "step": 2,
+          "observation": "Timeline entries such as 2009 AirBed, 2010 Human, and later product eras dominate the first screen.",
+          "persona_thought": "The historical content is interesting, but it does not answer my trip-planning goal.",
+          "intent": "scan_history",
+          "action": "read visible archive milestones",
+          "target_ui": "Timeline list",
+          "expected_result": "Determine whether any milestone leads to a stay search.",
+          "friction": 0.62,
+          "event_type": "scroll",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 42
+        },
+        {
+          "step": 3,
+          "observation": "The archive navigation offers many era buttons, so users click around the timeline instead of progressing toward a stay task.",
+          "persona_thought": "I will try another era, but this is exploration rather than booking progress.",
+          "intent": "timeline_click",
+          "action": "click a timeline era such as 2025 Services",
+          "target_ui": "Archive timeline button",
+          "expected_result": "Switch archive era, not booking context.",
+          "friction": 0.58,
+          "event_type": "secondary_click",
+          "clicked": true,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 18
+        },
+        {
+          "step": 4,
+          "observation": "Some archived eras expose SearchSurface forms, but they feel like historical examples rather than the primary current booking flow.",
+          "persona_thought": "I am unsure whether this search will produce useful current listings.",
+          "intent": "probe_archive_search",
+          "action": "scan archived search form without committing",
+          "target_ui": "Archive SearchSurface",
+          "expected_result": "Recognize that the CTA is not clearly tied to the task.",
+          "friction": 0.72,
+          "event_type": "dwell",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 38
+        },
+        {
+          "step": 5,
+          "observation": "No clear listing cards, price comparison, or mock checkout path is visible from the archive experience.",
+          "persona_thought": "I cannot evaluate price, trust, or purchase intent from this page.",
+          "intent": "abandon_booking_task",
+          "action": "stop before any account or personal-data step",
+          "target_ui": "Archive page",
+          "expected_result": "Exit with low booking confidence.",
+          "friction": 0.86,
+          "event_type": "dropoff",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 20
+        }
+      ],
+      "final_feedback": {
+        "task_success": false,
+        "scores": {
+          "ease_of_search": 4,
+          "price_clarity": 5,
+          "trust": 7,
+          "purchase_intent": 3
+        },
+        "liked_features": [
+          "The timeline communicates brand evolution clearly."
+        ],
+        "confusion_points": [
+          "The page reads as a historical archive rather than a booking or comparison experience.",
+          "Destination, date, guest, listing, and price controls are not available in the expected place."
+        ],
+        "friction_themes": [
+          "price_clarity",
+          "date_picker_friction",
+          "experiences_discoverability"
+        ],
+        "recommendation": "Do not send booking-intent traffic to the archive page; route users to a searchable stay flow or add a clear booking CTA."
+      },
+      "variant": "B",
+      "trace_source": "rule_ui_specific",
+      "task_seconds": 140,
+      "converted": false,
+      "dropoff": true,
+      "satisfaction": 2.8
+    },
+    {
+      "persona_id": "airbnb_u_017",
+      "segment": "first_time_cautious_user",
+      "goal": "Determine whether the page feels trustworthy enough to start searching without signing up.",
+      "steps": [
+        {
+          "step": 1,
+          "observation": "The page opens as Airbnb Archive with a chronological product-history navigation.",
+          "persona_thought": "This looks like brand history, not a place to book a stay.",
+          "intent": "orient_on_archive",
+          "action": "scan timeline and hero content",
+          "target_ui": "Archive timeline",
+          "expected_result": "Understand the page purpose before trying to search.",
+          "friction": 0.48,
+          "event_type": "view",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 22
+        },
+        {
+          "step": 2,
+          "observation": "Timeline entries such as 2009 AirBed, 2010 Human, and later product eras dominate the first screen.",
+          "persona_thought": "The historical content is interesting, but it does not answer my trip-planning goal.",
+          "intent": "scan_history",
+          "action": "read visible archive milestones",
+          "target_ui": "Timeline list",
+          "expected_result": "Determine whether any milestone leads to a stay search.",
+          "friction": 0.62,
+          "event_type": "scroll",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 42
+        },
+        {
+          "step": 3,
+          "observation": "The archive navigation offers many era buttons, so users click around the timeline instead of progressing toward a stay task.",
+          "persona_thought": "I will try another era, but this is exploration rather than booking progress.",
+          "intent": "timeline_click",
+          "action": "click a timeline era such as 2025 Services",
+          "target_ui": "Archive timeline button",
+          "expected_result": "Switch archive era, not booking context.",
+          "friction": 0.58,
+          "event_type": "secondary_click",
+          "clicked": true,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 18
+        },
+        {
+          "step": 4,
+          "observation": "Some archived eras expose SearchSurface forms, but they feel like historical examples rather than the primary current booking flow.",
+          "persona_thought": "I am unsure whether this search will produce useful current listings.",
+          "intent": "probe_archive_search",
+          "action": "scan archived search form without committing",
+          "target_ui": "Archive SearchSurface",
+          "expected_result": "Recognize that the CTA is not clearly tied to the task.",
+          "friction": 0.72,
+          "event_type": "dwell",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 38
+        },
+        {
+          "step": 5,
+          "observation": "No clear listing cards, price comparison, or mock checkout path is visible from the archive experience.",
+          "persona_thought": "I cannot evaluate price, trust, or purchase intent from this page.",
+          "intent": "abandon_booking_task",
+          "action": "stop before any account or personal-data step",
+          "target_ui": "Archive page",
+          "expected_result": "Exit with low booking confidence.",
+          "friction": 0.86,
+          "event_type": "dropoff",
+          "clicked": false,
+          "like_signal": false,
+          "primary_action": false,
+          "detail_action": false,
+          "elapsed_seconds": 20
+        }
+      ],
+      "final_feedback": {
+        "task_success": false,
+        "scores": {
+          "ease_of_search": 4,
+          "price_clarity": 4,
+          "trust": 8,
+          "purchase_intent": 3
+        },
+        "liked_features": [
+          "The timeline communicates brand evolution clearly."
+        ],
+        "confusion_points": [
+          "The page reads as a historical archive rather than a booking or comparison experience.",
+          "Destination, date, guest, listing, and price controls are not available in the expected place."
+        ],
+        "friction_themes": [
+          "price_clarity",
+          "date_picker_friction"
+        ],
+        "recommendation": "Do not send booking-intent traffic to the archive page; route users to a searchable stay flow or add a clear booking CTA."
+      },
+      "variant": "B",
+      "trace_source": "rule_ui_specific",
+      "task_seconds": 140,
+      "converted": false,
+      "dropoff": true,
+      "satisfaction": 3.0
+    }
+  ]
+}
+
+=== 3) SYNTHETIC_FEEDBACK_SUMMARY_JSON ===
+{
+  "top_findings": [
+    {
+      "theme": "Archive content blocks booking intent",
+      "affected_users": 5,
+      "severity": "high",
+      "evidence": "run_count 5; task_success_rate 0.0; conversion_rate 0.0; dropoff_rate 1.0; completion_rate 0.0; avg_satisfaction 2.84.",
+      "suggestion": "Do not route booking-intent traffic to the archive page. Add a prominent path to the current searchable stays flow."
+    },
+    {
+      "theme": "Search controls are unclear or non-functional for trip planning",
+      "affected_users": 5,
+      "severity": "high",
+      "evidence": "date_picker_friction count 5; avg ease_of_search 4.0; primary_cta_rate 0.0.",
+      "suggestion": "Make destination, check-in, check-out, guests, and search CTA clearly active, or label the archive as non-bookable."
+    },
+    {
+      "theme": "Users cannot compare listings or prices",
+      "affected_users": 5,
+      "severity": "high",
+      "evidence": "price_clarity count 5; avg price_clarity 4.2; detail_open_rate 0.0; avg_clicks_per_user 1.0.",
+      "suggestion": "Show real listing cards with nightly/total prices, ratings, and detail links, or replace archive examples with a clear handoff to search results."
+    },
+    {
+      "theme": "Brand trust is present but does not convert",
+      "affected_users": 5,
+      "severity": "medium",
+      "evidence": "avg trust 7.2 while avg purchase_intent is 2.6 and conversion_rate is 0.0.",
+      "suggestion": "Preserve the archive as brand storytelling, but separate it from task-based booking flows and add safety, fee, and policy context near any search CTA."
+    },
+    {
+      "theme": "Experiences discovery is weak",
+      "affected_users": 1,
+      "severity": "medium",
+      "evidence": "experiences_discoverability count 1; the experience seeker saw archive navigation instead of usable Services or Experiences paths.",
+      "suggestion": "Expose current Services and Experiences navigation separately from historical timeline entries."
+    }
+  ],
+  "segment_notes": [
+    {
+      "segment": "budget_weekend_couple",
+      "note": "Could not compare low-cost weekend options because visible content did not provide usable destination, date, guest, or price comparison controls."
+    },
+    {
+      "segment": "family_planner",
+      "note": "Could not assess family suitability because capacity, bedroom, amenity, total cost, and listing detail paths were missing."
+    },
+    {
+      "segment": "remote_worker_business_traveler",
+      "note": "The page was too slow and indirect for work-trip planning, with no reliable destination results, dates, or business-relevant amenities."
+    },
+    {
+      "segment": "experience_seeker",
+      "note": "The timeline had some discovery appeal, but it did not expose usable Experiences, Services, photos, activity details, or bookable inspiration."
+    },
+    {
+      "segment": "first_time_cautious_user",
+      "note": "Brand history supported trust, but the archive purpose and lack of current booking protections left cautious users unwilling to proceed."
+    }
+  ],
+  "recommendations": [
+    "Split the archive from the booking journey: keep it for storytelling, but send search-intent users to the live stays search page.",
+    "Add a clear primary CTA such as Search current stays that opens a functional destination/date/guest flow.",
+    "If archived search surfaces remain visible, label them as historical examples and avoid making them look like active booking controls.",
+    "Add listing comparison essentials near any booking path: price, total cost context, rating, review count, capacity, and detail links.",
+    "Create a separate current Services and Experiences entry point so exploration users are not trapped in the timeline."
+  ],
+  "demo_readout": "Across 5 synthetic users, task_success_rate was 0.0, conversion_rate was 0.0, and dropoff_rate was 1.0. Users averaged 140.0 seconds and 5.0 steps, clicked once on average, but never reached a primary CTA, detail view, like action, or completion. The archive communicates brand history, but it does not support booking, comparison shopping, family planning, business travel, or experiences discovery.",
+  "metrics": {
+    "run_count": 5,
+    "task_success_rate": 0.0,
+    "conversion_rate": 0.0,
+    "dropoff_rate": 1.0,
+    "avg_task_seconds": 140.0,
+    "avg_satisfaction": 2.84,
+    "avg_steps": 5.0,
+    "avg_scores": {
+      "ease_of_search": 4.0,
+      "price_clarity": 4.2,
+      "trust": 7.2,
+      "purchase_intent": 2.6
+    },
+    "interaction_metrics": {
+      "click_rate": 1.0,
+      "primary_cta_rate": 0.0,
+      "like_rate": 0.0,
+      "detail_open_rate": 0.0,
+      "completion_rate": 0.0,
+      "avg_dwell_seconds": 140.0,
+      "avg_clicks_per_user": 1.0,
+      "friction_step_rate": 1.0
+    },
+    "friction_counts": {
+      "date_picker_friction": 5,
+      "experiences_discoverability": 1,
+      "price_clarity": 5
+    },
+    "segments_run": [
+      "budget_weekend_couple",
+      "experience_seeker",
+      "family_planner",
+      "first_time_cautious_user",
+      "remote_worker_business_traveler"
+    ]
+  }
+}
+
+=== READABLE_SUMMARY ===
+Ran 5 synthetic users; success rate=0.0; avg steps=5.0.
+Average scores: {"ease_of_search": 4.0, "price_clarity": 4.2, "trust": 7.2, "purchase_intent": 2.6}
+
+Top findings:
+- [high] Archive content blocks booking intent: 5 users. Do not route booking-intent traffic to the archive page. Add a prominent path to the current searchable stays flow.
+- [high] Search controls are unclear or non-functional for trip planning: 5 users. Make destination, check-in, check-out, guests, and search CTA clearly active, or label the archive as non-bookable.
+- [high] Users cannot compare listings or prices: 5 users. Show real listing cards with nightly/total prices, ratings, and detail links, or replace archive examples with a clear handoff to search results.
+- [medium] Brand trust is present but does not convert: 5 users. Preserve the archive as brand storytelling, but separate it from task-based booking flows and add safety, fee, and policy context near any search CTA.
+- [medium] Experiences discovery is weak: 1 users. Expose current Services and Experiences navigation separately from historical timeline entries.
+
+Demo readout:
+Across 5 synthetic users, task_success_rate was 0.0, conversion_rate was 0.0, and dropoff_rate was 1.0. Users averaged 140.0 seconds and 5.0 steps, clicked once on average, but never reached a primary CTA, detail view, like action, or completion. The archive communicates brand history, but it does not support booking, comparison shopping, family planning, business travel, or experiences discovery.

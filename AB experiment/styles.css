@@ -906,16 +906,21 @@ select {
 
 .logs-table th:nth-child(1),
 .logs-table td:nth-child(1) {
-  width: 54px;
+  width: 48px;
 }
 
 .logs-table th:nth-child(2),
 .logs-table td:nth-child(2) {
-  width: 86px;
+  width: 72px;
 }
 
-.logs-table th:nth-child(4),
-.logs-table td:nth-child(4) {
+.logs-table th:nth-child(3),
+.logs-table td:nth-child(3) {
+  width: 96px;
+}
+
+.logs-table th:nth-child(5),
+.logs-table td:nth-child(5) {
   width: 82px;
 }
 
@@ -942,6 +947,10 @@ select {
 
 .friction.none {
   color: var(--green);
+}
+
+.friction.low {
+  color: var(--blue);
 }
 
 .friction.medium {
@@ -993,6 +1002,10 @@ select {
 
   .evidence-row {
     grid-template-columns: 54px 240px minmax(240px, 1fr) 174px;
+  }
+
+  .control-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -1102,7 +1115,7 @@ select {
 
   .logs-table,
   .profiles-table {
-    min-width: 620px;
+    min-width: 680px;
   }
 
   .runner-card {

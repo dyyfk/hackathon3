@@ -188,12 +188,13 @@ function logsCard(logs) {
   const card = sectionCard("Behavior Logs", "list");
   const table = document.createElement("table");
   table.className = "logs-table";
-  table.innerHTML = "<thead><tr><th>Step</th><th>Intent</th><th>Action</th><th>Friction</th><th>Observation</th></tr></thead>";
+  table.innerHTML = "<thead><tr><th>Step</th><th>Event</th><th>Intent</th><th>Action</th><th>Friction</th><th>Observation</th></tr></thead>";
   const body = document.createElement("tbody");
   logs.slice(0, 6).forEach((log, index) => {
     const row = document.createElement("tr");
     row.append(
       td(String(index + 1), "step-dot-cell"),
+      td(log.event || "View"),
       td(log.intent),
       td(log.action),
       td(log.friction, `friction ${log.friction.toLowerCase()}`),
