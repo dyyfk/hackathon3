@@ -1,508 +1,837 @@
-const listings = [
+const versions = [
   {
-    id: "malibu-ocean-villa",
-    category: "Beachfront",
-    title: "Malibu Ocean Villa",
-    location: "Malibu, California",
-    style: "Glass walls, private stairs to the sand",
-    rating: "4.92",
-    reviews: 128,
-    price: 420,
-    host: "Lena",
-    hostAvatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=220&q=80",
-    stats: ["6 guests", "3 bedrooms", "3 beds", "2 baths"],
-    description:
-      "A bright oceanfront villa with wide terraces, warm interiors, a chef's kitchen, and sunset views from nearly every room.",
-    images: [
-      "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=1200&q=82",
-      "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=82",
-      "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=900&q=82",
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=82",
-      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=900&q=82",
+    slug: "v/2009-02-04-airbed-and-breakfast",
+    label: "2009 AirBed",
+    date: "Feb 4, 2009",
+    archive: "https://web.archive.org/web/20090204145417/http://www.airbnb.com/",
+    template: "classic",
+    className: "era-airbed",
+    brand: "AirBed & Breakfast",
+    title: "Stay with a local when traveling",
+    kicker: "AirBed & Breakfast - Forget hotels.",
+    subtitle: "You can stay in 715 cities in 71 countries.",
+    nav: ["Sign Up", "Sign In"],
+    searchButton: "See listing",
+    searchFields: ["Check in", "Check out", "Guests"],
+    highlight: "$0 per night in",
+    listings: [
+      ["New York couch near Union Square", "New York", "$45", "simple room"],
+      ["Sunny bedroom by the park", "San Francisco", "$70", "hosted stay"],
+      ["Spare futon in Montmartre", "Paris", "$39", "budget pick"],
     ],
-    features: [
-      ["waves", "Steps from the beach"],
-      ["chef-hat", "Chef-ready kitchen"],
-      ["sunset", "Sunset terrace"],
-      ["car", "Private parking"],
+    columns: [
+      ["Biggest Deals", "New York", "San Francisco", "Paris"],
+      ["Socially bookmark us", "Twitter", "Facebook", "Delicious"],
+      ["Company", "About", "FAQ", "Contact"],
     ],
-    amenities: [
-      ["wifi", "Fast wifi"],
-      ["waves", "Ocean view"],
-      ["utensils", "Kitchen"],
-      ["sparkles", "Pool"],
-      ["washing-machine", "Laundry"],
-      ["flame", "Fire pit"],
-    ],
-    reviewsText: [
-      ["Noah", "The terrace felt made for slow mornings and golden-hour dinners."],
-      ["Priya", "Every room is calm, sunny, and close enough to hear the water."],
-    ],
+    image:
+      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=900&q=80",
   },
   {
-    id: "tahoe-glass-cabin",
-    category: "Cabins",
-    title: "Tahoe Glass Cabin",
-    location: "Lake Tahoe, California",
-    style: "Pine forest, cedar sauna, quiet lake trail",
-    rating: "4.86",
-    reviews: 94,
-    price: 280,
-    host: "Miles",
-    hostAvatar:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=220&q=80",
-    stats: ["4 guests", "2 bedrooms", "2 beds", "1 bath"],
-    description:
-      "A compact mountain cabin wrapped in pine trees, with heated concrete floors, a reading loft, and a deck built for stargazing.",
-    images: [
-      "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=1200&q=82",
-      "https://images.unsplash.com/photo-1542718610-a1d656d1884c?auto=format&fit=crop&w=900&q=82",
-      "https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=900&q=82",
-      "https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=900&q=82",
-      "https://images.unsplash.com/photo-1551524559-8af4e6624178?auto=format&fit=crop&w=900&q=82",
+    slug: "v/2010-01-02-travel-like-a-human",
+    label: "2010 Human",
+    date: "Jan 2, 2010",
+    archive: "https://web.archive.org/web/20100102155706/http://www.airbnb.com/",
+    template: "classic",
+    className: "era-human",
+    brand: "Airbnb",
+    title: "Travel like a human.",
+    kicker: "Vacation rentals, private rooms, sublets by the night",
+    subtitle: "Rent nightly from real people in 2,089 cities in 106 countries.",
+    nav: ["Sign Up", "Sign In", "Post a room"],
+    searchButton: "Search",
+    searchFields: ["Where are you going?", "Check in", "Check out", "Guests"],
+    highlight: "Find a place to stay.",
+    listings: [
+      ["Casa Ponte I", "Puntarenas", "$1500", "featured"],
+      ["Brooklyn artist loft", "New York", "$99", "new"],
+      ["Quiet garden room", "Vancouver", "$64", "Olympics rental"],
     ],
-    features: [
-      ["trees", "Wrapped in forest"],
-      ["flame", "Cedar sauna"],
-      ["book-open", "Reading loft"],
-      ["mountain", "Lake trail nearby"],
+    columns: [
+      ["Best Deals", "New York", "San Francisco", "Paris"],
+      ["Join us on", "Twitter", "Blog", "Help"],
+      ["Language", "English", "Francais", "Deutsch"],
     ],
-    amenities: [
-      ["wifi", "Wifi"],
-      ["flame", "Indoor fireplace"],
-      ["flame", "Sauna"],
-      ["coffee", "Espresso setup"],
-      ["car", "Driveway parking"],
-      ["snowflake", "Radiant heat"],
-    ],
-    reviewsText: [
-      ["Amelia", "Small, smart, and beautifully quiet after a day near the lake."],
-      ["Theo", "The sauna and forest deck made the whole weekend feel restorative."],
-    ],
+    image:
+      "https://images.unsplash.com/photo-1523217582562-09d0def993a6?auto=format&fit=crop&w=900&q=80",
   },
   {
-    id: "kyoto-courtyard-loft",
-    category: "Design",
-    title: "Kyoto Courtyard Loft",
-    location: "Kyoto, Japan",
-    style: "Tatami lounge, sculptural bath, garden courtyard",
-    rating: "4.95",
-    reviews: 211,
-    price: 190,
-    host: "Aiko",
-    hostAvatar:
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=220&q=80",
-    stats: ["3 guests", "1 bedroom", "2 beds", "1 bath"],
-    description:
-      "A serene loft tucked behind a narrow lane, pairing warm wood, handmade ceramics, and a private courtyard for tea.",
-    images: [
-      "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1200&q=82",
-      "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=900&q=82",
-      "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=900&q=82",
-      "https://images.unsplash.com/photo-1523413363574-c30aa1c2a516?auto=format&fit=crop&w=900&q=82",
-      "https://images.unsplash.com/photo-1616046229478-9901c5536a45?auto=format&fit=crop&w=900&q=82",
+    slug: "v/2012-01-01-global-marketplace",
+    label: "2012 Global",
+    date: "Jan 1, 2012",
+    archive: "https://web.archive.org/web/20120101183110/http://www.airbnb.com/",
+    template: "marketplace",
+    className: "era-market",
+    brand: "Airbnb",
+    title: "Find a place to stay.",
+    kicker: "Rent from real people in 19,732 cities in 192 countries.",
+    subtitle:
+      "A busier global marketplace with languages, currencies, host prompts, and city directories packed onto the homepage.",
+    nav: ["How It Works", "Sign Up", "Log In", "List your space", "Help"],
+    searchButton: "Search",
+    searchFields: ["Please set location", "Check in", "Check out", "Guests"],
+    listings: [
+      ["GORGEOUS HUGE, VERY Convenient Apt.", "New York, NY", "$150 / night", "20 reviews"],
+      ["THE VILLA LA DELIZIA DEI PIANCIANI", "Spoleto, Italy", "$1148 / night", "1 review"],
+      ["DOUBLE BED - TRENDY LOFT FLAT", "Lambeth, United Kingdom", "$133 / night", "popular"],
     ],
-    features: [
-      ["flower-2", "Private courtyard"],
-      ["bath", "Deep soaking bath"],
-      ["palette", "Handmade interiors"],
-      ["map-pin", "Historic lanes"],
+    columns: [
+      ["North America", "New York City", "San Francisco", "Honolulu", "Chicago", "Los Angeles"],
+      ["Europe", "Berlin", "Paris", "London", "Venice", "Barcelona"],
+      ["Asia Pacific", "Bangkok", "Sydney", "Seoul", "Tokyo", "Hong Kong"],
     ],
-    amenities: [
-      ["wifi", "Pocket wifi"],
-      ["bath", "Soaking tub"],
-      ["utensils", "Kitchenette"],
-      ["leaf", "Garden view"],
-      ["snowflake", "Air conditioning"],
-      ["coffee", "Tea station"],
-    ],
-    reviewsText: [
-      ["Mina", "A quiet, beautiful place to come home to after long city walks."],
-      ["Daniel", "Every object felt chosen with care, and the courtyard was magic."],
-    ],
+    image:
+      "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=900&q=80",
   },
   {
-    id: "sonoma-farmhouse",
-    category: "Countryside",
-    title: "Sonoma Olive Farmhouse",
-    location: "Sonoma, California",
-    style: "Olive grove, outdoor table, vineyard roads",
-    rating: "4.89",
-    reviews: 76,
-    price: 310,
-    host: "Claire",
-    hostAvatar:
-      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=220&q=80",
-    stats: ["5 guests", "2 bedrooms", "3 beds", "2 baths"],
-    description:
-      "A sunlit farmhouse surrounded by olive trees, with a long outdoor table, a breezy kitchen, and quiet vineyard roads nearby.",
-    images: [
+    slug: "v/2012-12-03-discovery-neighborhoods",
+    label: "2012 Discovery",
+    date: "Dec 3, 2012",
+    archive: "https://web.archive.org/web/20121203032644/https://www.airbnb.com/",
+    template: "discovery",
+    className: "era-discovery",
+    brand: "Airbnb",
+    title: "Rent unique spaces from people all around the world.",
+    kicker: "Introducing neighborhoods, wish lists, and social discovery.",
+    subtitle:
+      "The page starts to sell the dream, not just the inventory: curated neighborhoods, video, Airbnb Picks, and trust messaging.",
+    nav: ["Find a place", "Browse", "Neighborhoods", "Popular", "Match", "Help"],
+    searchButton: "Search",
+    searchFields: ["Location", "Check in", "Check out", "Room type"],
+    listings: [
+      ["Ipanema", "Rio de Janeiro", "beach energy", "neighborhood"],
+      ["DUMBO", "New York", "brick lofts", "neighborhood"],
+      ["Mission District", "San Francisco", "murals and cafes", "neighborhood"],
+      ["Covent Garden", "London", "markets and theatres", "neighborhood"],
+    ],
+    columns: [
+      ["Travel", "Apartments", "Rooms", "Treehouses", "Boats"],
+      ["Host", "Pay your bills", "Fund your next vacation", "Learn more"],
+      ["How it Works", "Customer support", "Reviews", "Trust center"],
+    ],
+    image:
+      "https://images.unsplash.com/photo-1494522855154-9297ac14b55f?auto=format&fit=crop&w=1200&q=80",
+  },
+  {
+    slug: "v/2014-07-17-belong-anywhere",
+    label: "2014 Belo",
+    date: "Jul 17, 2014",
+    archive: "https://web.archive.org/web/20140717004925/https://www.airbnb.com/",
+    template: "brand",
+    className: "era-belong",
+    brand: "Airbnb",
+    title: "Welcome home",
+    kicker: "Rent unique places to stay from local hosts in 190 countries.",
+    subtitle:
+      "A new brand system: immersive photography, the Belo symbol, community stories, and belonging as the core promise.",
+    nav: ["List Your Space", "Sign Up", "Log In"],
+    searchButton: "Search",
+    searchFields: ["Where are you going?", "Check in", "Check out", "Guests"],
+    listings: [
+      ["The Story Behind the New Airbnb", "A new look inspired by belonging", "Read the story", "brand"],
+      ["Introducing the Belo", "The story of a symbol of belonging", "Make Airbnb yours", "symbol"],
+      ["Our Community", "Travelers and hosts around the world", "Learn more", "people"],
+    ],
+    columns: [
+      ["Start Your Adventure", "Amsterdam", "Bali", "Barcelona", "Berlin"],
+      ["Traveling", "Alice & Chris", "Across an ocean or across town", "Local experiences"],
+      ["Hosting", "Nina", "Photographer host in Shanghai", "Show guests they belong"],
+    ],
+    image:
+      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1500&q=82",
+  },
+  {
+    slug: "v/2016-11-17-live-there",
+    label: "2016 Live There",
+    date: "Nov 17, 2016",
+    archive: "https://web.archive.org/web/20161117164833/https://www.airbnb.com/",
+    template: "trips",
+    className: "era-live",
+    brand: "Airbnb",
+    title: "Live there.",
+    kicker: "Book unique homes and experience a city like a local.",
+    subtitle:
+      "The homepage moves toward the larger Trips vision, with stronger local-life language and host experience prompts.",
+    nav: ["Search", "Trips", "Host", "Help", "Sign Up", "Log In"],
+    searchButton: "Search",
+    searchFields: ["Where", "When", "Guests"],
+    tabs: ["Homes", "Experiences", "Places"],
+    listings: [
+      ["City Hosts", "Explore with locals who know the block", "New", "users"],
+      ["Experience Hosting", "Share a skill, route, kitchen, or story", "New", "sparkles"],
+      ["Business Travel", "Homes that work for work trips", "For teams", "briefcase"],
+    ],
+    columns: [
+      ["Airbnb", "About", "Careers", "Press", "Policies"],
+      ["Discover", "Trust & Safety", "Travel Credit", "Gift Cards", "Guidebooks"],
+      ["Hosting", "Why Host", "Hospitality", "Responsible Hosting", "Host Assist"],
+    ],
+    image:
+      "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1500&q=82",
+  },
+  {
+    slug: "v/2017-01-01-trips",
+    label: "2017 Trips",
+    date: "Jan 1, 2017",
+    archive: "https://web.archive.org/web/20170101104045/https://www.airbnb.com/",
+    template: "trips",
+    className: "era-trips",
+    brand: "Airbnb",
+    title: "Welcome to the world of trips.",
+    kicker: "Homes, experiences, and places - all in one app.",
+    subtitle:
+      "Trips gets the spotlight: homes become one part of a broader city experience product.",
+    nav: ["Airbnb Places", "Live from LA", "Search", "Host", "Help", "Sign Up"],
+    searchButton: "Explore",
+    searchFields: ["Where", "When", "Guests"],
+    tabs: ["For You", "Homes", "Experiences", "Places"],
+    listings: [
+      ["Airbnb Places", "Get lost in a city with insiders, like Woody.", "See what's new", "map"],
+      ["Airbnb Experiences", "Turn into a sushi master or fearless surfer.", "Try one", "waves"],
+      ["Live from LA", "Watch the keynote for a new kind of trip.", "Watch", "play"],
+    ],
+    columns: [
+      ["Homes", "Apartments", "Rooms", "Treehouses", "Boats"],
+      ["Experiences", "Sushi", "Surfing", "Music", "Night walks"],
+      ["Places", "Guidebooks", "Local picks", "Neighborhoods", "Stories"],
+    ],
+    image:
+      "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&w=1500&q=82",
+  },
+  {
+    slug: "v/2019-06-01-places-things",
+    label: "2019 Trips",
+    date: "Jun 1, 2019",
+    archive: "https://web.archive.org/web/20190601012946/https://www.airbnb.com/",
+    template: "modern",
+    className: "era-places",
+    brand: "Airbnb",
+    title: "Book unique places to stay and things to do.",
+    kicker: "Unforgettable trips start with Airbnb.",
+    subtitle:
+      "Homes and activities sit in one simplified booking surface, with a clean white search block and compact footer.",
+    nav: ["Become a Host", "Help", "Sign Up", "Log In"],
+    searchButton: "Search",
+    searchFields: ["WHERE", "CHECK-IN", "CHECKOUT", "GUESTS"],
+    tabs: ["Stays", "Experiences"],
+    listings: [
+      ["Over 300 unique homes in Oregon", "Cabins, coast houses, city rooms", "$89 avg", "home"],
+      ["Cooking in Lisbon", "A small-group market-to-table evening", "$48", "utensils"],
+      ["Night photography walk", "Explore the city after dark", "$35", "camera"],
+    ],
+    columns: [
+      ["Company", "About", "Careers", "Press", "Policies"],
+      ["Discover", "Trust & Safety", "Airbnb Citizen", "Guidebooks"],
+      ["Hosting", "Why Host", "Responsible Hosting", "Host an experience"],
+    ],
+    image:
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1500&q=82",
+  },
+  {
+    slug: "v/2020-05-01-online-experiences",
+    label: "2020 Online",
+    date: "May 1, 2020",
+    archive: "https://web.archive.org/web/20200501051641/https://www.airbnb.com/",
+    template: "modern",
+    className: "era-online",
+    brand: "Airbnb",
+    title: "We may be apart, but we'll get through this together.",
+    kicker: "Get the latest on our COVID-19 response and cancellation policies.",
+    subtitle:
+      "The pandemic page adds response messaging, monthly stays, and online experiences alongside regular stays.",
+    nav: ["Host your home", "Host an experience", "Help", "Log in", "Sign up"],
+    searchButton: "Search",
+    searchFields: ["Location", "Check in / Check out", "Guests"],
+    tabs: ["Places to stay", "Monthly stays", "Experiences", "Online Experiences"],
+    listings: [
+      ["Monthly stays", "Homes for longer stretches and remote work", "Flexible dates", "calendar"],
+      ["Online Experiences", "Meet hosts by screen from home", "New", "monitor"],
+      ["COVID-19 response", "Support and cancellation policy updates", "Learn more", "shield"],
+      ["Frontline stays", "Find or provide places for COVID-19 responders", "Support", "heart-handshake"],
+    ],
+    columns: [
+      ["About", "Diversity & Belonging", "Accessibility", "Newsroom"],
+      ["Community", "Airbnb Magazine", "Airbnb for Work", "Gift cards"],
+      ["Support", "Help Center", "Neighborhood Support", "Cancellation options"],
+    ],
+    image:
+      "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1500&q=82",
+  },
+  {
+    slug: "v/2021-12-01-flexible-travel",
+    label: "2021 Flexible",
+    date: "Dec 1, 2021",
+    archive: "https://web.archive.org/web/20211201003321/https://www.airbnb.com/",
+    template: "modern",
+    className: "era-flex",
+    brand: "Airbnb",
+    title: "Not sure where to go? Perfect.",
+    kicker: "Airbnb: vacation rentals, cabins, beach houses, unique homes and experiences.",
+    subtitle:
+      "The flexible-travel era foregrounds inspiration, broad home types, and the 'I'm flexible' browsing behavior.",
+    nav: ["Become a Host", "Help", "Sign up", "Log in"],
+    searchButton: "I'm flexible",
+    searchFields: ["Location", "Check in", "Check out", "Guests"],
+    tabs: ["Places to stay", "Experiences", "Online Experiences"],
+    listings: [
+      ["The Greatest Outdoors", "Wishlists curated by Airbnb", "Get inspired", "trees"],
+      ["Cabins and beach houses", "Flexible trips around open dates", "Browse", "waves"],
+      ["Made possible by Hosts", "A softer post-IPO host-centered message", "Meet hosts", "heart"],
+    ],
+    columns: [
+      ["About", "How Airbnb works", "Newsroom", "Investors"],
+      ["Community", "Made possible by Hosts", "Founders' Letter", "Airbnb.org"],
+      ["Host", "Host an Online Experience", "Resource Center", "Community Center"],
+    ],
+    image:
+      "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1500&q=82",
+  },
+  {
+    slug: "v/2022-05-14-categories",
+    label: "2022 Categories",
+    date: "May 14, 2022",
+    archive: "https://web.archive.org/web/20220514231746/https://www.airbnb.com/",
+    template: "categories",
+    className: "era-categories",
+    brand: "Airbnb",
+    title: "Introducing the new Airbnb",
+    kicker: "Anywhere. Any week. Add guests.",
+    subtitle:
+      "The homepage becomes a browsable product grid with categories, map controls, flexible dates, and AirCover messaging.",
+    nav: ["Watch announcement", "Learn more", "Try hosting", "Help"],
+    searchButton: "Search",
+    searchFields: ["Anywhere", "Any week", "Add guests"],
+    tabs: ["Amazing views", "Amazing pools", "Beachfront", "Cabins", "Design", "OMG!", "Treehouses", "Farms"],
+    listings: [
+      ["San Rafael, California", "Beach and mountain views", "$151 night", "4.91"],
+      ["Moss Beach, California", "Beach views", "$886 night", "4.92"],
+      ["Daly City, California", "Beach and bay views", "$503 night", "4.83"],
+      ["Sonoma, California", "Mountain views", "$1,300 night", "4.93"],
+    ],
+    columns: [
+      ["Support", "Help Center", "AirCover", "Safety information"],
+      ["Community", "Airbnb.org", "Combating discrimination", "Disaster relief"],
+      ["Hosting", "Try hosting", "AirCover for Hosts", "Community forum"],
+    ],
+    image:
       "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=82",
-      "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=900&q=82",
-      "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?auto=format&fit=crop&w=900&q=82",
-      "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=900&q=82",
-      "https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&w=900&q=82",
-    ],
-    features: [
-      ["leaf", "Olive grove setting"],
-      ["utensils", "Outdoor dining"],
-      ["bike", "Quiet roads"],
-      ["wine", "Near vineyards"],
-    ],
-    amenities: [
-      ["wifi", "Wifi"],
-      ["utensils", "Full kitchen"],
-      ["washing-machine", "Laundry"],
-      ["car", "Free parking"],
-      ["sun", "Patio"],
-      ["shield-check", "Self check-in"],
-    ],
-    reviewsText: [
-      ["Jules", "The kitchen, patio, and grove made cooking together the whole point."],
-      ["Sam", "Easy, warm, and peaceful without feeling remote."],
-    ],
   },
   {
-    id: "brooklyn-townhouse",
-    category: "City",
-    title: "Brooklyn Brownstone Suite",
-    location: "Brooklyn, New York",
-    style: "Tree-lined block, restored brick, record nook",
-    rating: "4.81",
-    reviews: 152,
-    price: 225,
-    host: "Iris",
-    hostAvatar:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=220&q=80",
-    stats: ["2 guests", "1 bedroom", "1 bed", "1 bath"],
-    description:
-      "A restored suite in a classic brownstone with exposed brick, generous windows, and an easy walk to cafes and trains.",
-    images: [
-      "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=82",
-      "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?auto=format&fit=crop&w=900&q=82",
-      "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=900&q=82",
-      "https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=900&q=82",
-      "https://images.unsplash.com/photo-1560448075-bb485b067938?auto=format&fit=crop&w=900&q=82",
+    slug: "v/2023-12-31-rooms",
+    label: "2023 Rooms",
+    date: "Dec 31, 2023",
+    archive: "https://web.archive.org/web/20231231225314/https://www.airbnb.com/",
+    template: "categories",
+    className: "era-rooms",
+    brand: "Airbnb",
+    title: "Introducing Airbnb Rooms and 50+ features",
+    kicker: "Start your search with Stays, Experiences, and Online Experiences.",
+    subtitle:
+      "Rooms enters the category system, with clearer total pricing, host-forward trust signals, and a denser search header.",
+    nav: ["Airbnb your home", "Sign up", "Log in", "Gift cards", "Help Center"],
+    searchButton: "Search",
+    searchFields: ["Where", "Check in", "Check out", "Who"],
+    tabs: ["Rooms", "Amazing views", "Beachfront", "Lake", "Cabins", "Tiny homes", "Mansions", "Adapted"],
+    listings: [
+      ["Brooklyn, New York", "Stay with Mira - designer and cyclist", "$108 night", "4.94"],
+      ["Lisbon, Portugal", "Private room near tiled streets", "$82 night", "4.88"],
+      ["Mexico City, Mexico", "Room in a garden house", "$61 night", "4.97"],
+      ["Kyoto, Japan", "Host passport and local tips", "$74 night", "4.91"],
     ],
-    features: [
-      ["building-2", "Historic brownstone"],
-      ["train", "Close to transit"],
-      ["music", "Record nook"],
-      ["coffee", "Cafe block"],
+    columns: [
+      ["Support", "AirCover", "Anti-discrimination", "Disability support"],
+      ["Hosting", "AirCover for Hosts", "Hosting resources", "Airbnb-friendly apartments"],
+      ["Airbnb", "Newsroom", "New features", "Careers", "Investors"],
     ],
-    amenities: [
-      ["wifi", "Fast wifi"],
-      ["snowflake", "Air conditioning"],
-      ["coffee", "Coffee setup"],
-      ["tv", "Streaming TV"],
-      ["key-round", "Private entrance"],
-      ["briefcase-business", "Work desk"],
-    ],
-    reviewsText: [
-      ["Lara", "A calm room in the middle of everything we wanted to do."],
-      ["Ben", "The brick, light, and records made it feel like a real neighborhood stay."],
-    ],
+    image:
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=82",
   },
   {
-    id: "sedona-desert-retreat",
-    category: "Design",
-    title: "Sedona Desert Retreat",
-    location: "Sedona, Arizona",
-    style: "Red rock views, clay walls, plunge pool",
-    rating: "4.97",
-    reviews: 63,
-    price: 360,
-    host: "Mara",
-    hostAvatar:
-      "https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?auto=format&fit=crop&w=220&q=80",
-    stats: ["4 guests", "2 bedrooms", "2 beds", "2 baths"],
-    description:
-      "A low-slung desert home with soft plaster walls, a shaded courtyard, and wide red rock views from the plunge pool.",
-    images: [
-      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=82",
-      "https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=900&q=82",
-      "https://images.unsplash.com/photo-1616046229478-9901c5536a45?auto=format&fit=crop&w=900&q=82",
-      "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=900&q=82",
-      "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=900&q=82",
+    slug: "v/2025-06-01-services-experiences",
+    label: "2025 Services",
+    date: "Jun 1, 2025",
+    archive: "https://web.archive.org/web/20250601000554/https://www.airbnb.com/",
+    template: "services",
+    className: "era-services",
+    brand: "Airbnb",
+    title: "Homes, Experiences, and Services",
+    kicker: "Get an Airbnb for every kind of trip.",
+    subtitle:
+      "The latest structure adds Services as a first-class tab beside Homes and Experiences, turning Airbnb into a broader travel app.",
+    nav: ["Homes", "Experiences", "Services", "Become a host", "Help Center"],
+    searchButton: "Search",
+    searchFields: ["Where", "Date", "Who"],
+    tabs: ["Homes", "Experiences", "Services"],
+    listings: [
+      ["Homes", "Book places to stay in New York, Paris, and beyond", "8M rentals", "home"],
+      ["Experiences", "Hosted activities, tours, classes, and nights out", "New", "ticket"],
+      ["Services", "In-home chefs, photo shoots, wellness, and more", "New", "concierge-bell"],
     ],
-    features: [
-      ["mountain", "Red rock views"],
-      ["sparkles", "Plunge pool"],
-      ["sun", "Shaded courtyard"],
-      ["moon", "Dark sky nights"],
+    columns: [
+      ["Inspiration", "Homes in New York", "Homes in Paris", "Airbnb-friendly apartments"],
+      ["Hosting", "Airbnb your home", "Airbnb your experience", "Airbnb your service"],
+      ["Airbnb", "2025 Summer Release", "Newsroom", "Investors"],
     ],
-    amenities: [
-      ["wifi", "Wifi"],
-      ["sparkles", "Pool"],
-      ["utensils", "Kitchen"],
-      ["car", "Parking"],
-      ["sun", "Outdoor shower"],
-      ["thermometer-sun", "Climate control"],
+    image:
+      "https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=1400&q=82",
+  },
+  {
+    slug: "v/2026-05-01-services-era",
+    label: "2026 Services",
+    date: "May 1, 2026",
+    archive: "https://web.archive.org/web/20260501141757/https://www.airbnb.com/",
+    template: "services",
+    className: "era-services era-services-mature",
+    brand: "Airbnb",
+    title: "Homes, Experiences, and Services",
+    kicker: "Get an Airbnb for every kind of trip.",
+    subtitle:
+      "A mature Services-era homepage before later 2026 changes: Homes stays active, while Experiences and Services remain promoted as new product surfaces.",
+    nav: ["Homes", "Experiences", "Services", "Become a host", "Help Center"],
+    searchButton: "Search",
+    searchFields: ["Where", "When", "Who"],
+    tabs: ["Homes", "Experiences", "Services"],
+    listings: [
+      ["Homes", "Inspiration for future getaways, from Barcelona to Maui", "8M rentals", "home"],
+      ["Experiences", "Search by city or landmark, today or this weekend", "New", "ticket"],
+      ["Services", "Chefs, massage, photography, training, hair, and spa", "New", "concierge-bell"],
     ],
-    reviewsText: [
-      ["Evan", "The pool and the view made the place feel cinematic."],
-      ["Harper", "Beautifully designed but still comfortable after hiking."],
+    columns: [
+      ["Popular", "Barcelona", "St. Petersburg", "Madrid", "Dallas", "Brooklyn"],
+      ["Hosting", "Airbnb your home", "Airbnb your experience", "Airbnb your service"],
+      ["Airbnb", "Newsroom", "Careers", "Investors", "Airbnb.org emergency stays"],
     ],
+    image:
+      "https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=1400&q=82",
   },
 ];
-
-const categories = [
-  ["All", "layout-grid"],
-  ["Beachfront", "waves"],
-  ["Cabins", "trees"],
-  ["City", "building-2"],
-  ["Countryside", "leaf"],
-  ["Design", "palette"],
-];
-
-let activeCategory = "All";
-let selectedListing = null;
 
 const app = document.querySelector("#app");
-
-function money(value) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
 
 function icon(name, className = "") {
   return `<i data-lucide="${name}" class="${className}" aria-hidden="true"></i>`;
 }
 
-function renderShell(content) {
+function currentVersion() {
+  const slug = window.location.hash.replace(/^#\/?/, "");
+  return versions.find((version) => version.slug === slug) || versions[0];
+}
+
+function renderApp() {
+  const version = currentVersion();
+
   app.innerHTML = `
-    <div class="app-shell">
-      <header class="site-header">
-        <div class="header-inner">
-          <button class="brand icon-button" type="button" data-action="home" aria-label="Show homes">
-            <span class="brand-mark">${icon("home", "header-icon")}</span>
-            <span class="brand-label">StayFinder</span>
-          </button>
-          <nav class="nav-actions" aria-label="Primary">
-            <button class="text-button" type="button">Wishlist</button>
-            <button class="text-button" type="button">Trips</button>
-            <button class="profile-button icon-button" type="button" aria-label="Open profile menu">
-              ${icon("menu", "header-icon")}
-              ${icon("circle-user-round", "header-icon")}
-            </button>
-          </nav>
-        </div>
+    <div class="archive-shell">
+      <header class="archive-header">
+        <a class="archive-brand" href="#/${versions[0].slug}" aria-label="Airbnb archive clone home">
+          <span class="archive-mark">${icon("history")}</span>
+          <span>Airbnb Archive Clones</span>
+        </a>
+        <nav class="version-nav" aria-label="Historical versions">
+          ${versions.map(renderVersionLink).join("")}
+        </nav>
       </header>
-      <main>${content}</main>
+      <main class="clone-stage ${version.className}">
+        ${renderVersion(version)}
+      </main>
     </div>
   `;
 
-  attachEvents();
   refreshIcons();
 }
 
-function renderBrowse() {
-  selectedListing = null;
-  const filtered =
-    activeCategory === "All"
-      ? listings
-      : listings.filter((listing) => listing.category === activeCategory);
-
-  renderShell(`
-    <section class="browse-view" aria-label="Homes">
-      <div class="category-bar" role="tablist" aria-label="Stay categories">
-        ${categories
-          .map(
-            ([label, iconName]) => `
-              <button
-                class="category-tab ${activeCategory === label ? "active" : ""}"
-                type="button"
-                role="tab"
-                aria-selected="${activeCategory === label}"
-                data-category="${label}"
-              >
-                ${icon(iconName)}
-                <span>${label}</span>
-              </button>
-            `,
-          )
-          .join("")}
-      </div>
-
-      <div class="view-heading">
-        <div>
-          <h1>Homes with character, ready to explore.</h1>
-          <p>Standout places shaped by setting, style, and mood, from quiet cabins to oceanfront villas.</p>
-        </div>
-      </div>
-
-      <div class="listing-grid">
-        ${filtered.map(renderListingCard).join("")}
-      </div>
-    </section>
-  `);
-}
-
-function renderListingCard(listing) {
+function renderVersionLink(version) {
+  const active = currentVersion().slug === version.slug;
   return `
-    <button class="listing-card" type="button" data-listing="${listing.id}" aria-label="View details for ${listing.title}">
-      <span class="listing-media">
-        <img src="${listing.images[0]}" alt="${listing.title}" loading="lazy" />
-        <span class="favorite-dot">${icon("heart")}</span>
-      </span>
-      <span class="listing-body">
-        <span>
-          <h2 class="listing-title">${listing.title}</h2>
-          <p class="listing-meta">${listing.location}</p>
-          <p class="listing-style">${listing.style}</p>
-        </span>
-        <span class="listing-rating">${icon("star")} ${listing.rating}</span>
-        <span class="listing-price"><strong>${money(listing.price)}</strong> night</span>
-      </span>
-    </button>
+    <a class="version-link ${active ? "active" : ""}" href="#/${version.slug}">
+      <span>${version.label}</span>
+      <small>${version.date.split(" ").slice(-1)[0]}</small>
+    </a>
   `;
 }
 
-function renderDetail(id) {
-  selectedListing = listings.find((listing) => listing.id === id) || listings[0];
+function renderVersion(version) {
+  const meta = `
+    <div class="source-strip">
+      <span>${version.date}</span>
+      <a href="${version.archive}" target="_blank" rel="noreferrer">Wayback source</a>
+    </div>
+  `;
 
-  renderShell(`
-    <section class="detail-view" aria-label="${selectedListing.title} details">
-      <div class="detail-topbar">
-        <button class="back-button" type="button" data-action="back">
-          ${icon("chevron-left")}
-          <span>Homes</span>
-        </button>
-        <div class="utility-actions">
-          <button class="utility-button" type="button" aria-label="Share this home">${icon("share")}</button>
-          <button class="utility-button" type="button" aria-label="Save this home">${icon("heart")}</button>
-        </div>
+  const template = {
+    classic: renderClassic,
+    marketplace: renderMarketplace,
+    discovery: renderDiscovery,
+    brand: renderBrand,
+    trips: renderTrips,
+    modern: renderModern,
+    categories: renderCategories,
+    services: renderServices,
+  }[version.template];
+
+  return `${template(version)}${meta}`;
+}
+
+function renderClassic(version) {
+  return `
+    <section class="classic-page">
+      <div class="classic-top">
+        <div class="classic-logo">${version.brand}</div>
+        <nav>${version.nav.map((item) => `<a href="#">${item}</a>`).join("")}</nav>
       </div>
-
-      <div class="detail-title-row">
-        <div>
-          <h1>${selectedListing.title}</h1>
-          <div class="detail-subline">
-            <span>${selectedListing.location}</span>
-            <span class="dot-separator"></span>
-            <span>${icon("star")} ${selectedListing.rating}</span>
-            <span class="dot-separator"></span>
-            <span>${selectedListing.reviews} reviews</span>
+      <div class="classic-hero">
+        <div class="classic-copy">
+          <p class="classic-kicker">${version.kicker}</p>
+          <h1>${version.title}</h1>
+          <p>${version.subtitle}</p>
+          <div class="classic-stats">
+            <strong>${version.highlight}</strong>
+            <span>real hosts, real neighborhoods, real prices</span>
           </div>
         </div>
-        <div class="detail-price"><strong>${money(selectedListing.price)}</strong> / night</div>
-      </div>
-
-      <div class="gallery-grid">
-        ${selectedListing.images
-          .map(
-            (image, index) => `
-              <div class="gallery-image">
-                <img src="${image}" alt="${selectedListing.title} photo ${index + 1}" />
-              </div>
-            `,
-          )
-          .join("")}
-      </div>
-
-      <div class="detail-content">
-        <div>
-          <section class="section">
-            <div class="host-row">
-              <img class="host-avatar" src="${selectedListing.hostAvatar}" alt="${selectedListing.host}" />
-              <div>
-                <h2>Entire place hosted by ${selectedListing.host}</h2>
-                <p>${selectedListing.stats.join(" · ")}</p>
-              </div>
-            </div>
-          </section>
-
-          <section class="section">
-            <h2>What makes it special</h2>
-            <ul class="feature-list">
-              ${selectedListing.features
-                .map(([iconName, label]) => `<li class="feature-item">${icon(iconName)}<span>${label}</span></li>`)
-                .join("")}
-            </ul>
-          </section>
-
-          <section class="section">
-            <h2>About this place</h2>
-            <p>${selectedListing.description}</p>
-          </section>
-
-          <section class="section">
-            <h2>Amenities</h2>
-            <ul class="amenity-list">
-              ${selectedListing.amenities
-                .map(([iconName, label]) => `<li class="amenity-item">${icon(iconName)}<span>${label}</span></li>`)
-                .join("")}
-            </ul>
-          </section>
-
-          <section class="section reviews">
-            <h2>Guest notes</h2>
-            <div class="review-grid">
-              ${selectedListing.reviewsText
-                .map(
-                  ([name, text]) => `
-                    <article class="review-card">
-                      <strong>${name}</strong>
-                      <p>${text}</p>
-                    </article>
-                  `,
-                )
-                .join("")}
-            </div>
-          </section>
+        <form class="classic-search">
+          ${version.searchFields.map((field) => `<label><span>${field}</span><input value="" /></label>`).join("")}
+          <button type="button">${version.searchButton}</button>
+        </form>
+        <div class="classic-photo">
+          <img src="${version.image}" alt="" />
         </div>
+      </div>
+      <div class="classic-listings">
+        ${version.listings.map(([title, city, price, tag]) => `
+          <article>
+            <div class="old-thumb">${city.slice(0, 2).toUpperCase()}</div>
+            <h2>${title}</h2>
+            <p>${city}</p>
+            <strong>${price}</strong>
+            <small>${tag}</small>
+          </article>
+        `).join("")}
+      </div>
+      ${renderClassicFooter(version)}
+    </section>
+  `;
+}
 
-        <aside class="booking-panel" aria-label="Booking summary">
-          <h2>${selectedListing.title}</h2>
-          <p class="panel-price"><strong>${money(selectedListing.price)}</strong> / night</p>
-          <ul class="panel-facts">
-            <li><span>Rating</span><strong>${selectedListing.rating}</strong></li>
-            <li><span>Reviews</span><strong>${selectedListing.reviews}</strong></li>
-            <li><span>Style</span><strong>${selectedListing.category}</strong></li>
-          </ul>
-          <button class="primary-button" type="button">${icon("send")} Request to book</button>
-          <button class="secondary-button" type="button">${icon("message-circle")} Contact host</button>
-          <p class="panel-note">A host confirmation follows each request.</p>
+function renderMarketplace(version) {
+  return `
+    <section class="market-page">
+      ${renderOldNav(version)}
+      <div class="market-hero">
+        <div>
+          <h1>${version.title}</h1>
+          <p>${version.kicker}</p>
+        </div>
+        <form class="market-search">
+          ${version.searchFields.map((field) => `<label>${field}<input /></label>`).join("")}
+          <button type="button">${version.searchButton}</button>
+        </form>
+      </div>
+      <div class="market-body">
+        <section class="market-featured">
+          ${version.listings.map(([title, city, price, reviews]) => `
+            <article>
+              <img src="${version.image}" alt="" />
+              <div>
+                <h2>${title}</h2>
+                <p>${city}</p>
+                <strong>${price}</strong>
+                <small>${reviews}</small>
+              </div>
+            </article>
+          `).join("")}
+        </section>
+        <aside class="host-calculator">
+          <h2>How much is your place worth?</h2>
+          <button type="button">Calculate now</button>
+          <p>${version.subtitle}</p>
         </aside>
       </div>
+      ${renderDirectory(version)}
     </section>
+  `;
+}
 
-    <div class="mobile-bottom-bar">
-      <div>
-        <strong>${money(selectedListing.price)}</strong> / night
-        <div>${icon("star")} ${selectedListing.rating} · ${selectedListing.reviews} reviews</div>
+function renderDiscovery(version) {
+  return `
+    <section class="discovery-page">
+      ${renderOldNav(version)}
+      <div class="discovery-hero">
+        <div class="discovery-mosaic">
+          ${version.listings.map(([name, place], index) => `
+            <article style="--tile: ${index + 1}">
+              <span>${place}</span>
+              <strong>${name}</strong>
+            </article>
+          `).join("")}
+        </div>
+        <div class="discovery-copy">
+          <p>Introducing</p>
+          <h1>${version.title}</h1>
+          <p>${version.subtitle}</p>
+          <button type="button">Watch the Video</button>
+        </div>
       </div>
-      <button class="primary-button" type="button">${icon("send")} Request</button>
-    </div>
-  `);
+      <form class="wide-old-search">
+        ${version.searchFields.map((field) => `<label>${field}<input /></label>`).join("")}
+        <button type="button">${version.searchButton}</button>
+      </form>
+      <div class="info-columns">
+        ${version.columns.map(([title, ...items]) => `
+          <article>
+            <h2>${title}</h2>
+            ${items.map((item) => `<p>${item}</p>`).join("")}
+          </article>
+        `).join("")}
+      </div>
+    </section>
+  `;
 }
 
-function attachEvents() {
-  document.querySelectorAll("[data-category]").forEach((button) => {
-    button.addEventListener("click", () => {
-      activeCategory = button.dataset.category;
-      renderBrowse();
-    });
-  });
-
-  document.querySelectorAll("[data-listing]").forEach((button) => {
-    button.addEventListener("click", () => {
-      renderDetail(button.dataset.listing);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-  });
-
-  document.querySelectorAll("[data-action='back'], [data-action='home']").forEach((button) => {
-    button.addEventListener("click", () => {
-      renderBrowse();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-  });
+function renderBrand(version) {
+  return `
+    <section class="brand-page">
+      <div class="photo-hero" style="--hero-image: url('${version.image}')">
+        <div class="brand-nav">
+          <div class="belo-mark">A</div>
+          <nav>${version.nav.map((item) => `<a href="#">${item}</a>`).join("")}</nav>
+        </div>
+        <div class="photo-copy">
+          <h1>${version.title}</h1>
+          <p>${version.kicker}</p>
+        </div>
+        ${renderSearchBar(version, "hero-search")}
+      </div>
+      <section class="story-band">
+        ${version.listings.map(([title, body, cta]) => `
+          <article>
+            <h2>${title}</h2>
+            <p>${body}</p>
+            <a href="#">${cta}</a>
+          </article>
+        `).join("")}
+      </section>
+      <section class="destination-band">
+        <h2>Start Your Adventure</h2>
+        <div>${version.columns[0].slice(1).map((item) => `<span>${item}</span>`).join("")}</div>
+      </section>
+    </section>
+  `;
 }
+
+function renderTrips(version) {
+  return `
+    <section class="trips-page">
+      <div class="trips-hero" style="--hero-image: url('${version.image}')">
+        <div class="trips-nav">
+          <strong>${version.brand}</strong>
+          <nav>${version.nav.map((item) => `<a href="#">${item}</a>`).join("")}</nav>
+        </div>
+        <div class="trips-copy">
+          <h1>${version.title}</h1>
+          <p>${version.kicker}</p>
+        </div>
+        ${renderSearchBar(version, "trips-search")}
+      </div>
+      <div class="trip-tabs">${version.tabs.map((tab) => `<button type="button">${tab}</button>`).join("")}</div>
+      <section class="trip-cards">
+        ${version.listings.map(([title, body, cta, iconName]) => `
+          <article>
+            <span>${icon(iconName)}</span>
+            <h2>${title}</h2>
+            <p>${body}</p>
+            <a href="#">${cta}</a>
+          </article>
+        `).join("")}
+      </section>
+      ${renderModernFooter(version)}
+    </section>
+  `;
+}
+
+function renderModern(version) {
+  return `
+    <section class="modern-page">
+      <div class="modern-topline">${version.kicker}</div>
+      <header class="modern-header">
+        <strong>${version.brand}</strong>
+        <nav>${version.nav.map((item) => `<a href="#">${item}</a>`).join("")}</nav>
+      </header>
+      <div class="modern-hero" style="--hero-image: url('${version.image}')">
+        <div class="modern-copy">
+          <h1>${version.title}</h1>
+          <p>${version.subtitle}</p>
+          ${version.className.includes("era-flex") ? `<button class="flexible-cta" type="button">I'm flexible</button>` : ""}
+        </div>
+        <div class="modern-panel">
+          <div class="modern-tabs">${version.tabs.map((tab, index) => `<button class="${index === 0 ? "active" : ""}" type="button">${tab}</button>`).join("")}</div>
+          ${renderSearchBar(version, "modern-search")}
+        </div>
+      </div>
+      <section class="modern-cards">
+        ${version.listings.map(([title, body, meta, iconName]) => `
+          <article>
+            <span>${icon(iconName)}</span>
+            <h2>${title}</h2>
+            <p>${body}</p>
+            <strong>${meta}</strong>
+          </article>
+        `).join("")}
+      </section>
+      ${renderModernFooter(version)}
+    </section>
+  `;
+}
+
+function renderCategories(version) {
+  return `
+    <section class="category-page">
+      <header class="category-header">
+        <strong>${version.brand}</strong>
+        ${renderSearchBar(version, "category-search")}
+        <nav>${version.nav.map((item) => `<a href="#">${item}</a>`).join("")}</nav>
+      </header>
+      <section class="release-banner">
+        <div>
+          <p>${version.title}</p>
+          <h1>${version.kicker}</h1>
+          <span>${version.subtitle}</span>
+        </div>
+        <button type="button">Show map</button>
+      </section>
+      <nav class="category-icons" aria-label="Categories">
+        ${version.tabs.map((tab, index) => `
+          <button class="${index === 0 ? "active" : ""}" type="button">
+            ${icon(categoryIcon(tab))}
+            <span>${tab}</span>
+          </button>
+        `).join("")}
+      </nav>
+      <section class="home-grid">
+        ${version.listings.map(([place, detail, price, rating], index) => `
+          <article>
+            <img src="${categoryImages[index % categoryImages.length]}" alt="" />
+            <div>
+              <h2>${place}</h2>
+              <p>${detail}</p>
+              <strong>${price}</strong>
+              <span>${icon("star")} ${rating}</span>
+            </div>
+          </article>
+        `).join("")}
+      </section>
+      ${renderModernFooter(version)}
+    </section>
+  `;
+}
+
+function renderServices(version) {
+  return `
+    <section class="services-page">
+      <header class="services-header">
+        <strong>${version.brand}</strong>
+        <nav>${version.nav.map((item, index) => `<a class="${index < 3 ? "primary-tab" : ""}" href="#">${item}</a>`).join("")}</nav>
+      </header>
+      <section class="services-hero">
+        <div>
+          <p>${version.kicker}</p>
+          <h1>${version.title}</h1>
+          ${renderSearchBar(version, "services-search")}
+        </div>
+        <img src="${version.image}" alt="" />
+      </section>
+      <section class="service-panels">
+        ${version.listings.map(([title, body, meta, iconName]) => `
+          <article>
+            <span>${icon(iconName)}</span>
+            <h2>${title}</h2>
+            <p>${body}</p>
+            <strong>${meta}</strong>
+          </article>
+        `).join("")}
+      </section>
+      ${renderModernFooter(version)}
+    </section>
+  `;
+}
+
+function renderOldNav(version) {
+  return `
+    <header class="old-nav">
+      <strong>${version.brand}</strong>
+      <nav>${version.nav.map((item) => `<a href="#">${item}</a>`).join("")}</nav>
+    </header>
+  `;
+}
+
+function renderSearchBar(version, className) {
+  return `
+    <form class="search-bar ${className}" style="--field-count: ${version.searchFields.length}">
+      ${version.searchFields.map((field) => `<label><span>${field}</span><input /></label>`).join("")}
+      <button type="button">${icon("search")}<span>${version.searchButton}</span></button>
+    </form>
+  `;
+}
+
+function renderClassicFooter(version) {
+  return `
+    <footer class="classic-footer">
+      ${version.columns.map(([title, ...items]) => `
+        <div>
+          <h2>${title}</h2>
+          ${items.map((item) => `<a href="#">${item}</a>`).join("")}
+        </div>
+      `).join("")}
+      <p>© ${version.brand}, Inc.</p>
+    </footer>
+  `;
+}
+
+function renderDirectory(version) {
+  return `
+    <section class="directory">
+      ${version.columns.map(([title, ...items]) => `
+        <div>
+          <h2>${title}</h2>
+          ${items.map((item) => `<a href="#">${item}</a>`).join("")}
+        </div>
+      `).join("")}
+    </section>
+  `;
+}
+
+function renderModernFooter(version) {
+  return `
+    <footer class="modern-footer">
+      ${version.columns.map(([title, ...items]) => `
+        <div>
+          <h2>${title}</h2>
+          ${items.map((item) => `<a href="#">${item}</a>`).join("")}
+        </div>
+      `).join("")}
+    </footer>
+  `;
+}
+
+function categoryIcon(tab) {
+  const key = tab.toLowerCase();
+  if (key.includes("room")) return "door-open";
+  if (key.includes("pool")) return "waves";
+  if (key.includes("beach")) return "umbrella";
+  if (key.includes("cabin")) return "trees";
+  if (key.includes("tree")) return "tree-pine";
+  if (key.includes("farm")) return "wheat";
+  if (key.includes("tiny")) return "home";
+  if (key.includes("view")) return "mountain";
+  return "sparkles";
+}
+
+const categoryImages = [
+  "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=900&q=80",
+];
 
 function refreshIcons() {
   if (window.lucide) {
@@ -510,4 +839,13 @@ function refreshIcons() {
   }
 }
 
-renderBrowse();
+window.addEventListener("hashchange", () => {
+  renderApp();
+  window.scrollTo({ top: 0, behavior: "auto" });
+});
+
+if (!window.location.hash) {
+  window.location.hash = `/${versions[0].slug}`;
+} else {
+  renderApp();
+}

@@ -6,16 +6,21 @@ same access pattern.
 ## Routes
 
 - `/versionA` renders the Staybnb booking prototype from `TEST_WEBSITE_A`.
-- `/versionB` renders the Airbnb archive/version browser as a dynamic React page.
+- `/versionB` renders the original StayFinder rental gallery SPA from the
+  initial repository commit, adapted to React with clickable modal actions.
+- `/eval` renders the Airbnb archive/version browser as a dynamic React page.
+- `/synthetic` renders the synthetic user behavior inspector.
 - `/` redirects to `/versionA`.
 
 The intended local URLs are:
 
 - `http://localhost:3000/versionA`
 - `http://localhost:3000/versionB`
+- `http://localhost:3000/eval`
+- `http://localhost:3000/synthetic`
 
 If another process is using port 3000, run the app on another port and use the
-same route paths, for example `http://localhost:3100/versionB`.
+same route paths, for example `http://localhost:3100/eval`.
 
 ## Development
 
@@ -300,3 +305,30 @@ Recommended safety rules:
 ---
 
 <!-- USER TWIN README PACKAGE END -->
+
+## Synthetic user behavior
+
+`actor=agent` in the URL only labels captured events as agent activity. The
+profile-based synthetic behavior model lives in `src/lib/syntheticUser.ts`.
+
+It projects behavior from:
+
+- a synthetic profile, such as `budget_planner`, `policy_checker`, or
+  `quick_booker`
+- a UX task, such as `find_budget_stay` or `compare_cancellation`
+- the current screen, selected listing, filters, and action history
+
+For each step the model scores candidate actions with task relevance,
+preference match, effort penalty, and risk penalty. It then samples the next
+action using the profile's exploration level. Dwell time is estimated from the
+screen base time, visible complexity, task pressure, profile patience/speed, and
+deterministic jitter.
+
+## Synthetic A/B self-improvement
+
+`src/lib/syntheticOptimization.ts` runs the synthetic profiles across Variant A
+and Variant B, aggregates completion, dwell, abandon, and friction rates, then
+turns the collected feedback into ranked UX changes. The `/synthetic` page shows
+the A/B scorecard, the current winner, and a projected self-improved variant
+that applies the highest-impact recommendations as synthetic score and dwell
+adjustments.

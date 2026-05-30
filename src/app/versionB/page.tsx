@@ -1,5 +1,5 @@
-import { ArchiveApp } from "./archive-app";
+import { StayFinderApp } from "./stayfinder-app";
 
 export default function VersionB() {
-  return <ArchiveApp />;
+  return <StayFinderApp />;
 }
