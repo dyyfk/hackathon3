@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { listings } from "../src/data/listings";
+import { runSyntheticABTest } from "../src/lib/syntheticOptimization";
 import {
   projectSyntheticJourney,
   projectSyntheticUserBehavior,
@@ -37,8 +38,27 @@ test("synthetic decisions expose score, sampling, and dwell explanations", () =>
   expect(decision.candidates.length).toBeGreaterThan(1);
   expect(decision.selection.probabilities.length).toBe(decision.candidates.length);
   expect(decision.action.scoreBreakdown.total).toBe(decision.action.score);
+  expect(decision.action.scoreBreakdown.experienceAdjustment).toBe(0);
   expect(decision.dwellBreakdown.total).toBe(decision.dwellMs);
+  expect(decision.dwellBreakdown.experienceMultiplier).toBe(1);
   expect(decision.dwellBreakdown.subtotalBeforeMultipliers).toBeGreaterThan(0);
+});
+
+test("synthetic A/B feedback produces a self-improvement projection", () => {
+  const report = runSyntheticABTest({ seedPrefix: "improvement-proof" });
+
+  expect(report.variants.map((variant) => variant.variantId)).toEqual([
+    "A",
+    "B",
+  ]);
+  expect(report.sampleSizePerVariant).toBeGreaterThan(0);
+  expect(report.recommendations.length).toBeGreaterThan(0);
+  expect(report.optimizedVariant.appliedRecommendationIds).toContain(
+    report.recommendations[0].id,
+  );
+  expect(report.optimizedProjection.summary.score).toBeGreaterThanOrEqual(
+    report.winner.score,
+  );
 });
 
 test("policy-sensitive profile checks cancellation before reserving", () => {
@@ -73,6 +93,9 @@ test("synthetic inspector renders profile and candidate breakdowns", async ({
   await page.goto("/synthetic");
 
   await expect(page.getByRole("heading", { name: /Behavior inspector/i })).toBeVisible();
+  await expect(page.getByTestId("synthetic-improvement-panel")).toBeVisible();
+  await expect(page.getByText("Synthetic A/B feedback")).toBeVisible();
+  await expect(page.getByText("Projected self-improvement")).toBeVisible();
   await expect(page.getByTestId("synthetic-step-1")).toBeVisible();
   await expect(page.getByText("Candidate actions")).toBeVisible();
   await expect(page.getByText("Dwell breakdown")).toBeVisible();
@@ -80,5 +103,7 @@ test("synthetic inspector renders profile and candidate breakdowns", async ({
   await page.getByTestId("synthetic-profile-select").selectOption("quick_booker");
   await page.getByTestId("synthetic-task-select").selectOption("complete_checkout");
   await expect(page.getByRole("heading", { name: "Quick booker" })).toBeVisible();
-  await expect(page.getByText("confirm_reservation")).toBeVisible();
+  await expect(
+    page.getByTestId("synthetic-step-4").getByText("confirm_reservation"),
+  ).toBeVisible();
 });

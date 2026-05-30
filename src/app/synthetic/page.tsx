@@ -1,7 +1,13 @@
 "use client";
 
-import { Download, SlidersHorizontal } from "lucide-react";
+import { ArrowUpRight, Download, Lightbulb, SlidersHorizontal } from "lucide-react";
 import { useMemo, useState } from "react";
+import {
+  runSyntheticABTest,
+  type SyntheticABTestReport,
+  type SyntheticABVariantSummary,
+  type SyntheticImprovementRecommendation,
+} from "@/lib/syntheticOptimization";
 import {
   explainSyntheticJourney,
   syntheticUserProfiles,
@@ -33,6 +39,10 @@ export default function SyntheticPage() {
   const [seed, setSeed] = useState("profile-demo");
   const [selectedStepIndex, setSelectedStepIndex] = useState(0);
 
+  const abReport = useMemo(
+    () => runSyntheticABTest({ seedPrefix: seed || "profile-demo" }),
+    [seed],
+  );
   const explanation = useMemo(
     () =>
       explainSyntheticJourney({
@@ -53,6 +63,18 @@ export default function SyntheticPage() {
     const link = document.createElement("a");
     link.href = url;
     link.download = `synthetic-${profileId}-${taskId}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function downloadImprovementJson() {
+    const blob = new Blob([JSON.stringify(abReport, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `synthetic-ab-improvement-${seed || "profile-demo"}.json`;
     link.click();
     URL.revokeObjectURL(url);
   }
@@ -133,6 +155,8 @@ export default function SyntheticPage() {
           </div>
         </div>
       </section>
+
+      <ImprovementPanel report={abReport} onDownload={downloadImprovementJson} />
 
       <section className="mx-auto grid max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[360px_minmax(0,1fr)] lg:px-8">
         <aside className="space-y-6">
@@ -226,6 +250,217 @@ export default function SyntheticPage() {
   );
 }
 
+function ImprovementPanel({
+  report,
+  onDownload,
+}: {
+  report: SyntheticABTestReport;
+  onDownload: () => void;
+}) {
+  const optimizedSummary = report.optimizedProjection.summary;
+
+  return (
+    <section
+      data-testid="synthetic-improvement-panel"
+      className="border-b border-stone-200 bg-[#fffdf8]"
+    >
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#e95f45]">
+              Feedback loop
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-normal">
+              Synthetic A/B feedback
+            </h2>
+          </div>
+          <button
+            data-testid="synthetic-improvement-export-json"
+            type="button"
+            onClick={onDownload}
+            className="inline-flex w-fit items-center gap-2 rounded-full border border-stone-300 bg-white px-4 py-2 text-sm font-semibold text-stone-950"
+          >
+            <Download className="size-4" />
+            Export improvement
+          </button>
+        </div>
+
+        <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(0,1fr)_360px]">
+          <VariantScorecard
+            variants={[...report.variants, optimizedSummary]}
+            winnerVariantId={report.winner.variantId}
+            optimizedVariantId={optimizedSummary.variantId}
+          />
+
+          <section className="rounded-lg border border-stone-200 bg-white p-5">
+            <div className="flex items-center gap-2">
+              <ArrowUpRight className="size-4 text-[#e95f45]" />
+              <h3 className="text-lg font-semibold">Projected self-improvement</h3>
+            </div>
+            <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
+              <SummaryValue
+                label="Score lift"
+                value={formatSigned(report.optimizedProjection.scoreUplift)}
+              />
+              <SummaryValue
+                label="Completion"
+                value={formatSignedPercent(
+                  report.optimizedProjection.completionRateUplift,
+                )}
+              />
+              <SummaryValue
+                label="Dwell saved"
+                value={formatMs(report.optimizedProjection.dwellReductionMs)}
+              />
+              <SummaryValue
+                label="Winner"
+                value={report.optimizedVariant.basedOnVariantId}
+              />
+            </dl>
+            <p className="mt-4 text-sm leading-6 text-stone-600">
+              {report.optimizedVariant.description}
+            </p>
+          </section>
+        </div>
+
+        <div className="mt-5 grid gap-3 md:grid-cols-2">
+          {report.recommendations.map((recommendation) => (
+            <RecommendationCard
+              key={recommendation.id}
+              recommendation={recommendation}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function VariantScorecard({
+  variants,
+  winnerVariantId,
+  optimizedVariantId,
+}: {
+  variants: SyntheticABVariantSummary[];
+  winnerVariantId: string;
+  optimizedVariantId: string;
+}) {
+  return (
+    <section className="overflow-hidden rounded-lg border border-stone-200 bg-white">
+      <div className="border-b border-stone-200 px-5 py-4">
+        <h3 className="text-lg font-semibold">A/B scorecard</h3>
+        <p className="mt-1 text-sm text-stone-500">
+          {variants[0]?.sessions ?? 0} synthetic sessions per variant
+        </p>
+      </div>
+      <div className="overflow-x-auto">
+        <table
+          data-testid="synthetic-ab-table"
+          className="min-w-full divide-y divide-stone-200 text-left text-sm"
+        >
+          <thead className="bg-stone-50 text-xs uppercase tracking-wide text-stone-500">
+            <tr>
+              <th className="px-4 py-3">Variant</th>
+              <th className="px-4 py-3">Score</th>
+              <th className="px-4 py-3">Complete</th>
+              <th className="px-4 py-3">Dwell</th>
+              <th className="px-4 py-3">Friction</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-stone-100">
+            {variants.map((variant) => (
+              <tr
+                key={variant.variantId}
+                data-testid={`synthetic-ab-row-${variant.variantId}`}
+                className={
+                  variant.variantId === optimizedVariantId
+                    ? "bg-[#fff7f4]"
+                    : undefined
+                }
+              >
+                <td className="px-4 py-3">
+                  <div className="font-semibold text-stone-950">
+                    {variant.label}
+                  </div>
+                  <div className="mt-1 flex flex-wrap gap-1 text-xs text-stone-500">
+                    {variant.variantId === winnerVariantId ? (
+                      <span className="rounded-full bg-stone-950 px-2 py-0.5 font-semibold text-white">
+                        Winner
+                      </span>
+                    ) : null}
+                    {variant.variantId === optimizedVariantId ? (
+                      <span className="rounded-full bg-[#ffe1d8] px-2 py-0.5 font-semibold text-[#b5422b]">
+                        Projected
+                      </span>
+                    ) : null}
+                  </div>
+                </td>
+                <td className="px-4 py-3 font-semibold">{variant.score}</td>
+                <td className="px-4 py-3">
+                  {formatPercent(variant.completionRate)}
+                </td>
+                <td className="px-4 py-3">{formatMs(variant.averageDwellMs)}</td>
+                <td className="px-4 py-3">
+                  {formatPercent(variant.feedback.totalFrictionRate)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
+
+function RecommendationCard({
+  recommendation,
+}: {
+  recommendation: SyntheticImprovementRecommendation;
+}) {
+  const changes = [
+    ...Object.entries(recommendation.actionScoreAdjustments ?? {}).map(
+      ([key, value]) => `${key} ${formatSigned(Number(value))}`,
+    ),
+    ...Object.entries(recommendation.screenDwellMultipliers ?? {}).map(
+      ([key, value]) => `${key} ${Math.round(Number(value) * 100)}% dwell`,
+    ),
+  ];
+
+  return (
+    <article
+      data-testid={`synthetic-recommendation-${recommendation.id}`}
+      className="rounded-lg border border-stone-200 bg-white p-5"
+    >
+      <div className="flex items-start gap-3">
+        <div className="grid size-9 shrink-0 place-items-center rounded-full bg-[#fff3ef] text-[#e95f45]">
+          <Lightbulb className="size-4" />
+        </div>
+        <div className="min-w-0">
+          <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">
+            Priority {recommendation.priority} · impact {recommendation.impact}
+          </p>
+          <h3 className="mt-1 text-lg font-semibold">
+            {recommendation.title}
+          </h3>
+          <p className="mt-2 text-sm leading-6 text-stone-600">
+            {recommendation.rationale}
+          </p>
+        </div>
+      </div>
+      <div className="mt-4 flex flex-wrap gap-2">
+        {changes.slice(0, 5).map((change) => (
+          <span
+            key={change}
+            className="rounded-full bg-stone-100 px-3 py-1 text-xs font-semibold text-stone-700"
+          >
+            {change}
+          </span>
+        ))}
+      </div>
+    </article>
+  );
+}
+
 function MetricRow({
   label,
   value,
@@ -281,6 +516,7 @@ function CandidateTable({ step }: { step: SyntheticJourneyStep }) {
               <th className="px-4 py-3">Preference</th>
               <th className="px-4 py-3">Effort</th>
               <th className="px-4 py-3">Risk</th>
+              <th className="px-4 py-3">UX adj</th>
               <th className="px-4 py-3">Probability</th>
             </tr>
           </thead>
@@ -314,6 +550,9 @@ function CandidateTable({ step }: { step: SyntheticJourneyStep }) {
                     -{candidate.scoreBreakdown.riskPenalty.toFixed(2)}
                   </td>
                   <td className="px-4 py-3">
+                    {formatSigned(candidate.scoreBreakdown.experienceAdjustment)}
+                  </td>
+                  <td className="px-4 py-3">
                     {probability ? `${Math.round(probability.probability * 100)}%` : "-"}
                   </td>
                 </tr>
@@ -338,6 +577,7 @@ function DwellTable({ step }: { step: SyntheticJourneyStep }) {
     ["patienceMultiplier", step.dwellBreakdown.patienceMultiplier],
     ["speedMultiplier", step.dwellBreakdown.speedMultiplier],
     ["jitter", step.dwellBreakdown.jitter],
+    ["experienceMultiplier", step.dwellBreakdown.experienceMultiplier],
     ["total", step.dwellBreakdown.total],
   ];
 
@@ -381,4 +621,16 @@ function JsonPanel({ label, value }: { label: string; value: unknown }) {
 
 function formatMs(ms: number): string {
   return ms >= 1_000 ? `${(ms / 1_000).toFixed(1)}s` : `${ms}ms`;
+}
+
+function formatPercent(value: number): string {
+  return `${Math.round(value * 100)}%`;
+}
+
+function formatSigned(value: number): string {
+  return value > 0 ? `+${value}` : String(value);
+}
+
+function formatSignedPercent(value: number): string {
+  return value > 0 ? `+${formatPercent(value)}` : formatPercent(value);
 }

@@ -323,3 +323,12 @@ preference match, effort penalty, and risk penalty. It then samples the next
 action using the profile's exploration level. Dwell time is estimated from the
 screen base time, visible complexity, task pressure, profile patience/speed, and
 deterministic jitter.
+
+## Synthetic A/B self-improvement
+
+`src/lib/syntheticOptimization.ts` runs the synthetic profiles across Variant A
+and Variant B, aggregates completion, dwell, abandon, and friction rates, then
+turns the collected feedback into ranked UX changes. The `/synthetic` page shows
+the A/B scorecard, the current winner, and a projected self-improved variant
+that applies the highest-impact recommendations as synthetic score and dwell
+adjustments.
