@@ -68,6 +68,7 @@ def normalize_ab_run(
     variant_a = normalize_variant("A", config["a_url"], parse_synthetic_stdout(a_stdout))
     variant_b = normalize_variant("B", config["b_url"], parse_synthetic_stdout(b_stdout))
     matrix = build_matrix_summary(variant_a, variant_b)
+    run_mode = config.get("run_mode") or infer_run_mode(variant_a, variant_b)
     return {
         "schema_version": "synthetic_ab_run_v1",
         "run_id": run_id,
@@ -80,13 +81,26 @@ def normalize_ab_run(
         "matrix_summary": matrix,
         "metadata": {
             "source": "AB experiment/scripts/airbnb_synth_demo.py",
-            "run_mode": config.get("run_mode", "deterministic_rule"),
+            "run_mode": run_mode,
             "data_status": {
                 "synthetic": "from_runner_stdout",
                 "real_user": "generated_placeholder",
             },
         },
     }
+
+
+def infer_run_mode(*variants: Dict[str, Any]) -> str:
+    trace_sources = {
+        str(trace.get("trace_source", ""))
+        for variant in variants
+        for trace in variant.get("raw", {}).get("traces", [])
+    }
+    if any(source.startswith("lm_batch_browser_observed") for source in trace_sources):
+        return "browser_observed_lm_trace"
+    if any(source.startswith("rule") for source in trace_sources):
+        return "deterministic_rule"
+    return "synthetic_runner"
 
 
 def parse_synthetic_stdout(text: str) -> Dict[str, Any]:
@@ -152,7 +166,7 @@ def normalize_variant(label: str, url: str, payload: Dict[str, Any]) -> Dict[str
     logs = behavior_logs(payload["traces"])
     profiles = profile_rows(payload["profiles"])
     return {
-        "label": f"Variant {label}",
+        "label": display_variant_label(label, url),
         "url": url,
         "raw": payload,
         "summary_stats": [
@@ -342,9 +356,9 @@ def build_matrix_summary(a: Dict[str, Any], b: Dict[str, Any]) -> Dict[str, Any]
     confidence = confidence_score(a, b)
     return {
         "winner": winner,
-        "title": winner_title(winner),
+        "title": winner_title(winner, a["label"], b["label"]),
         "label": "Overall winner" if winner in {"A", "B"} else "No clear winner",
-        "summary_primary": summary_primary(winner),
+        "summary_primary": summary_primary(winner, a["label"], b["label"]),
         "summary_secondary": f"We are {round(confidence * 100)}% confident based on the current synthetic runs.",
         "date_range": "May 5 - May 12, 2025",
         "summary_stats": [
@@ -415,27 +429,30 @@ def choose_winner(a: Dict[str, Any], b: Dict[str, Any]) -> str:
 def variant_score(variant: Dict[str, Any]) -> float:
     metrics = variant["derived_metrics"]
     return (
-        metrics["completion_rate"] * 0.35
-        + metrics["primary_cta_rate"] * 0.25
-        + metrics["detail_open_rate"] * 0.15
+        metrics["completion_rate"] * 0.28
+        + metrics["primary_cta_rate"] * 0.18
+        + metrics["detail_open_rate"] * 0.14
         + metrics["like_rate"] * 0.1
-        + (1 - metrics["friction_rate"]) * 0.1
-        + max(0, 1 - metrics["dwell_time"] / 360) * 0.05
+        + metrics["click_rate"] * 0.12
+        + (metrics["satisfaction"] / 5) * 0.1
+        + (1 - metrics["friction_rate"]) * 0.05
+        + max(0, 1 - metrics["dwell_time"] / 360) * 0.03
     )
 
 
-def winner_title(winner: str) -> str:
+def winner_title(winner: str, a_label: str = "Variant A", b_label: str = "Variant B") -> str:
     if winner == "A":
-        return "Variant A leads"
+        return f"{a_label} leads"
     if winner == "B":
-        return "Variant B leads"
+        return f"{b_label} leads"
     return "Variants are comparable"
 
 
-def summary_primary(winner: str) -> str:
+def summary_primary(winner: str, a_label: str = "Variant A", b_label: str = "Variant B") -> str:
     if winner == "tie":
         return "A and B show similar interaction outcomes across clicks, like intent, dwell time, and task completion."
-    return f"Variant {winner} performs better on UI-specific interaction behavior across the current synthetic runs."
+    winner_label = a_label if winner == "A" else b_label
+    return f"{winner_label} performs better on UI-specific interaction behavior across the current synthetic runs."
 
 
 def confidence_score(a: Dict[str, Any], b: Dict[str, Any]) -> float:
@@ -564,6 +581,17 @@ def generated_real_value(variant: str, url: str, key: str, value: float) -> floa
 
 def generated_real_lift(a: Dict[str, Any], b: Dict[str, Any], key: str) -> float:
     return generated_real_value("B", b["url"], key, b["derived_metrics"][key]) - generated_real_value("A", a["url"], key, a["derived_metrics"][key])
+
+
+def display_variant_label(label: str, url: str) -> str:
+    lowered = url.lower()
+    if "versionc" in lowered or "version-c" in lowered:
+        return "Variant C"
+    if "versionb" in lowered or "version-b" in lowered:
+        return "Variant B"
+    if "versiona" in lowered or "version-a" in lowered:
+        return "Variant A"
+    return f"Variant {label}"
 
 
 def winner_for_metric(a: float, b: float, direction: str) -> str:

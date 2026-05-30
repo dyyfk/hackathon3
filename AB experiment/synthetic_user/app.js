@@ -23,6 +23,7 @@ const refs = {
 
 const STORAGE_KEY = "syntheticABLatestRunId";
 const CONFIG_KEY = "syntheticABLastConfig";
+const SAMPLE_URL = "../data/latest_ab_run.json";
 const phases = [
   ["observing_pages", "Observe URLs"],
   ["generating_profiles", "Generate profiles"],
@@ -59,24 +60,35 @@ function init() {
 async function loadStoredRun() {
   const params = new URLSearchParams(window.location.search);
   const runId = params.get("run");
-  if (!runId) {
-    return;
+  if (runId) {
+    try {
+      const response = await fetch(`/api/synthetic-runs/${runId}`, { cache: "no-store" });
+      const job = await response.json();
+      if (job.status === "completed" && job.result) {
+        currentRun = job.result;
+        writeStorage(STORAGE_KEY, job.job_id || runId);
+        hydrateControls(currentRun.config);
+        renderRun(currentRun);
+        setStatus("Completed", "ready");
+        return;
+      }
+    } catch (error) {
+      console.warn(error);
+    }
+    removeStorage(STORAGE_KEY);
   }
   try {
-    const response = await fetch(`/api/synthetic-runs/${runId}`, { cache: "no-store" });
-    const job = await response.json();
-    if (job.status === "completed" && job.result) {
-      currentRun = job.result;
-      writeStorage(STORAGE_KEY, job.job_id || runId);
+    const response = await fetch(SAMPLE_URL, { cache: "no-store" });
+    if (response.ok) {
+      currentRun = await response.json();
       hydrateControls(currentRun.config);
       renderRun(currentRun);
-      setStatus("Completed", "ready");
+      setStatus("Sample Loaded", "ready");
       return;
     }
   } catch (error) {
     console.warn(error);
   }
-  removeStorage(STORAGE_KEY);
 }
 
 function renderIdle() {

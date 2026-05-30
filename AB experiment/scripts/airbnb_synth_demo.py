@@ -109,7 +109,13 @@ class AirbnbPageModel:
 
         model["page_type"] = str(self.live_snapshot.get("page_type") or "Live A/B page")
         model["live_snapshot"] = self.live_snapshot
-        if self.page_kind == "staybnb_booking":
+        if self.page_kind == "staybnb_guided_booking":
+            model["likely_friction"] = [
+                "Flexible-date defaults reduce calendar hesitation.",
+                "Estimated total price and fees are visible before checkout intent.",
+                "Contextual confidence cues make the next action clearer.",
+            ]
+        elif self.page_kind == "staybnb_booking":
             model["likely_friction"] = [
                 "Total price and fees are not fully visible before checkout.",
                 "Guests may need clearer listing detail before continuing.",
@@ -224,6 +230,7 @@ def fetch_live_snapshot(url: str) -> Dict[str, Any]:
         "final_url": url,
         "page_kind": page_kind,
         "page_type": {
+            "staybnb_guided_booking": "Staybnb guided booking flow",
             "staybnb_booking": "Staybnb booking flow",
             "airbnb_archive": "Airbnb archive page",
         }.get(page_kind, "Live web page"),
@@ -283,6 +290,8 @@ def detect_page_kind(text: str) -> str:
     lower = text.lower()
     if "airbnb archive" in lower or "airbed & breakfast" in lower or "2009 airbed" in lower:
         return "airbnb_archive"
+    if "variant c confidence guide" in lower or "smart date + price confidence guide" in lower:
+        return "staybnb_guided_booking"
     if "stayfinder" in lower or "homes with character" in lower or "show homes" in lower:
         return "stayfinder_gallery"
     if "staybnb" in lower or "mock checkout" in lower or "search stays" in lower:
@@ -470,6 +479,8 @@ class SyntheticRunner:
 
         if self.page_model.page_kind == "airbnb_archive":
             steps = self._archive_steps(profile)
+        elif self.page_model.page_kind == "staybnb_guided_booking":
+            steps = self._guided_staybnb_steps(profile, destination, guests)
         elif self.page_model.page_kind == "staybnb_booking":
             steps = self._staybnb_steps(profile, destination, guests)
         elif self.page_model.page_kind == "stayfinder_gallery":
@@ -670,6 +681,102 @@ class SyntheticRunner:
                 event_type="primary_click",
                 primary_action=True,
                 elapsed_seconds=24,
+            ),
+        ]
+
+    def _guided_staybnb_steps(
+        self, profile: Dict[str, Any], destination: str, guests: int
+    ) -> List[Dict[str, Any]]:
+        price_focus = profile["behavior_style"]["price_sensitivity"]
+        detail_focus = profile["behavior_style"]["detail_orientation"]
+        return [
+            step(
+                1,
+                "Variant C opens with a confidence guide that names flexible dates, upfront total price, and contextual helper cues.",
+                f"I can tell this flow is optimized for quickly choosing a stay near {destination}.",
+                "orient_on_guided_flow",
+                "scan Variant C confidence guide and search controls",
+                "Variant C confidence guide",
+                "Understand that dates and price will be handled before checkout.",
+                0.04,
+                event_type="view",
+                elapsed_seconds=6,
+            ),
+            step(
+                2,
+                "The page pre-communicates Flexible weekend selected - 2 nights and offers a Use flexible weekend action.",
+                "I do not need to struggle through the calendar before comparing stays.",
+                "accept_flexible_dates",
+                "use the flexible weekend default and keep the selected date range",
+                "Flexible weekend date guide",
+                "Date selection is resolved with low effort.",
+                0.06,
+                event_type="input",
+                elapsed_seconds=10,
+            ),
+            step(
+                3,
+                "Location, dates, guests, and Search remain in one compact row.",
+                f"I can set {destination} and {guests} guest(s) without losing the recommended dates.",
+                "configure_trip",
+                "confirm location and guest count",
+                "Search form",
+                "Trip context is ready for search.",
+                0.08,
+                event_type="input",
+                elapsed_seconds=14,
+            ),
+            step(
+                4,
+                "Search is the clear primary action after the date guide has reduced uncertainty.",
+                "I am ready to compare stays because the flow tells me what is already selected.",
+                "submit_search",
+                "click Search",
+                "Search button",
+                "Move directly into guided stay comparison.",
+                0.06,
+                event_type="primary_click",
+                primary_action=True,
+                elapsed_seconds=6,
+            ),
+            step(
+                5,
+                "Each listing card exposes Estimated total, nights, fees, and tax before opening checkout.",
+                "This solves my price confidence question while I compare cards.",
+                "compare_total_price",
+                "compare estimated total price and shortlist the best value stay",
+                "Estimated total price on listing cards",
+                "Shortlist with clear value confidence.",
+                round(0.06 + price_focus * 0.06, 2),
+                event_type="like_save",
+                like_signal=True,
+                elapsed_seconds=18,
+            ),
+            step(
+                6,
+                "The detail page repeats total price, flexible-date status, rating, and review count near the decision point.",
+                "I have enough price and trust context before expressing checkout intent.",
+                "open_confident_detail",
+                "open listing details and review the confidence strip",
+                "Detail confidence strip",
+                "Confirm the stay is worth continuing.",
+                round(0.06 + detail_focus * 0.05, 2),
+                event_type="detail_open",
+                detail_action=True,
+                elapsed_seconds=20,
+            ),
+            step(
+                7,
+                "The booking card says No surprise fees and shows the total before reserve.",
+                "The CTA feels safer because the cost is no longer hidden until checkout.",
+                "reserve_with_confidence",
+                "activate Reserve after checking the upfront total",
+                "Reserve button with upfront total",
+                "Measure confident checkout intent without real booking.",
+                0.06,
+                event_type="primary_click",
+                primary_action=True,
+                elapsed_seconds=10,
             ),
         ]
 
@@ -988,6 +1095,20 @@ class SyntheticRunner:
             ]
             liked = ["The timeline communicates brand evolution clearly."]
             purchase_intent = clamp_score(purchase_intent - 2.0)
+        elif self.page_model.page_kind == "staybnb_guided_booking":
+            recommendation = "Promote Version C to the next A/B/C test: it resolves date hesitation and price confidence before checkout intent."
+            confusion = [
+                "No major blocker remained after the guided comparison cues.",
+            ]
+            liked = [
+                "Flexible weekend defaults reduce calendar work.",
+                "Estimated totals and no-surprise-fee copy make comparison feel safer.",
+                "The confidence strip keeps trust and price cues near the Reserve CTA.",
+            ]
+            ease = clamp_score(ease + 1.2)
+            price_clarity = clamp_score(price_clarity + 2.2)
+            trust = clamp_score(trust + 1.0)
+            purchase_intent = clamp_score(purchase_intent + 1.4)
         elif self.page_model.page_kind == "staybnb_booking":
             recommendation = "Keep the compact search-to-mock-checkout path, but expose total price and listing detail earlier."
             confusion = [
@@ -2118,13 +2239,13 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--profile-mode",
         choices=["rule", "lm"],
-        default="rule",
+        default="lm",
         help="Use deterministic profiles or LM-generated profiles.",
     )
     parser.add_argument(
         "--trace-mode",
         choices=["rule", "lm"],
-        default="rule",
+        default="lm",
         help="Use LM-generated traces or deterministic UI-specific fallback traces.",
     )
     parser.add_argument(

@@ -1,8 +1,8 @@
 # Synthetic A/B Lab
 
-This folder is self-contained. It includes the synthetic-user runner script,
-a local server, data normalization, the matrix dashboard, and the A/B synthetic
-user runner page.
+This folder is self-contained. It includes the dashboard UI, synthetic-user
+runner UI, local server, copied runner script, browser observation layer,
+normalizer, sample JSON, and stored run artifacts.
 
 ## Run Locally
 
@@ -12,79 +12,57 @@ From the repository root:
 python3 "AB experiment/server.py" --port 8765
 ```
 
-Open the empty starting screens:
+Open either page:
 
 ```text
 http://127.0.0.1:8765/AB%20experiment/
 http://127.0.0.1:8765/AB%20experiment/synthetic_user/
 ```
 
-Open the committed sample replay:
+Both pages load `AB experiment/data/latest_ab_run.json` by default, so reviewers
+can inspect the committed sample immediately. A completed run can also be opened
+directly with `?run=<job_id>`.
+
+## Committed Sample
+
+The committed sample uses the same Airbnb URL for A and B while real A/B URLs
+are still being prepared:
 
 ```text
-http://127.0.0.1:8765/AB%20experiment/?run=sample-airbnb-ab
-http://127.0.0.1:8765/AB%20experiment/synthetic_user/?run=sample-airbnb-ab
+https://www.airbnb.com
 ```
 
-## Reproduce the Sample Data
-
-The committed sample uses the local A/B pages from the app:
+The fixture is a 10-profile, 5-run browser-observed LM trace sample. It is stored
+in:
 
 ```text
-http://127.0.0.1:3000/versionA
-http://127.0.0.1:3000/versionB
-```
-
-The committed sample is a 20-profile, 5-run fixture so reviewers can open the
-UI immediately.
-
-If you already have cached stdout from the runner, normalize it into the UI
-schema:
-
-```bash
-python3 "AB experiment/scripts/normalize_ab_run.py" \
-  --a-output /tmp/airbnb_synth_demo_full.out \
-  --b-output /tmp/airbnb_synth_demo_full.out \
-  --a-url http://127.0.0.1:3000/versionA \
-  --b-url http://127.0.0.1:3000/versionB \
-  --profiles 20 \
-  --runs 5 \
-  --run-id sample-airbnb-ab \
-  --out "AB experiment/data/latest_ab_run.json"
+AB experiment/data/latest_ab_run.json
+AB experiment/data/runs/sample-airbnb-ab.json
 ```
 
 ## Run Fresh A/B URLs
 
-The CLI runner is deterministic by default:
+Use the Synthetic User Runner page and enter:
 
-```bash
-python3 "AB experiment/scripts/airbnb_synth_demo.py" --url <A URL> --variant A --profile-mode rule --trace-mode rule --summary-mode rule --profiles 20 --runs 5
-python3 "AB experiment/scripts/airbnb_synth_demo.py" --url <B URL> --variant B --profile-mode rule --trace-mode rule --summary-mode rule --profiles 20 --runs 5
+```text
+A URL: https://www.airbnb.com
+B URL: https://www.airbnb.com
+Profiles: 20
+Runs: 5
+Model: auto
+Timeout: 240s
 ```
 
-`server.py` runs one staged job: observe both URLs, generate one shared cohort
-of profiles, run A and B trajectories concurrently against that same cohort,
-compute UI interaction metrics, then write an agent-style summary. The UI polls
-one shared job id and only renders results after generation starts.
+Start Run does one staged local job:
 
-Before generating behavior traces, the runner uses
-`AB experiment/scripts/observe_page.mjs` to open each URL with Playwright
-Chromium and extract browser-observed page context: visible text, headings,
-buttons, links, inputs, forms, CTAs, pricing text, trust signals, and clickable
-elements. That context is passed into the deterministic profile and
-UI-specific trace generators so steps are grounded in the A/B pages.
+1. Observe A and B URLs in parallel with Playwright Chromium.
+2. Generate one shared synthetic profile cohort with the copied runner script
+   logic, falling back to deterministic profiles if Codex CLI is unavailable.
+3. Generate A and B behavior traces in parallel through batch LM calls.
+4. Normalize stdout-compatible JSON into the shared UI schema.
+5. Write latest and per-run artifacts.
 
-If Playwright/Chrome is unavailable or the URL cannot be observed, the runner
-falls back to an HTML snapshot and then to the built-in Airbnb page model.
-`--profile-mode rule`, `--trace-mode rule`, and `--summary-mode rule` are the
-defaults for reproducible local demos. Pass an `lm` mode only when you want to
-experiment with Codex-generated profiles, traces, or summaries.
-
-The normalized UI metrics focus on interaction behavior: click rate,
-like/save intent rate, dwell time, completion, primary CTA rate, detail opens,
-clicks per user, and friction rate.
-
-The server writes run artifacts here:
+The server writes:
 
 ```text
 AB experiment/data/runs/<job_id>_A.out
@@ -93,14 +71,80 @@ AB experiment/data/runs/<job_id>.json
 AB experiment/data/latest_ab_run.json
 ```
 
-## Notes
+## CLI Reproduction
 
-- `Generate` requires the local `server.py`; `python3 -m http.server` can serve
-  the static sample but cannot execute the runner.
-- Codex CLI is optional for LM profile/trace/summary experiments. The default
-  server and CLI paths are local and deterministic.
-- Browser observation uses the repo Playwright dependency. Run `npm install`
-  from the repository root first if `node_modules` is missing, and run
-  `npx playwright install chromium` if Playwright reports a missing browser.
-- Real-user data is not required yet. The UI keeps real-user rows as generated
-  placeholders and stores that status in JSON metadata.
+You can run the copied script directly for each variant:
+
+```bash
+python3 "AB experiment/scripts/airbnb_synth_demo.py" \
+  --url https://www.airbnb.com \
+  --variant A \
+  --profiles 20 \
+  --runs 5 \
+  --profile-mode lm \
+  --trace-mode lm \
+  --summary-mode rule \
+  --codex-timeout 240
+
+python3 "AB experiment/scripts/airbnb_synth_demo.py" \
+  --url https://www.airbnb.com \
+  --variant B \
+  --profiles 20 \
+  --runs 5 \
+  --profile-mode lm \
+  --trace-mode lm \
+  --summary-mode rule \
+  --codex-timeout 240
+```
+
+Normalize cached stdout into the UI schema:
+
+```bash
+python3 "AB experiment/scripts/normalize_ab_run.py" \
+  --a-output /tmp/airbnb_ab_A.out \
+  --b-output /tmp/airbnb_ab_B.out \
+  --a-url https://www.airbnb.com \
+  --b-url https://www.airbnb.com \
+  --profiles 20 \
+  --runs 5 \
+  --run-id sample-airbnb-ab \
+  --out "AB experiment/data/latest_ab_run.json"
+```
+
+## Browser Observation
+
+Before generating traces, the runner calls:
+
+```bash
+node "AB experiment/scripts/observe_page.mjs" --url <URL>
+```
+
+It extracts page title, visible text, headings, buttons, links, inputs, forms,
+CTA candidates, pricing text, trust signals, and clickable elements. Those
+observations are passed into the LM trace prompt so steps are grounded in the
+actual A/B page instead of persona templates.
+
+If Playwright Chromium is missing or a URL cannot be reached, the runner falls
+back to an HTML snapshot and then to the built-in Airbnb page model. Install the
+browser when needed:
+
+```bash
+npx playwright install chromium
+```
+
+## Validation
+
+```bash
+python3 -m py_compile "AB experiment/server.py"
+python3 -m py_compile "AB experiment/scripts/airbnb_synth_demo.py"
+python3 -m py_compile "AB experiment/scripts/normalize_ab_run.py"
+node --check "AB experiment/scripts/observe_page.mjs"
+node --check "AB experiment/app.js"
+node --check "AB experiment/synthetic_user/app.js"
+python3 -m json.tool "AB experiment/data/latest_ab_run.json" >/dev/null
+python3 -m json.tool "AB experiment/data/runs/sample-airbnb-ab.json" >/dev/null
+```
+
+Real-user logs are not required yet. The JSON keeps placeholder metadata so
+future fields such as `variant`, `event`, `converted`, `task_seconds`,
+`dropoff`, and `satisfaction` can replace generated real-user rows later.
