@@ -285,36 +285,6 @@ A useful synthetic agent is not one that behaves exactly like a person in every 
 └── reports/                # Generated experiment summaries
 ```
 
-For a minimal hackathon repository, the most important files are:
-
-```text
-README.md
-assets/system_architecture.png
-assets/experiment_loop.png
-assets/data_flow.png
-```
-
----
-
-## Hackathon Demo Flow
-
-A recommended demo sequence:
-
-1. Open the StayLab V1 app.
-2. Run a real or synthetic user task, such as finding a budget stay.
-3. Show the structured trajectory log generated from the session.
-4. Show the detected issue, such as late discovery of total price.
-5. Show the improved V2 interface.
-6. Re-run the synthetic user task.
-7. Compare V1 and V2 using success rate, time on task, step count, and friction count.
-8. Present the improvement card and the continuous feedback loop.
-
-The key message is:
-
-> We are not replacing users with agents. We are using real users to teach agents how to become better product researchers.
-
----
-
 ## Privacy and Safety
 
 The demo uses a mock product environment with synthetic listings and mock checkout. No real payments, accounts, addresses, or sensitive personal data are collected.
@@ -328,13 +298,5 @@ Recommended safety rules:
 - Do not run autonomous agents on third-party production websites.
 
 ---
-
-## One-Minute Pitch
-
-UserTwin is a human-calibrated self-improving UX agent. Traditional user research is slow, traditional A/B testing needs large traffic, and pure LLM user simulation is difficult to trust. UserTwin connects these approaches by using a small number of real user sessions to calibrate synthetic user agents.
-
-In our demo, real users and synthetic agents complete the same tasks on two variants of a short-term rental search app. Their interactions are converted into structured trajectories. The system compares paths, outcomes, drop-offs, and friction points, then generates product improvement suggestions and re-tests the updated version.
-
-The goal is not to replace human users. The goal is to use human behavior as a calibration layer, then scale UX exploration with agents.
 
 <!-- USER TWIN README PACKAGE END -->
