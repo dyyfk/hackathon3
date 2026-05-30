@@ -1,14 +1,14 @@
 {
   "schema_version": "synthetic_ab_run_v1",
-  "run_id": "202605302150-ui-specific",
-  "created_at": "2026-05-30T21:52:57.954246+00:00",
+  "run_id": "sample-airbnb-ab",
+  "created_at": "2026-05-30T22:22:15.615528+00:00",
   "config": {
     "a_url": "http://127.0.0.1:3000/versionA",
     "b_url": "http://127.0.0.1:3000/versionB",
     "profiles": 20,
     "runs": 5,
     "model": "auto",
-    "codex_timeout": 240
+    "codex_timeout": 120
   },
   "variants": {
     "A": {
@@ -19,581 +19,521 @@
           {
             "id": "airbnb_u_001",
             "segment": "budget_weekend_couple",
-            "goal": "Find an affordable two-night Lake Tahoe stay for a couple and decide which listing is worth investigating further.",
-            "task": "On the Homes tab, search Lake Tahoe for 2 guests, compare the visible two-night prices and ratings, identify the best low-price option, and stop after recording whether the couple would continue to listing details.",
+            "goal": "Find an affordable two-night stay that still feels trustworthy.",
+            "task": "Compare visible stay options by price, rating, and value signals without booking.",
             "constraints": {
               "destination": "Lake Tahoe",
               "guests": 2,
-              "budget_preference": "lowest total visible price with acceptable rating"
+              "budget_preference": "lowest credible visible total"
             },
             "behavior_style": {
-              "patience": 0.52,
-              "exploration": 0.38,
-              "price_sensitivity": 0.94,
-              "trust_sensitivity": 0.62,
-              "detail_orientation": 0.55
+              "patience": 0.44,
+              "exploration": 0.44,
+              "price_sensitivity": 0.93,
+              "trust_sensitivity": 0.63,
+              "detail_orientation": 0.56
             },
             "success_criteria": [
-              "Search is submitted with Lake Tahoe and 2 guests.",
-              "Lowest visible price option is identified.",
-              "Rating and guest-favorite signals are considered.",
-              "No booking, account action, host message, or payment step is attempted."
+              "Compares at least two options.",
+              "Forms a shortlist without booking."
             ],
             "frustration_triggers": [
-              "Fees are not visible in the comparison view.",
-              "Guest count controls are unclear.",
-              "Low-price listings lack enough detail to judge value."
+              "Fees are unclear.",
+              "Low-price options are hard to compare."
             ]
           },
           {
             "id": "airbnb_u_002",
             "segment": "budget_weekend_couple",
-            "goal": "Compare budget-friendly cabin options for a short weekend stay.",
-            "task": "Search for Lake Tahoe with 2 guests, focus on cabin listings, compare Cabin in Kings Beach and Cabin in South Lake Tahoe by visible price, rating, and Guest favorite signal, then stop with a preferred option.",
+            "goal": "Find an affordable two-night stay that still feels trustworthy.",
+            "task": "Compare visible stay options by price, rating, and value signals without booking.",
             "constraints": {
-              "destination": "Lake Tahoe",
+              "destination": "Joshua Tree",
               "guests": 2,
-              "budget_preference": "prefer cabin under the higher visible cabin price"
+              "budget_preference": "under budget if ratings stay above average"
             },
             "behavior_style": {
-              "patience": 0.47,
-              "exploration": 0.44,
-              "price_sensitivity": 0.89,
-              "trust_sensitivity": 0.7,
-              "detail_orientation": 0.5
+              "patience": 0.48,
+              "exploration": 0.42,
+              "price_sensitivity": 0.94,
+              "trust_sensitivity": 0.62,
+              "detail_orientation": 0.58
             },
             "success_criteria": [
-              "Relevant cabin listings are found or noted from visible cards.",
-              "Price difference is considered before rating.",
-              "A single preferred cabin is selected for further review.",
-              "Task stops at comparison or intent assessment."
+              "Compares at least two options.",
+              "Forms a shortlist without booking."
             ],
             "frustration_triggers": [
-              "Cabin filters are unavailable or hard to find.",
-              "Total cost is ambiguous.",
-              "Guest favorite badge does not explain why it matters."
+              "Fees are unclear.",
+              "Low-price options are hard to compare."
             ]
           },
           {
             "id": "airbnb_u_003",
             "segment": "budget_weekend_couple",
-            "goal": "Decide whether a higher-rated listing justifies paying more for a weekend trip.",
-            "task": "Search Lake Tahoe for 2 guests, compare the $498 Cabin in Kings Beach against the $588 Condo in South Lake Tahoe, inspect any available listing details, and stop after deciding whether the cheaper cabin is sufficient.",
+            "goal": "Find an affordable two-night stay that still feels trustworthy.",
+            "task": "Compare visible stay options by price, rating, and value signals without booking.",
             "constraints": {
-              "destination": "Lake Tahoe",
+              "destination": "San Diego",
               "guests": 2,
-              "budget_preference": "balance visible price against rating"
+              "budget_preference": "clear total price before opening checkout"
             },
             "behavior_style": {
-              "patience": 0.6,
-              "exploration": 0.5,
-              "price_sensitivity": 0.86,
-              "trust_sensitivity": 0.66,
-              "detail_orientation": 0.64
+              "patience": 0.52,
+              "exploration": 0.4,
+              "price_sensitivity": 0.95,
+              "trust_sensitivity": 0.61,
+              "detail_orientation": 0.6
             },
             "success_criteria": [
-              "Both target listings are compared.",
-              "Visible rating and price are captured.",
-              "Any missing fee or detail information is noted.",
-              "No checkout submission or personal data entry occurs."
+              "Compares at least two options.",
+              "Forms a shortlist without booking."
             ],
             "frustration_triggers": [
-              "Listing detail navigation is unclear.",
-              "Taxes or cleaning fees are hidden.",
-              "Price comparison requires too many clicks."
+              "Fees are unclear.",
+              "Low-price options are hard to compare."
             ]
           },
           {
             "id": "airbnb_u_004",
             "segment": "budget_weekend_couple",
-            "goal": "Quickly assess if Staybnb can support a spontaneous low-cost weekend plan.",
-            "task": "Use the search controls to enter Lake Tahoe, keep the trip to 2 guests, scan the first carousel of popular homes, and stop after rating confidence in finding a stay under a budget-conscious threshold.",
+            "goal": "Find an affordable two-night stay that still feels trustworthy.",
+            "task": "Compare visible stay options by price, rating, and value signals without booking.",
             "constraints": {
-              "destination": "Lake Tahoe",
+              "destination": "Portland",
               "guests": 2,
-              "budget_preference": "avoid listings above midrange visible prices"
+              "budget_preference": "lowest credible visible total"
             },
             "behavior_style": {
-              "patience": 0.35,
-              "exploration": 0.3,
-              "price_sensitivity": 0.97,
-              "trust_sensitivity": 0.52,
-              "detail_orientation": 0.4
+              "patience": 0.55,
+              "exploration": 0.39,
+              "price_sensitivity": 0.96,
+              "trust_sensitivity": 0.6,
+              "detail_orientation": 0.61
             },
             "success_criteria": [
-              "Search path is completed without account creation.",
-              "At least three visible listings are price-compared.",
-              "Confidence to continue is assessed.",
-              "No wishlist action is used if it requires login."
+              "Compares at least two options.",
+              "Forms a shortlist without booking."
             ],
             "frustration_triggers": [
-              "Search results do not clearly update.",
-              "Budget options are mixed with expensive listings.",
-              "Checkout costs are not previewed early."
+              "Fees are unclear.",
+              "Low-price options are hard to compare."
             ]
           },
           {
             "id": "airbnb_u_005",
             "segment": "family_planner",
-            "goal": "Find a Lake Tahoe stay that looks suitable for a small family and worth deeper comparison.",
-            "task": "Search Lake Tahoe for 4 guests, compare visible listings for rating, price, and trust signals, then stop after choosing up to two listings for a family shortlist.",
+            "goal": "Find a reliable stay that looks suitable for a family trip.",
+            "task": "Search for a family-sized stay and compare trust, space, and suitability signals.",
             "constraints": {
               "destination": "Lake Tahoe",
               "guests": 4,
-              "budget_preference": "moderate price with strong trust signals"
+              "budget_preference": "moderate budget with strong trust signals"
             },
             "behavior_style": {
-              "patience": 0.78,
-              "exploration": 0.62,
-              "price_sensitivity": 0.68,
-              "trust_sensitivity": 0.88,
-              "detail_orientation": 0.84
+              "patience": 0.71,
+              "exploration": 0.61,
+              "price_sensitivity": 0.6,
+              "trust_sensitivity": 0.92,
+              "detail_orientation": 0.82
             },
             "success_criteria": [
-              "Guest count is adjusted to 4 if controls allow.",
-              "At least two listings are compared.",
-              "Guest favorite and rating signals influence the shortlist.",
-              "Task ends before booking or account creation."
+              "Checks suitability signals.",
+              "Avoids account or payment actions."
             ],
             "frustration_triggers": [
-              "Guest capacity is not visible on cards.",
-              "Family-relevant amenities are not obvious.",
-              "Fees and cancellation details are missing."
+              "Family details are missing.",
+              "Cancellation or fee details are unclear."
             ]
           },
           {
             "id": "airbnb_u_006",
             "segment": "family_planner",
-            "goal": "Assess whether a higher-priced home is justified for a family stay.",
-            "task": "Search for Lake Tahoe with 4 guests, compare Home in Carnelian Bay against lower-priced options, look for visible reasons to justify the price, and stop with a continue-or-abandon decision.",
+            "goal": "Find a reliable stay that looks suitable for a family trip.",
+            "task": "Search for a family-sized stay and compare trust, space, and suitability signals.",
             "constraints": {
-              "destination": "Lake Tahoe",
+              "destination": "San Francisco",
               "guests": 4,
-              "budget_preference": "willing to pay more only for clear family value"
+              "budget_preference": "family-fit value over cheapest option"
             },
             "behavior_style": {
-              "patience": 0.82,
-              "exploration": 0.55,
-              "price_sensitivity": 0.6,
-              "trust_sensitivity": 0.9,
-              "detail_orientation": 0.86
+              "patience": 0.74,
+              "exploration": 0.6,
+              "price_sensitivity": 0.61,
+              "trust_sensitivity": 0.91,
+              "detail_orientation": 0.84
             },
             "success_criteria": [
-              "Higher-priced home is compared against at least two cheaper options.",
-              "Rating and Guest favorite badge are recorded.",
-              "Missing family suitability information is noted.",
-              "No checkout submission is attempted."
+              "Checks suitability signals.",
+              "Avoids account or payment actions."
             ],
             "frustration_triggers": [
-              "Beds, rooms, or capacity are not visible early.",
-              "High price lacks explanation.",
-              "Trust signals are too vague."
+              "Family details are missing.",
+              "Cancellation or fee details are unclear."
             ]
           },
           {
             "id": "airbnb_u_007",
             "segment": "family_planner",
-            "goal": "Create a cautious family shortlist without committing to a reservation.",
-            "task": "Use Lake Tahoe and 3 guests in the search, inspect the visible listing cards, avoid login-only actions, and stop after selecting the safest-looking option for later review.",
+            "goal": "Find a reliable stay that looks suitable for a family trip.",
+            "task": "Search for a family-sized stay and compare trust, space, and suitability signals.",
             "constraints": {
-              "destination": "Lake Tahoe",
-              "guests": 3,
-              "budget_preference": "avoid extreme high prices unless trust is exceptional"
+              "destination": "San Diego",
+              "guests": 5,
+              "budget_preference": "flexible budget if cancellation is clear"
             },
             "behavior_style": {
-              "patience": 0.74,
+              "patience": 0.78,
               "exploration": 0.58,
-              "price_sensitivity": 0.72,
-              "trust_sensitivity": 0.91,
-              "detail_orientation": 0.8
+              "price_sensitivity": 0.62,
+              "trust_sensitivity": 0.9,
+              "detail_orientation": 0.86
             },
             "success_criteria": [
-              "Search uses 3 guests.",
-              "Listings are compared by price and rating.",
-              "A single safest-looking option is chosen.",
-              "No real personal data or payment details are entered."
+              "Checks suitability signals.",
+              "Avoids account or payment actions."
             ],
             "frustration_triggers": [
-              "Wishlist requires account access.",
-              "Safety or accessibility details are buried.",
-              "Checkout path appears before enough comparison detail."
+              "Family details are missing.",
+              "Cancellation or fee details are unclear."
             ]
           },
           {
             "id": "airbnb_u_008",
             "segment": "family_planner",
-            "goal": "Determine whether the booking flow gives enough information for a family decision.",
-            "task": "Search Lake Tahoe for 5 guests, attempt to compare details for the visible homes, and stop after documenting whether the page provides enough information to continue toward mock checkout intent.",
+            "goal": "Find a reliable stay that looks suitable for a family trip.",
+            "task": "Search for a family-sized stay and compare trust, space, and suitability signals.",
             "constraints": {
-              "destination": "Lake Tahoe",
-              "guests": 5,
-              "budget_preference": "value-oriented but flexible for the right fit"
+              "destination": "Seattle",
+              "guests": 4,
+              "budget_preference": "moderate budget with strong trust signals"
             },
             "behavior_style": {
-              "patience": 0.86,
-              "exploration": 0.66,
-              "price_sensitivity": 0.64,
-              "trust_sensitivity": 0.87,
-              "detail_orientation": 0.92
+              "patience": 0.82,
+              "exploration": 0.56,
+              "price_sensitivity": 0.63,
+              "trust_sensitivity": 0.89,
+              "detail_orientation": 0.88
             },
             "success_criteria": [
-              "Guest count is set or limitation is noted.",
-              "Comparison includes visible price, rating, and badge signals.",
-              "Readiness to continue is assessed without booking.",
-              "Any missing detail needed for a family is captured."
+              "Checks suitability signals.",
+              "Avoids account or payment actions."
             ],
             "frustration_triggers": [
-              "Guest controls do not support desired party size clearly.",
-              "Listing cards omit family capacity.",
-              "Mock checkout appears before full price clarity."
+              "Family details are missing.",
+              "Cancellation or fee details are unclear."
             ]
           },
           {
             "id": "airbnb_u_009",
             "segment": "remote_worker_business_traveler",
-            "goal": "Find a quiet, reliable Lake Tahoe stay for a short work trip.",
-            "task": "Search Lake Tahoe for 1 guest, compare listings by rating and visible professionalism signals, and stop after selecting the listing that seems most reliable for a solo work stay.",
+            "goal": "Find a stay that would work for a quiet remote-work trip.",
+            "task": "Assess whether the page exposes work-readiness, location, and fast booking confidence.",
             "constraints": {
-              "destination": "Lake Tahoe",
+              "destination": "Austin",
               "guests": 1,
-              "budget_preference": "midrange acceptable if rating is strong"
+              "budget_preference": "business-friendly value with reliable amenities"
             },
             "behavior_style": {
-              "patience": 0.58,
-              "exploration": 0.42,
-              "price_sensitivity": 0.54,
-              "trust_sensitivity": 0.82,
-              "detail_orientation": 0.76
+              "patience": 0.71,
+              "exploration": 0.43,
+              "price_sensitivity": 0.57,
+              "trust_sensitivity": 0.7,
+              "detail_orientation": 0.85
             },
             "success_criteria": [
-              "Search is completed for 1 guest.",
-              "Highest-confidence listing is chosen from visible cards.",
-              "Rating is prioritized over lowest price when justified.",
-              "No account, message, or payment action is attempted."
+              "Finds practical fit signals.",
+              "Identifies whether more details are needed."
             ],
             "frustration_triggers": [
-              "Workspace or Wi-Fi details are not visible.",
-              "Listing details require too many clicks.",
-              "Total price is unclear for expense planning."
+              "Work amenities are hidden.",
+              "The next step takes too long."
             ]
           },
           {
             "id": "airbnb_u_010",
             "segment": "remote_worker_business_traveler",
-            "goal": "Quickly assess whether the site can support a reimbursable two-night business stay.",
-            "task": "Use the search controls for Lake Tahoe and 1 guest, compare visible two-night prices, identify an option that would be easy to justify on expenses, and stop at intent assessment.",
+            "goal": "Find a stay that would work for a quiet remote-work trip.",
+            "task": "Assess whether the page exposes work-readiness, location, and fast booking confidence.",
             "constraints": {
-              "destination": "Lake Tahoe",
+              "destination": "Seattle",
               "guests": 1,
-              "budget_preference": "clear and defensible total price"
+              "budget_preference": "fast decision if work-readiness is visible"
             },
             "behavior_style": {
-              "patience": 0.42,
-              "exploration": 0.28,
-              "price_sensitivity": 0.7,
+              "patience": 0.57,
+              "exploration": 0.49,
+              "price_sensitivity": 0.53,
               "trust_sensitivity": 0.74,
-              "detail_orientation": 0.68
+              "detail_orientation": 0.78
             },
             "success_criteria": [
-              "Visible two-night prices are compared.",
-              "A reimbursable-looking option is identified.",
-              "Unclear fees are noted as expense risk.",
-              "No checkout submission or payment entry occurs."
+              "Finds practical fit signals.",
+              "Identifies whether more details are needed."
             ],
             "frustration_triggers": [
-              "Fees are hidden until late.",
-              "Search flow feels slower than expected.",
-              "Receipts or business details are not previewed."
+              "Work amenities are hidden.",
+              "The next step takes too long."
             ]
           },
           {
             "id": "airbnb_u_011",
             "segment": "remote_worker_business_traveler",
-            "goal": "Choose between convenience and trust signals for a solo work stay.",
-            "task": "Search Lake Tahoe for 1 guest, compare the condo and cabin listings, inspect available details if reachable, and stop after deciding which one is more suitable for work travel.",
+            "goal": "Find a stay that would work for a quiet remote-work trip.",
+            "task": "Assess whether the page exposes work-readiness, location, and fast booking confidence.",
             "constraints": {
-              "destination": "Lake Tahoe",
+              "destination": "San Francisco",
               "guests": 1,
-              "budget_preference": "reasonable price with high confidence"
+              "budget_preference": "company-reimbursable price clarity"
             },
             "behavior_style": {
-              "patience": 0.55,
+              "patience": 0.6,
               "exploration": 0.48,
-              "price_sensitivity": 0.58,
-              "trust_sensitivity": 0.8,
-              "detail_orientation": 0.72
+              "price_sensitivity": 0.54,
+              "trust_sensitivity": 0.73,
+              "detail_orientation": 0.8
             },
             "success_criteria": [
-              "Condo and cabin options are compared.",
-              "Rating and Guest favorite status are used in the decision.",
-              "A work-travel suitability judgment is recorded.",
-              "No real personal information is submitted."
+              "Finds practical fit signals.",
+              "Identifies whether more details are needed."
             ],
             "frustration_triggers": [
-              "No business-friendly amenity information appears.",
-              "Guest favorite signal lacks context.",
-              "Mock checkout does not clarify final cost."
+              "Work amenities are hidden.",
+              "The next step takes too long."
             ]
           },
           {
             "id": "airbnb_u_012",
             "segment": "remote_worker_business_traveler",
-            "goal": "Evaluate whether a quick booking flow feels trustworthy enough for a business traveler.",
-            "task": "Search Lake Tahoe for 2 guests to simulate a colleague trip, compare visible listings, proceed only as far as a non-submitted mock checkout intent screen if available, and stop before entering personal or payment data.",
+            "goal": "Find a stay that would work for a quiet remote-work trip.",
+            "task": "Assess whether the page exposes work-readiness, location, and fast booking confidence.",
             "constraints": {
-              "destination": "Lake Tahoe",
-              "guests": 2,
-              "budget_preference": "company-friendly price with strong rating"
+              "destination": "Denver",
+              "guests": 1,
+              "budget_preference": "business-friendly value with reliable amenities"
             },
             "behavior_style": {
-              "patience": 0.5,
-              "exploration": 0.35,
-              "price_sensitivity": 0.63,
-              "trust_sensitivity": 0.86,
-              "detail_orientation": 0.7
+              "patience": 0.64,
+              "exploration": 0.46,
+              "price_sensitivity": 0.55,
+              "trust_sensitivity": 0.72,
+              "detail_orientation": 0.82
             },
             "success_criteria": [
-              "Search is completed for 2 guests.",
-              "A preferred listing is selected based on visible evidence.",
-              "Mock checkout intent is assessed without submission.",
-              "No account, host message, or payment detail is used."
+              "Finds practical fit signals.",
+              "Identifies whether more details are needed."
             ],
             "frustration_triggers": [
-              "Checkout path feels too committal.",
-              "Final price is not visible before intent assessment.",
-              "Trust and cancellation information are sparse."
+              "Work amenities are hidden.",
+              "The next step takes too long."
             ]
           },
           {
             "id": "airbnb_u_013",
             "segment": "experience_seeker",
-            "goal": "Explore whether Staybnb supports a memorable Lake Tahoe getaway beyond basic lodging.",
-            "task": "Start on the Experiences tab if available, note what experience options or limitations appear, return to Homes if needed, compare distinctive Lake Tahoe stays, and stop after choosing the most interesting option to explore later.",
+            "goal": "Discover whether activities or services are easy to find from the page.",
+            "task": "Look for non-stay discovery paths and judge whether the page supports activity intent.",
             "constraints": {
-              "destination": "Lake Tahoe",
+              "destination": "New York",
               "guests": 2,
-              "budget_preference": "flexible for distinctive stays"
+              "budget_preference": "flexible if the experience feels distinctive"
             },
             "behavior_style": {
-              "patience": 0.7,
-              "exploration": 0.9,
-              "price_sensitivity": 0.42,
-              "trust_sensitivity": 0.64,
-              "detail_orientation": 0.66
+              "patience": 0.73,
+              "exploration": 0.86,
+              "price_sensitivity": 0.43,
+              "trust_sensitivity": 0.61,
+              "detail_orientation": 0.68
             },
             "success_criteria": [
-              "Experiences entry point is tried or its absence is noted.",
-              "At least two homes are compared for uniqueness and rating.",
-              "A most-interesting option is selected.",
-              "No booking or account action is performed."
+              "Finds the experiences path.",
+              "Understands what to do next."
             ],
             "frustration_triggers": [
-              "Experiences tab does not expose useful content.",
-              "Listings feel generic.",
-              "Photos or detailed descriptions are unavailable."
+              "Experiences are secondary.",
+              "Navigation labels compete for attention."
             ]
           },
           {
             "id": "airbnb_u_014",
             "segment": "experience_seeker",
-            "goal": "Find a high-rated cabin that feels special enough for a short trip.",
-            "task": "Search Lake Tahoe for 2 guests, compare cabin listings first, use ratings and Guest favorite badges to decide which cabin feels most appealing, and stop at comparison.",
+            "goal": "Discover whether activities or services are easy to find from the page.",
+            "task": "Look for non-stay discovery paths and judge whether the page supports activity intent.",
             "constraints": {
-              "destination": "Lake Tahoe",
+              "destination": "Los Angeles",
               "guests": 2,
-              "budget_preference": "secondary to experience quality"
+              "budget_preference": "willing to pay more for a unique activity"
             },
             "behavior_style": {
-              "patience": 0.65,
-              "exploration": 0.78,
-              "price_sensitivity": 0.38,
-              "trust_sensitivity": 0.7,
-              "detail_orientation": 0.62
+              "patience": 0.77,
+              "exploration": 0.84,
+              "price_sensitivity": 0.44,
+              "trust_sensitivity": 0.6,
+              "detail_orientation": 0.7
             },
             "success_criteria": [
-              "Cabin listings are identified from visible cards.",
-              "Experience appeal is weighed with rating.",
-              "A preferred cabin is selected without checkout.",
-              "Missing experiential details are recorded."
+              "Finds the experiences path.",
+              "Understands what to do next."
             ],
             "frustration_triggers": [
-              "No photos or atmosphere details are visible.",
-              "Only price and rating are available.",
-              "Comparison controls are too shallow."
+              "Experiences are secondary.",
+              "Navigation labels compete for attention."
             ]
           },
           {
             "id": "airbnb_u_015",
             "segment": "experience_seeker",
-            "goal": "Assess whether a premium Lake Tahoe home looks worth the splurge for a memorable stay.",
-            "task": "Search Lake Tahoe for 2 guests, compare Home in Carnelian Bay with cheaper alternatives, look for visible trust or uniqueness signals, and stop after deciding whether to continue exploring it.",
+            "goal": "Discover whether activities or services are easy to find from the page.",
+            "task": "Look for non-stay discovery paths and judge whether the page supports activity intent.",
             "constraints": {
-              "destination": "Lake Tahoe",
+              "destination": "Miami",
               "guests": 2,
-              "budget_preference": "splurge acceptable if clearly justified"
+              "budget_preference": "compare novelty before cost"
             },
             "behavior_style": {
-              "patience": 0.73,
-              "exploration": 0.82,
-              "price_sensitivity": 0.45,
-              "trust_sensitivity": 0.72,
-              "detail_orientation": 0.74
+              "patience": 0.63,
+              "exploration": 0.92,
+              "price_sensitivity": 0.4,
+              "trust_sensitivity": 0.64,
+              "detail_orientation": 0.62
             },
             "success_criteria": [
-              "Premium listing is compared against at least two cheaper listings.",
-              "Rating and Guest favorite signals are considered.",
-              "Continue intent is assessed without purchase action.",
-              "No personal data or payment step is entered."
+              "Finds the experiences path.",
+              "Understands what to do next."
             ],
             "frustration_triggers": [
-              "Premium price lacks visible justification.",
-              "Listing detail is too limited.",
-              "Fees are not transparent before intent assessment."
+              "Experiences are secondary.",
+              "Navigation labels compete for attention."
             ]
           },
           {
             "id": "airbnb_u_016",
             "segment": "experience_seeker",
-            "goal": "Compare lodging versus new service or experience entry points without committing.",
-            "task": "Click through Homes, Experiences, and Services tabs if present, search Lake Tahoe where applicable, then stop after noting which path feels most relevant for planning a getaway.",
+            "goal": "Discover whether activities or services are easy to find from the page.",
+            "task": "Look for non-stay discovery paths and judge whether the page supports activity intent.",
             "constraints": {
-              "destination": "Lake Tahoe",
+              "destination": "Chicago",
               "guests": 2,
-              "budget_preference": "open-ended, experience-driven"
+              "budget_preference": "flexible if the experience feels distinctive"
             },
             "behavior_style": {
-              "patience": 0.68,
-              "exploration": 0.95,
-              "price_sensitivity": 0.34,
-              "trust_sensitivity": 0.6,
-              "detail_orientation": 0.58
+              "patience": 0.66,
+              "exploration": 0.9,
+              "price_sensitivity": 0.41,
+              "trust_sensitivity": 0.63,
+              "detail_orientation": 0.64
             },
             "success_criteria": [
-              "Primary tabs are explored safely.",
-              "No login or sign-up flow is started.",
-              "A preferred planning path is identified.",
-              "Task remains at browsing and intent assessment only."
+              "Finds the experiences path.",
+              "Understands what to do next."
             ],
             "frustration_triggers": [
-              "New tabs are labeled but not functional.",
-              "Navigation state is unclear.",
-              "Search context is lost between tabs."
+              "Experiences are secondary.",
+              "Navigation labels compete for attention."
             ]
           },
           {
             "id": "airbnb_u_017",
             "segment": "first_time_cautious_user",
-            "goal": "Understand whether the Staybnb search flow feels safe and clear before considering a stay.",
-            "task": "Use the homepage controls to search Lake Tahoe for 1 guest, carefully inspect labels, visible prices, ratings, and footer trust links, then stop after deciding whether the site feels trustworthy enough to continue.",
+            "goal": "Understand the site without creating an account or exposing personal data.",
+            "task": "Browse cautiously, check trust and cost clarity, and stop before account or payment steps.",
             "constraints": {
               "destination": "Lake Tahoe",
-              "guests": 1,
-              "budget_preference": "low risk over lowest price"
+              "guests": 2,
+              "budget_preference": "needs clear price confidence before continuing"
             },
             "behavior_style": {
-              "patience": 0.8,
-              "exploration": 0.36,
-              "price_sensitivity": 0.64,
-              "trust_sensitivity": 0.96,
-              "detail_orientation": 0.88
+              "patience": 0.52,
+              "exploration": 0.38,
+              "price_sensitivity": 0.76,
+              "trust_sensitivity": 0.92,
+              "detail_orientation": 0.74
             },
             "success_criteria": [
-              "Search controls are used without account creation.",
-              "Trust and safety or research standards links are noticed if visible.",
-              "At least one listing is evaluated for confidence.",
-              "No booking, host message, or payment step is attempted."
+              "Avoids unsafe actions.",
+              "Forms confidence or identifies why not."
             ],
             "frustration_triggers": [
-              "The flow asks for commitment too early.",
-              "Trust information is hard to find.",
-              "Total price is incomplete."
+              "Sign-in appears too early.",
+              "Trust or fees are not explained."
             ]
           },
           {
             "id": "airbnb_u_018",
             "segment": "first_time_cautious_user",
-            "goal": "Learn how guest count and search results work without making a reservation.",
-            "task": "Search Lake Tahoe, adjust Who to 2 guests if possible, observe how the results or listing cards respond, and stop after documenting whether the controls were understandable.",
+            "goal": "Understand the site without creating an account or exposing personal data.",
+            "task": "Browse cautiously, check trust and cost clarity, and stop before account or payment steps.",
             "constraints": {
-              "destination": "Lake Tahoe",
+              "destination": "San Diego",
               "guests": 2,
-              "budget_preference": "clear cost before preference"
+              "budget_preference": "prefers visible fees before any account step"
             },
             "behavior_style": {
-              "patience": 0.72,
-              "exploration": 0.32,
-              "price_sensitivity": 0.7,
-              "trust_sensitivity": 0.9,
-              "detail_orientation": 0.82
+              "patience": 0.56,
+              "exploration": 0.36,
+              "price_sensitivity": 0.77,
+              "trust_sensitivity": 0.91,
+              "detail_orientation": 0.76
             },
             "success_criteria": [
-              "Guest control is attempted and result is observed.",
-              "Search is submitted or limitation is noted.",
-              "User confidence in the control flow is assessed.",
-              "No account, payment, or checkout submission occurs."
+              "Avoids unsafe actions.",
+              "Forms confidence or identifies why not."
             ],
             "frustration_triggers": [
-              "Guest selector labels are ambiguous.",
-              "Results do not visibly change.",
-              "Buttons look like they may trigger booking."
+              "Sign-in appears too early.",
+              "Trust or fees are not explained."
             ]
           },
           {
             "id": "airbnb_u_019",
             "segment": "first_time_cautious_user",
-            "goal": "Compare listings cautiously and avoid accidental booking actions.",
-            "task": "Search Lake Tahoe for 1 guest, open or inspect listing details only if clearly safe, avoid wishlist and account links, and stop after identifying the safest-looking listing to revisit.",
+            "goal": "Understand the site without creating an account or exposing personal data.",
+            "task": "Browse cautiously, check trust and cost clarity, and stop before account or payment steps.",
             "constraints": {
-              "destination": "Lake Tahoe",
-              "guests": 1,
-              "budget_preference": "prefer transparent, lower-risk options"
+              "destination": "Portland",
+              "guests": 2,
+              "budget_preference": "will stop if trust or cost feels hidden"
             },
             "behavior_style": {
-              "patience": 0.76,
-              "exploration": 0.4,
-              "price_sensitivity": 0.66,
-              "trust_sensitivity": 0.94,
-              "detail_orientation": 0.9
+              "patience": 0.59,
+              "exploration": 0.34,
+              "price_sensitivity": 0.78,
+              "trust_sensitivity": 0.9,
+              "detail_orientation": 0.78
             },
             "success_criteria": [
-              "At least two listings are compared cautiously.",
-              "Potentially account-gated actions are avoided.",
-              "A safest-looking listing is selected.",
-              "The task stops before mock checkout submission."
+              "Avoids unsafe actions.",
+              "Forms confidence or identifies why not."
             ],
             "frustration_triggers": [
-              "Wishlist icons are unclear.",
-              "Listing clicks appear to move toward checkout.",
-              "Safety and cancellation details are not obvious."
+              "Sign-in appears too early.",
+              "Trust or fees are not explained."
             ]
           },
           {
             "id": "airbnb_u_020",
             "segment": "first_time_cautious_user",
-            "goal": "Assess checkout intent without entering real information or making a booking.",
-            "task": "Search Lake Tahoe for 2 guests, select the listing that looks most trustworthy from visible ratings and badges, proceed only if the mock checkout path is clearly non-final, and stop immediately before any submit, personal data, or payment step.",
+            "goal": "Understand the site without creating an account or exposing personal data.",
+            "task": "Browse cautiously, check trust and cost clarity, and stop before account or payment steps.",
             "constraints": {
-              "destination": "Lake Tahoe",
+              "destination": "Denver",
               "guests": 2,
-              "budget_preference": "trust and transparency before price"
+              "budget_preference": "needs clear price confidence before continuing"
             },
             "behavior_style": {
-              "patience": 0.84,
-              "exploration": 0.45,
-              "price_sensitivity": 0.62,
-              "trust_sensitivity": 0.98,
-              "detail_orientation": 0.92
+              "patience": 0.45,
+              "exploration": 0.42,
+              "price_sensitivity": 0.74,
+              "trust_sensitivity": 0.94,
+              "detail_orientation": 0.7
             },
             "success_criteria": [
-              "Preferred listing is chosen using visible trust signals.",
-              "Checkout intent is assessed without completing checkout.",
-              "No real personal data, account action, host message, or payment detail is entered.",
-              "Any unclear final-submit risk is documented."
+              "Avoids unsafe actions.",
+              "Forms confidence or identifies why not."
             ],
             "frustration_triggers": [
-              "Mock checkout is not clearly labeled as safe.",
-              "Final price is still hidden.",
-              "The page pressures the user to continue before enough review."
+              "Sign-in appears too early.",
+              "Trust or fees are not explained."
             ]
           }
         ],
@@ -601,7 +541,7 @@
           {
             "persona_id": "airbnb_u_001",
             "segment": "budget_weekend_couple",
-            "goal": "Find an affordable two-night Lake Tahoe stay for a couple and decide which listing is worth investigating further.",
+            "goal": "Find an affordable two-night stay that still feels trustworthy.",
             "steps": [
               {
                 "step": 1,
@@ -730,7 +670,7 @@
           {
             "persona_id": "airbnb_u_005",
             "segment": "family_planner",
-            "goal": "Find a Lake Tahoe stay that looks suitable for a small family and worth deeper comparison.",
+            "goal": "Find a reliable stay that looks suitable for a family trip.",
             "steps": [
               {
                 "step": 1,
@@ -804,7 +744,136 @@
                 "action": "click View details on the best matching listing",
                 "target_ui": "Listing card View details button",
                 "expected_result": "Decide whether the visible details are enough to continue.",
-                "friction": 0.29,
+                "friction": 0.28,
+                "event_type": "detail_open",
+                "clicked": true,
+                "like_signal": true,
+                "primary_action": false,
+                "detail_action": true,
+                "elapsed_seconds": 30
+              },
+              {
+                "step": 6,
+                "observation": "The detail page offers a Reserve CTA and clarifies that fees are calculated at checkout.",
+                "persona_thought": "I can express intent without entering payment or sending host messages.",
+                "intent": "assess_checkout_intent",
+                "action": "activate mock checkout intent CTA",
+                "target_ui": "Reserve button",
+                "expected_result": "Measure purchase intent safely.",
+                "friction": 0.19,
+                "event_type": "primary_click",
+                "clicked": true,
+                "like_signal": false,
+                "primary_action": true,
+                "detail_action": false,
+                "elapsed_seconds": 18
+              }
+            ],
+            "final_feedback": {
+              "task_success": true,
+              "scores": {
+                "ease_of_search": 8,
+                "price_clarity": 5,
+                "trust": 9,
+                "purchase_intent": 7
+              },
+              "liked_features": [
+                "The single-page flow makes search, comparison, and mock checkout easy to understand.",
+                "Event capture signals make the experiment instrumentation visible to the team."
+              ],
+              "confusion_points": [
+                "Final cost and listing detail need to be clearer before users move into checkout intent."
+              ],
+              "friction_themes": [
+                "price_clarity"
+              ],
+              "recommendation": "Keep the compact search-to-mock-checkout path, but expose total price and listing detail earlier."
+            },
+            "variant": "A",
+            "trace_source": "rule_ui_specific",
+            "task_seconds": 105,
+            "converted": true,
+            "dropoff": false,
+            "satisfaction": 4.2
+          },
+          {
+            "persona_id": "airbnb_u_009",
+            "segment": "remote_worker_business_traveler",
+            "goal": "Find a stay that would work for a quiet remote-work trip.",
+            "steps": [
+              {
+                "step": 1,
+                "observation": "Staybnb shows a compact booking-oriented homepage with search, comparison, and mock checkout stages.",
+                "persona_thought": "I can see this is meant for finding a stay near Austin.",
+                "intent": "orient_on_staybnb",
+                "action": "scan header, hero copy, and booking workflow",
+                "target_ui": "Staybnb homepage",
+                "expected_result": "Confirm that the page supports stay discovery.",
+                "friction": 0.08,
+                "event_type": "view",
+                "clicked": false,
+                "like_signal": false,
+                "primary_action": false,
+                "detail_action": false,
+                "elapsed_seconds": 9
+              },
+              {
+                "step": 2,
+                "observation": "The form exposes LOCATION, CHECK IN, CHECK OUT, and GUESTS in one row.",
+                "persona_thought": "I will set Austin and 1 guest(s) without leaving the page.",
+                "intent": "configure_trip",
+                "action": "fill location, dates, and guests",
+                "target_ui": "Search form",
+                "expected_result": "Trip context is ready for search.",
+                "friction": 0.14,
+                "event_type": "input",
+                "clicked": true,
+                "like_signal": false,
+                "primary_action": false,
+                "detail_action": false,
+                "elapsed_seconds": 24
+              },
+              {
+                "step": 3,
+                "observation": "Search is the clear primary action, and the page labels the next phases as Search stays, Compare details, and Mock checkout.",
+                "persona_thought": "The flow tells me what will happen after search.",
+                "intent": "submit_search",
+                "action": "click Search",
+                "target_ui": "Search button",
+                "expected_result": "Move from trip setup into stay comparison.",
+                "friction": 0.1,
+                "event_type": "primary_click",
+                "clicked": true,
+                "like_signal": false,
+                "primary_action": true,
+                "detail_action": false,
+                "elapsed_seconds": 8
+              },
+              {
+                "step": 4,
+                "observation": "The page is instrumented for events, which supports measuring friction during the experiment.",
+                "persona_thought": "I expect the team can capture where I hesitate.",
+                "intent": "notice_tracking",
+                "action": "scan Events counter and flow stage labels",
+                "target_ui": "Events and stage indicators",
+                "expected_result": "Understand that behavior can be measured without a real booking.",
+                "friction": 0.19,
+                "event_type": "scroll",
+                "clicked": false,
+                "like_signal": false,
+                "primary_action": false,
+                "detail_action": false,
+                "elapsed_seconds": 16
+              },
+              {
+                "step": 5,
+                "observation": "Search results expose listing cards with View details actions, prices, ratings, beds, and guest capacity.",
+                "persona_thought": "I can open a listing and use that as my shortlist/like signal.",
+                "intent": "compare_details",
+                "action": "click View details on the best matching listing",
+                "target_ui": "Listing card View details button",
+                "expected_result": "Decide whether the visible details are enough to continue.",
+                "friction": 0.27,
                 "event_type": "detail_open",
                 "clicked": true,
                 "like_signal": true,
@@ -857,143 +926,14 @@
             "satisfaction": 4.0
           },
           {
-            "persona_id": "airbnb_u_009",
-            "segment": "remote_worker_business_traveler",
-            "goal": "Find a quiet, reliable Lake Tahoe stay for a short work trip.",
-            "steps": [
-              {
-                "step": 1,
-                "observation": "Staybnb shows a compact booking-oriented homepage with search, comparison, and mock checkout stages.",
-                "persona_thought": "I can see this is meant for finding a stay near Lake Tahoe.",
-                "intent": "orient_on_staybnb",
-                "action": "scan header, hero copy, and booking workflow",
-                "target_ui": "Staybnb homepage",
-                "expected_result": "Confirm that the page supports stay discovery.",
-                "friction": 0.08,
-                "event_type": "view",
-                "clicked": false,
-                "like_signal": false,
-                "primary_action": false,
-                "detail_action": false,
-                "elapsed_seconds": 9
-              },
-              {
-                "step": 2,
-                "observation": "The form exposes LOCATION, CHECK IN, CHECK OUT, and GUESTS in one row.",
-                "persona_thought": "I will set Lake Tahoe and 1 guest(s) without leaving the page.",
-                "intent": "configure_trip",
-                "action": "fill location, dates, and guests",
-                "target_ui": "Search form",
-                "expected_result": "Trip context is ready for search.",
-                "friction": 0.14,
-                "event_type": "input",
-                "clicked": true,
-                "like_signal": false,
-                "primary_action": false,
-                "detail_action": false,
-                "elapsed_seconds": 24
-              },
-              {
-                "step": 3,
-                "observation": "Search is the clear primary action, and the page labels the next phases as Search stays, Compare details, and Mock checkout.",
-                "persona_thought": "The flow tells me what will happen after search.",
-                "intent": "submit_search",
-                "action": "click Search",
-                "target_ui": "Search button",
-                "expected_result": "Move from trip setup into stay comparison.",
-                "friction": 0.1,
-                "event_type": "primary_click",
-                "clicked": true,
-                "like_signal": false,
-                "primary_action": true,
-                "detail_action": false,
-                "elapsed_seconds": 8
-              },
-              {
-                "step": 4,
-                "observation": "The page is instrumented for events, which supports measuring friction during the experiment.",
-                "persona_thought": "I expect the team can capture where I hesitate.",
-                "intent": "notice_tracking",
-                "action": "scan Events counter and flow stage labels",
-                "target_ui": "Events and stage indicators",
-                "expected_result": "Understand that behavior can be measured without a real booking.",
-                "friction": 0.18,
-                "event_type": "scroll",
-                "clicked": false,
-                "like_signal": false,
-                "primary_action": false,
-                "detail_action": false,
-                "elapsed_seconds": 16
-              },
-              {
-                "step": 5,
-                "observation": "Search results expose listing cards with View details actions, prices, ratings, beds, and guest capacity.",
-                "persona_thought": "I can open a listing and use that as my shortlist/like signal.",
-                "intent": "compare_details",
-                "action": "click View details on the best matching listing",
-                "target_ui": "Listing card View details button",
-                "expected_result": "Decide whether the visible details are enough to continue.",
-                "friction": 0.27,
-                "event_type": "detail_open",
-                "clicked": true,
-                "like_signal": true,
-                "primary_action": false,
-                "detail_action": true,
-                "elapsed_seconds": 30
-              },
-              {
-                "step": 6,
-                "observation": "The detail page offers a Reserve CTA and clarifies that fees are calculated at checkout.",
-                "persona_thought": "I can express intent without entering payment or sending host messages.",
-                "intent": "assess_checkout_intent",
-                "action": "activate mock checkout intent CTA",
-                "target_ui": "Reserve button",
-                "expected_result": "Measure purchase intent safely.",
-                "friction": 0.18,
-                "event_type": "primary_click",
-                "clicked": true,
-                "like_signal": false,
-                "primary_action": true,
-                "detail_action": false,
-                "elapsed_seconds": 18
-              }
-            ],
-            "final_feedback": {
-              "task_success": true,
-              "scores": {
-                "ease_of_search": 8,
-                "price_clarity": 6,
-                "trust": 8,
-                "purchase_intent": 7
-              },
-              "liked_features": [
-                "The single-page flow makes search, comparison, and mock checkout easy to understand.",
-                "Event capture signals make the experiment instrumentation visible to the team."
-              ],
-              "confusion_points": [
-                "Final cost and listing detail need to be clearer before users move into checkout intent."
-              ],
-              "friction_themes": [
-                "price_clarity"
-              ],
-              "recommendation": "Keep the compact search-to-mock-checkout path, but expose total price and listing detail earlier."
-            },
-            "variant": "A",
-            "trace_source": "rule_ui_specific",
-            "task_seconds": 105,
-            "converted": true,
-            "dropoff": false,
-            "satisfaction": 4.0
-          },
-          {
             "persona_id": "airbnb_u_013",
             "segment": "experience_seeker",
-            "goal": "Explore whether Staybnb supports a memorable Lake Tahoe getaway beyond basic lodging.",
+            "goal": "Discover whether activities or services are easy to find from the page.",
             "steps": [
               {
                 "step": 1,
                 "observation": "Staybnb shows a compact booking-oriented homepage with search, comparison, and mock checkout stages.",
-                "persona_thought": "I can see this is meant for finding a stay near Lake Tahoe.",
+                "persona_thought": "I can see this is meant for finding a stay near New York.",
                 "intent": "orient_on_staybnb",
                 "action": "scan header, hero copy, and booking workflow",
                 "target_ui": "Staybnb homepage",
@@ -1009,7 +949,7 @@
               {
                 "step": 2,
                 "observation": "The form exposes LOCATION, CHECK IN, CHECK OUT, and GUESTS in one row.",
-                "persona_thought": "I will set Lake Tahoe and 2 guest(s) without leaving the page.",
+                "persona_thought": "I will set New York and 2 guest(s) without leaving the page.",
                 "intent": "configure_trip",
                 "action": "fill location, dates, and guests",
                 "target_ui": "Search form",
@@ -1118,7 +1058,7 @@
           {
             "persona_id": "airbnb_u_017",
             "segment": "first_time_cautious_user",
-            "goal": "Understand whether the Staybnb search flow feels safe and clear before considering a stay.",
+            "goal": "Understand the site without creating an account or exposing personal data.",
             "steps": [
               {
                 "step": 1,
@@ -1139,7 +1079,7 @@
               {
                 "step": 2,
                 "observation": "The form exposes LOCATION, CHECK IN, CHECK OUT, and GUESTS in one row.",
-                "persona_thought": "I will set Lake Tahoe and 1 guest(s) without leaving the page.",
+                "persona_thought": "I will set Lake Tahoe and 2 guest(s) without leaving the page.",
                 "intent": "configure_trip",
                 "action": "fill location, dates, and guests",
                 "target_ui": "Search form",
@@ -1176,7 +1116,7 @@
                 "action": "scan Events counter and flow stage labels",
                 "target_ui": "Events and stage indicators",
                 "expected_result": "Understand that behavior can be measured without a real booking.",
-                "friction": 0.19,
+                "friction": 0.18,
                 "event_type": "scroll",
                 "clicked": false,
                 "like_signal": false,
@@ -1192,7 +1132,7 @@
                 "action": "click View details on the best matching listing",
                 "target_ui": "Listing card View details button",
                 "expected_result": "Decide whether the visible details are enough to continue.",
-                "friction": 0.28,
+                "friction": 0.3,
                 "event_type": "detail_open",
                 "clicked": true,
                 "like_signal": true,
@@ -1208,7 +1148,7 @@
                 "action": "activate mock checkout intent CTA",
                 "target_ui": "Reserve button",
                 "expected_result": "Measure purchase intent safely.",
-                "friction": 0.19,
+                "friction": 0.18,
                 "event_type": "primary_click",
                 "clicked": true,
                 "like_signal": false,
@@ -1303,76 +1243,67 @@
         "summary": {
           "top_findings": [
             {
-              "theme": "Compact flow performed well",
-              "affected_users": 5,
-              "severity": "low",
-              "evidence": "5 runs completed successfully: task_success_rate 1.0, conversion_rate 1.0, dropoff_rate 0.0, avg_task_seconds 105.0, avg_steps 6.0, avg_satisfaction 4.04.",
-              "suggestion": "Keep the single-page search, comparison, detail, and mock checkout structure as the demo baseline."
-            },
-            {
-              "theme": "Price clarity is the main blocker",
+              "theme": "price_clarity",
               "affected_users": 5,
               "severity": "high",
-              "evidence": "price_clarity appeared in friction_counts for 5 users, and avg price_clarity was 5.2 versus ease_of_search 8.0 and trust 8.2.",
-              "suggestion": "Show total estimated stay cost, taxes, cleaning fees, and fee timing before the Reserve or mock checkout CTA."
+              "evidence": "5 users referenced price, fees, total cost, or value confidence during the run.",
+              "suggestion": "Expose total price and likely fees earlier in comparison moments."
             },
             {
-              "theme": "Detail view drives intent",
-              "affected_users": 5,
-              "severity": "medium",
-              "evidence": "detail_open_rate 1.0, like_rate 1.0, primary_cta_rate 1.0, and purchase_intent averaged 6.6 after users opened a listing detail page.",
-              "suggestion": "Strengthen listing detail cards with capacity, beds, amenities, cancellation, and trust rationale so intent is based on enough evidence."
-            },
-            {
-              "theme": "Experiences path is underdeveloped",
+              "theme": "experiences_discoverability",
               "affected_users": 1,
-              "severity": "medium",
-              "evidence": "experiences_discoverability appeared in friction_counts for 1 user, tied to the experience_seeker segment.",
-              "suggestion": "Make Experiences and Services tabs visibly functional or clearly label them as coming soon during the hackathon demo."
+              "severity": "low",
+              "evidence": "5 synthetic traces completed with avg_satisfaction=4.08.",
+              "suggestion": "Make Experiences and Services discoverable without competing with the stay search path."
+            },
+            {
+              "theme": "synthetic_behavior_pattern",
+              "affected_users": 5,
+              "severity": "low",
+              "evidence": "5 synthetic traces completed with structured browser-observed steps.",
+              "suggestion": "Review logs and profile-level traces before making a product decision."
             }
           ],
           "segment_notes": [
             {
               "segment": "budget_weekend_couple",
-              "note": "The budget user converted, but price_clarity scored 4; this segment needs total cost earlier than checkout intent."
-            },
-            {
-              "segment": "family_planner",
-              "note": "The family planner completed the flow with trust 8, but needs richer family suitability details before deeper comparison."
-            },
-            {
-              "segment": "remote_worker_business_traveler",
-              "note": "The business traveler had purchase_intent 7 and price_clarity 6; expense-friendly totals and Wi-Fi/workspace cues would improve confidence."
+              "note": "Budget travelers prioritized visible total cost and fast value comparison."
             },
             {
               "segment": "experience_seeker",
-              "note": "The experience seeker converted with purchase_intent 7, but experiences_discoverability was the unique segment-specific friction."
+              "note": "Experience seekers needed the activity path to stand out from the default stay flow."
+            },
+            {
+              "segment": "family_planner",
+              "note": "Family planners looked for trust, suitability, and enough detail before continuing."
             },
             {
               "segment": "first_time_cautious_user",
-              "note": "The cautious user reported the highest trust score at 9, suggesting the mock flow feels safe when commitment is clearly bounded."
+              "note": "Cautious users were sensitive to account, trust, and fee surprises."
+            },
+            {
+              "segment": "remote_worker_business_traveler",
+              "note": "Work travelers needed practical fit signals such as quietness and setup confidence."
             }
           ],
           "recommendations": [
-            "Prioritize an upfront price breakdown on listing cards and detail pages.",
-            "Add trust explanations behind Guest favorite, ratings, cancellation, and fee language.",
-            "Expose family and work-trip decision details directly in comparison: guest capacity, beds, Wi-Fi, workspace, parking, and cancellation.",
-            "Clarify that Reserve is a mock checkout intent action before any personal data or payment step.",
-            "For the demo, emphasize the strong funnel metrics: run_count 5, completion_rate 1.0, conversion_rate 1.0, avg_dwell_seconds 105.0, avg_clicks_per_user 4.0."
+            "Expose total price and likely fees earlier in comparison moments.",
+            "Make Experiences and Services discoverable without competing with the stay search path.",
+            "Review logs and profile-level traces before making a product decision."
           ],
-          "demo_readout": "Across 5 synthetic users, Staybnb\u2019s compact Airbnb-style flow worked: task_success_rate 1.0, conversion_rate 1.0, dropoff_rate 0.0, and avg_satisfaction 4.04. The strongest product message is that users understand the search-to-detail-to-intent path, but every trace flagged price clarity, making upfront total cost the clearest next improvement.",
+          "demo_readout": "5 synthetic runs completed with conversion_rate=1.0, dropoff_rate=0.0, avg_task_seconds=105.0, avg_satisfaction=4.08, and avg_steps=6.0.",
           "metrics": {
             "run_count": 5,
             "task_success_rate": 1.0,
             "conversion_rate": 1.0,
             "dropoff_rate": 0.0,
             "avg_task_seconds": 105.0,
-            "avg_satisfaction": 4.04,
+            "avg_satisfaction": 4.08,
             "avg_steps": 6.0,
             "avg_scores": {
               "ease_of_search": 8.0,
-              "price_clarity": 5.2,
-              "trust": 8.2,
+              "price_clarity": 5.0,
+              "trust": 8.4,
               "purchase_intent": 6.6
             },
             "interaction_metrics": {
@@ -1459,7 +1390,7 @@
         "conversion": 1.0,
         "dropoff": 0.0,
         "time_to_task": 1.75,
-        "satisfaction": 4.04,
+        "satisfaction": 4.08,
         "completion_rate": 1,
         "click_rate": 0.67,
         "primary_cta_rate": 1,
@@ -1471,25 +1402,25 @@
       },
       "feedback": [
         {
-          "icon": "triangle-alert",
-          "title": "Compact flow performed well",
-          "body": "5 runs completed successfully: task success rate 1.0, conversion_rate 1.0, dropoff_rate 0...",
-          "level": "low",
-          "badge": "Low Evidence"
-        },
-        {
           "icon": "circle-dollar-sign",
-          "title": "Price clarity is the main blocker",
-          "body": "price clarity appeared in friction_counts for 5 users, and avg price clarity was 5.2 vers...",
+          "title": "price clarity",
+          "body": "5 users referenced price, fees, total cost, or value confidence during the run.",
           "level": "high",
           "badge": "High Evidence"
         },
         {
-          "icon": "shield-check",
-          "title": "Detail view drives intent",
-          "body": "detail open rate 1.0, like rate 1.0, primary CTA rate 1.0, and purchase intent averaged 6...",
-          "level": "medium",
-          "badge": "Medium Evidence"
+          "icon": "triangle-alert",
+          "title": "experiences discoverability",
+          "body": "5 synthetic traces completed with avg_satisfaction=4.08.",
+          "level": "low",
+          "badge": "Low Evidence"
+        },
+        {
+          "icon": "triangle-alert",
+          "title": "synthetic_behavior_pattern",
+          "body": "5 synthetic traces completed with structured browser-observed steps.",
+          "level": "low",
+          "badge": "Low Evidence"
         }
       ],
       "logs": [
@@ -1798,7 +1729,7 @@
         {
           "persona": "airbnb_u_001",
           "segment": "Budget Weekend Couple",
-          "goal": "Find an affordable two-night Lake Tahoe stay for a couple and decide which listing is wor...",
+          "goal": "Find an affordable two-night stay that still feels trustworthy.",
           "tags": [
             "Price",
             "Trust"
@@ -1807,7 +1738,7 @@
         {
           "persona": "airbnb_u_002",
           "segment": "Budget Weekend Couple",
-          "goal": "Compare budget-friendly cabin options for a short weekend stay.",
+          "goal": "Find an affordable two-night stay that still feels trustworthy.",
           "tags": [
             "Price",
             "Trust"
@@ -1816,7 +1747,7 @@
         {
           "persona": "airbnb_u_003",
           "segment": "Budget Weekend Couple",
-          "goal": "Decide whether a higher-rated listing justifies paying more for a weekend trip.",
+          "goal": "Find an affordable two-night stay that still feels trustworthy.",
           "tags": [
             "Price",
             "Trust"
@@ -1825,16 +1756,16 @@
         {
           "persona": "airbnb_u_004",
           "segment": "Budget Weekend Couple",
-          "goal": "Quickly assess if Staybnb can support a spontaneous low-cost weekend plan.",
+          "goal": "Find an affordable two-night stay that still feels trustworthy.",
           "tags": [
             "Price",
-            "Trust"
+            "Detail Orientation"
           ]
         },
         {
           "persona": "airbnb_u_005",
           "segment": "Family Planner",
-          "goal": "Find a Lake Tahoe stay that looks suitable for a small family and worth deeper comparison.",
+          "goal": "Find a reliable stay that looks suitable for a family trip.",
           "tags": [
             "Trust",
             "Detail Orientation"
@@ -1843,7 +1774,7 @@
         {
           "persona": "airbnb_u_006",
           "segment": "Family Planner",
-          "goal": "Assess whether a higher-priced home is justified for a family stay.",
+          "goal": "Find a reliable stay that looks suitable for a family trip.",
           "tags": [
             "Trust",
             "Detail Orientation"
@@ -1852,7 +1783,7 @@
         {
           "persona": "airbnb_u_007",
           "segment": "Family Planner",
-          "goal": "Create a cautious family shortlist without committing to a reservation.",
+          "goal": "Find a reliable stay that looks suitable for a family trip.",
           "tags": [
             "Trust",
             "Detail Orientation"
@@ -1861,52 +1792,52 @@
         {
           "persona": "airbnb_u_008",
           "segment": "Family Planner",
-          "goal": "Determine whether the booking flow gives enough information for a family decision.",
+          "goal": "Find a reliable stay that looks suitable for a family trip.",
+          "tags": [
+            "Trust",
+            "Detail Orientation"
+          ]
+        },
+        {
+          "persona": "airbnb_u_009",
+          "segment": "Remote Worker Business Traveler",
+          "goal": "Find a stay that would work for a quiet remote-work trip.",
+          "tags": [
+            "Detail Orientation",
+            "Patience"
+          ]
+        },
+        {
+          "persona": "airbnb_u_010",
+          "segment": "Remote Worker Business Traveler",
+          "goal": "Find a stay that would work for a quiet remote-work trip.",
           "tags": [
             "Detail Orientation",
             "Trust"
           ]
         },
         {
-          "persona": "airbnb_u_009",
-          "segment": "Remote Worker Business Traveler",
-          "goal": "Find a quiet, reliable Lake Tahoe stay for a short work trip.",
-          "tags": [
-            "Trust",
-            "Detail Orientation"
-          ]
-        },
-        {
-          "persona": "airbnb_u_010",
-          "segment": "Remote Worker Business Traveler",
-          "goal": "Quickly assess whether the site can support a reimbursable two-night business stay.",
-          "tags": [
-            "Trust",
-            "Price"
-          ]
-        },
-        {
           "persona": "airbnb_u_011",
           "segment": "Remote Worker Business Traveler",
-          "goal": "Choose between convenience and trust signals for a solo work stay.",
+          "goal": "Find a stay that would work for a quiet remote-work trip.",
           "tags": [
-            "Trust",
-            "Detail Orientation"
+            "Detail Orientation",
+            "Trust"
           ]
         },
         {
           "persona": "airbnb_u_012",
           "segment": "Remote Worker Business Traveler",
-          "goal": "Evaluate whether a quick booking flow feels trustworthy enough for a business traveler.",
+          "goal": "Find a stay that would work for a quiet remote-work trip.",
           "tags": [
-            "Trust",
-            "Detail Orientation"
+            "Detail Orientation",
+            "Trust"
           ]
         },
         {
           "persona": "airbnb_u_013",
           "segment": "Experience Seeker",
-          "goal": "Explore whether Staybnb supports a memorable Lake Tahoe getaway beyond basic lodging.",
+          "goal": "Discover whether activities or services are easy to find from the page.",
           "tags": [
             "Exploration",
             "Patience"
@@ -1915,25 +1846,25 @@
         {
           "persona": "airbnb_u_014",
           "segment": "Experience Seeker",
-          "goal": "Find a high-rated cabin that feels special enough for a short trip.",
+          "goal": "Discover whether activities or services are easy to find from the page.",
+          "tags": [
+            "Exploration",
+            "Patience"
+          ]
+        },
+        {
+          "persona": "airbnb_u_015",
+          "segment": "Experience Seeker",
+          "goal": "Discover whether activities or services are easy to find from the page.",
           "tags": [
             "Exploration",
             "Trust"
           ]
         },
         {
-          "persona": "airbnb_u_015",
-          "segment": "Experience Seeker",
-          "goal": "Assess whether a premium Lake Tahoe home looks worth the splurge for a memorable stay.",
-          "tags": [
-            "Exploration",
-            "Detail Orientation"
-          ]
-        },
-        {
           "persona": "airbnb_u_016",
           "segment": "Experience Seeker",
-          "goal": "Compare lodging versus new service or experience entry points without committing.",
+          "goal": "Discover whether activities or services are easy to find from the page.",
           "tags": [
             "Exploration",
             "Patience"
@@ -1942,46 +1873,44 @@
         {
           "persona": "airbnb_u_017",
           "segment": "First Time Cautious User",
-          "goal": "Understand whether the Staybnb search flow feels safe and clear before considering a stay.",
+          "goal": "Understand the site without creating an account or exposing personal data.",
           "tags": [
             "Trust",
-            "Detail Orientation"
+            "Price"
           ]
         },
         {
           "persona": "airbnb_u_018",
           "segment": "First Time Cautious User",
-          "goal": "Learn how guest count and search results work without making a reservation.",
+          "goal": "Understand the site without creating an account or exposing personal data.",
           "tags": [
             "Trust",
-            "Detail Orientation"
+            "Price"
           ]
         },
         {
           "persona": "airbnb_u_019",
           "segment": "First Time Cautious User",
-          "goal": "Compare listings cautiously and avoid accidental booking actions.",
+          "goal": "Understand the site without creating an account or exposing personal data.",
           "tags": [
             "Trust",
-            "Detail Orientation"
+            "Price"
           ]
         },
         {
           "persona": "airbnb_u_020",
           "segment": "First Time Cautious User",
-          "goal": "Assess checkout intent without entering real information or making a booking.",
+          "goal": "Understand the site without creating an account or exposing personal data.",
           "tags": [
             "Trust",
-            "Detail Orientation"
+            "Price"
           ]
         }
       ],
       "recommendations": [
-        "Prioritize an upfront price breakdown on listing cards and detail pages.",
-        "Add trust explanations behind Guest favorite, ratings, cancellation, and fee language.",
-        "Expose family and work-trip decision details directly in comparison: guest capacity, beds, Wi-Fi, workspace, parking, and cancellation.",
-        "Clarify that Reserve is a mock checkout intent action before any personal data or payment step.",
-        "For the demo, emphasize the strong funnel metrics: run_count 5, completion_rate 1.0, conversion_rate 1.0, avg_dwell_seconds 105.0, avg_clicks_per_user 4.0."
+        "Expose total price and likely fees earlier in comparison moments.",
+        "Make Experiences and Services discoverable without competing with the stay search path.",
+        "Review logs and profile-level traces before making a product decision."
       ]
     },
     "B": {
@@ -1992,561 +1921,521 @@
           {
             "id": "airbnb_u_001",
             "segment": "budget_weekend_couple",
-            "goal": "Find a low-cost two-night weekend stay option and assess whether the page supports a normal search flow.",
-            "task": "Open the Airbnb archive page, look for destination, date, guest, and search controls, then compare any visible two-night prices or city/listing links without signing in or booking.",
+            "goal": "Find an affordable two-night stay that still feels trustworthy.",
+            "task": "Compare visible stay options by price, rating, and value signals without booking.",
             "constraints": {
               "destination": "Lake Tahoe",
               "guests": 2,
-              "budget_preference": "Prefer under $550 total for 2 nights"
+              "budget_preference": "lowest credible visible total"
             },
             "behavior_style": {
-              "patience": 0.45,
-              "exploration": 0.55,
-              "price_sensitivity": 0.95,
-              "trust_sensitivity": 0.55,
-              "detail_orientation": 0.6
+              "patience": 0.44,
+              "exploration": 0.44,
+              "price_sensitivity": 0.93,
+              "trust_sensitivity": 0.63,
+              "detail_orientation": 0.56
             },
             "success_criteria": [
-              "Identifies whether destination/date/guest search is available",
-              "Compares at least two visible low-price options if present",
-              "Stops after deciding whether the page is useful for budget trip planning"
+              "Compares at least two options.",
+              "Forms a shortlist without booking."
             ],
             "frustration_triggers": [
-              "No working Where searchbox",
-              "Prices are archive examples rather than searchable stays",
-              "Sign up or sign in appears necessary"
+              "Fees are unclear.",
+              "Low-price options are hard to compare."
             ]
           },
           {
             "id": "airbnb_u_002",
             "segment": "budget_weekend_couple",
-            "goal": "Check whether a cheap city weekend stay can be found from the visible archive content.",
-            "task": "Use only visible links and controls to look for a New York or San Francisco stay for two guests, compare any displayed prices, and stop after judging whether the page supports comparison shopping.",
+            "goal": "Find an affordable two-night stay that still feels trustworthy.",
+            "task": "Compare visible stay options by price, rating, and value signals without booking.",
             "constraints": {
-              "destination": "New York",
+              "destination": "Joshua Tree",
               "guests": 2,
-              "budget_preference": "Lowest visible nightly or weekend price"
+              "budget_preference": "under budget if ratings stay above average"
             },
             "behavior_style": {
-              "patience": 0.38,
-              "exploration": 0.48,
-              "price_sensitivity": 0.98,
-              "trust_sensitivity": 0.5,
-              "detail_orientation": 0.52
+              "patience": 0.48,
+              "exploration": 0.42,
+              "price_sensitivity": 0.94,
+              "trust_sensitivity": 0.62,
+              "detail_orientation": 0.58
             },
             "success_criteria": [
-              "Finds visible city or listing links",
-              "Records the cheapest visible option",
-              "Confirms whether there is a path to refine dates or guests"
+              "Compares at least two options.",
+              "Forms a shortlist without booking."
             ],
             "frustration_triggers": [
-              "City links do not lead to usable search results",
-              "Date controls are labels only",
-              "No clear total price comparison"
+              "Fees are unclear.",
+              "Low-price options are hard to compare."
             ]
           },
           {
             "id": "airbnb_u_003",
             "segment": "budget_weekend_couple",
-            "goal": "Evaluate whether a couple can shortlist an affordable cabin-style weekend stay.",
-            "task": "Scan the page for cabin, condo, or simple room listings, compare price and rating signals when visible, and decide whether any option is worth wishlisting or further research without using account features.",
+            "goal": "Find an affordable two-night stay that still feels trustworthy.",
+            "task": "Compare visible stay options by price, rating, and value signals without booking.",
             "constraints": {
-              "destination": "South Lake Tahoe",
+              "destination": "San Diego",
               "guests": 2,
-              "budget_preference": "Prefer the cheapest stay with a rating signal"
+              "budget_preference": "clear total price before opening checkout"
             },
             "behavior_style": {
-              "patience": 0.5,
-              "exploration": 0.6,
-              "price_sensitivity": 0.92,
-              "trust_sensitivity": 0.62,
-              "detail_orientation": 0.58
+              "patience": 0.52,
+              "exploration": 0.4,
+              "price_sensitivity": 0.95,
+              "trust_sensitivity": 0.61,
+              "detail_orientation": 0.6
             },
             "success_criteria": [
-              "Identifies cabin or condo options if visible",
-              "Compares price against rating or guest favorite signals",
-              "Avoids wishlist actions that require an account"
+              "Compares at least two options.",
+              "Forms a shortlist without booking."
             ],
             "frustration_triggers": [
-              "Wishlist requires sign-in",
-              "Archive timeline distracts from listing comparison",
-              "Listings are not clickable or filterable"
+              "Fees are unclear.",
+              "Low-price options are hard to compare."
             ]
           },
           {
             "id": "airbnb_u_004",
             "segment": "budget_weekend_couple",
-            "goal": "Determine whether the page can support a last-minute budget getaway search.",
-            "task": "Attempt to set or find check-in, check-out, and guest information for a two-person weekend trip, then summarize whether visible content is enough to choose a candidate stay.",
+            "goal": "Find an affordable two-night stay that still feels trustworthy.",
+            "task": "Compare visible stay options by price, rating, and value signals without booking.",
             "constraints": {
-              "destination": "Paris",
+              "destination": "Portland",
               "guests": 2,
-              "budget_preference": "Budget-first, willing to trade amenities for price"
+              "budget_preference": "lowest credible visible total"
             },
             "behavior_style": {
-              "patience": 0.32,
-              "exploration": 0.42,
-              "price_sensitivity": 1.0,
-              "trust_sensitivity": 0.45,
-              "detail_orientation": 0.46
+              "patience": 0.55,
+              "exploration": 0.39,
+              "price_sensitivity": 0.96,
+              "trust_sensitivity": 0.6,
+              "detail_orientation": 0.61
             },
             "success_criteria": [
-              "Locates date and guest entry points or confirms they are unavailable",
-              "Finds at least one visible destination or listing reference",
-              "Stops at intent assessment without booking"
+              "Compares at least two options.",
+              "Forms a shortlist without booking."
             ],
             "frustration_triggers": [
-              "Cannot enter travel dates",
-              "No active search submission path",
-              "Archive content looks unrelated to current booking"
+              "Fees are unclear.",
+              "Low-price options are hard to compare."
             ]
           },
           {
             "id": "airbnb_u_005",
             "segment": "family_planner",
-            "goal": "Assess whether a family can search for a practical multi-guest stay with clear dates and enough trust signals.",
-            "task": "Try to use the page to plan a family stay by locating guest controls, date controls, listing details, ratings, and any family-suitable options; stop after evaluating feasibility.",
+            "goal": "Find a reliable stay that looks suitable for a family trip.",
+            "task": "Search for a family-sized stay and compare trust, space, and suitability signals.",
             "constraints": {
               "destination": "Lake Tahoe",
               "guests": 4,
-              "budget_preference": "Prefer reasonable total price over cheapest option"
+              "budget_preference": "moderate budget with strong trust signals"
             },
             "behavior_style": {
-              "patience": 0.72,
-              "exploration": 0.55,
-              "price_sensitivity": 0.72,
-              "trust_sensitivity": 0.86,
-              "detail_orientation": 0.88
+              "patience": 0.71,
+              "exploration": 0.61,
+              "price_sensitivity": 0.6,
+              "trust_sensitivity": 0.92,
+              "detail_orientation": 0.82
             },
             "success_criteria": [
-              "Finds whether guest count can be set",
-              "Compares visible homes for family suitability cues",
-              "Notes rating or guest favorite signals where available"
+              "Checks suitability signals.",
+              "Avoids account or payment actions."
             ],
             "frustration_triggers": [
-              "Guest control does not open or accept counts",
-              "No bedroom, amenity, or capacity details",
-              "Archive page blocks normal family planning"
+              "Family details are missing.",
+              "Cancellation or fee details are unclear."
             ]
           },
           {
             "id": "airbnb_u_006",
             "segment": "family_planner",
-            "goal": "Compare safe-looking family options without creating an account.",
-            "task": "Review visible listings and city links for a family trip, prioritizing ratings, recognizable destinations, and clear pricing, then decide whether a parent would continue on this page.",
+            "goal": "Find a reliable stay that looks suitable for a family trip.",
+            "task": "Search for a family-sized stay and compare trust, space, and suitability signals.",
             "constraints": {
               "destination": "San Francisco",
-              "guests": 5,
-              "budget_preference": "Moderate budget with strong trust signals"
+              "guests": 4,
+              "budget_preference": "family-fit value over cheapest option"
             },
             "behavior_style": {
-              "patience": 0.78,
-              "exploration": 0.5,
-              "price_sensitivity": 0.68,
-              "trust_sensitivity": 0.93,
-              "detail_orientation": 0.82
+              "patience": 0.74,
+              "exploration": 0.6,
+              "price_sensitivity": 0.61,
+              "trust_sensitivity": 0.91,
+              "detail_orientation": 0.84
             },
             "success_criteria": [
-              "Identifies visible trust signals such as rating or guest favorite",
-              "Avoids sign-up, sign-in, and payment paths",
-              "Determines whether family-critical information is missing"
+              "Checks suitability signals.",
+              "Avoids account or payment actions."
             ],
             "frustration_triggers": [
-              "No capacity or bed information",
-              "Trust signals are sparse or historical",
-              "Account prompts interrupt comparison"
+              "Family details are missing.",
+              "Cancellation or fee details are unclear."
             ]
           },
           {
             "id": "airbnb_u_007",
             "segment": "family_planner",
-            "goal": "Find whether the archive page gives enough information to shortlist a family-friendly home.",
-            "task": "Look for homes rather than single rooms, compare total price and ratings if shown, and stop after selecting the most plausible family option or concluding none are usable.",
+            "goal": "Find a reliable stay that looks suitable for a family trip.",
+            "task": "Search for a family-sized stay and compare trust, space, and suitability signals.",
             "constraints": {
-              "destination": "Carnelian Bay",
-              "guests": 4,
-              "budget_preference": "Can pay more for a full home and high rating"
+              "destination": "San Diego",
+              "guests": 5,
+              "budget_preference": "flexible budget if cancellation is clear"
             },
             "behavior_style": {
-              "patience": 0.68,
-              "exploration": 0.62,
-              "price_sensitivity": 0.58,
+              "patience": 0.78,
+              "exploration": 0.58,
+              "price_sensitivity": 0.62,
               "trust_sensitivity": 0.9,
-              "detail_orientation": 0.9
+              "detail_orientation": 0.86
             },
             "success_criteria": [
-              "Distinguishes full-home options from simple rooms",
-              "Compares at least two visible options if available",
-              "Documents whether details are sufficient for family planning"
+              "Checks suitability signals.",
+              "Avoids account or payment actions."
             ],
             "frustration_triggers": [
-              "Only room-style archive listing is visible",
-              "No filters for entire place or family needs",
-              "Unable to inspect listing details"
+              "Family details are missing.",
+              "Cancellation or fee details are unclear."
             ]
           },
           {
             "id": "airbnb_u_008",
             "segment": "family_planner",
-            "goal": "Evaluate date and guest selection clarity for a family vacation search.",
-            "task": "Attempt to add check-in, check-out, and guest count for a four-person family trip, then inspect any resulting listing or error state without booking.",
+            "goal": "Find a reliable stay that looks suitable for a family trip.",
+            "task": "Search for a family-sized stay and compare trust, space, and suitability signals.",
             "constraints": {
-              "destination": "New York",
+              "destination": "Seattle",
               "guests": 4,
-              "budget_preference": "Needs transparent total cost before considering a stay"
+              "budget_preference": "moderate budget with strong trust signals"
             },
             "behavior_style": {
-              "patience": 0.74,
-              "exploration": 0.46,
-              "price_sensitivity": 0.75,
-              "trust_sensitivity": 0.88,
-              "detail_orientation": 0.86
+              "patience": 0.82,
+              "exploration": 0.56,
+              "price_sensitivity": 0.63,
+              "trust_sensitivity": 0.89,
+              "detail_orientation": 0.88
             },
             "success_criteria": [
-              "Confirms whether dates can be added",
-              "Confirms whether four guests can be represented",
-              "Stops after assessing whether the flow feels reliable"
+              "Checks suitability signals.",
+              "Avoids account or payment actions."
             ],
             "frustration_triggers": [
-              "Controls are static labels",
-              "No clear search results page",
-              "Pricing lacks fees or total cost context"
+              "Family details are missing.",
+              "Cancellation or fee details are unclear."
             ]
           },
           {
             "id": "airbnb_u_009",
             "segment": "remote_worker_business_traveler",
-            "goal": "Check whether the page can support a work-trip stay search with quick comparison.",
-            "task": "Try to find a stay for one business traveler by locating destination search, dates, guest count, and listing details; compare visible options for reliability signals and stop before reservation steps.",
+            "goal": "Find a stay that would work for a quiet remote-work trip.",
+            "task": "Assess whether the page exposes work-readiness, location, and fast booking confidence.",
             "constraints": {
-              "destination": "San Francisco",
+              "destination": "Austin",
               "guests": 1,
-              "budget_preference": "Company budget, prioritize convenience and rating over lowest price"
+              "budget_preference": "business-friendly value with reliable amenities"
             },
             "behavior_style": {
-              "patience": 0.42,
-              "exploration": 0.35,
-              "price_sensitivity": 0.48,
-              "trust_sensitivity": 0.8,
-              "detail_orientation": 0.7
+              "patience": 0.71,
+              "exploration": 0.43,
+              "price_sensitivity": 0.57,
+              "trust_sensitivity": 0.7,
+              "detail_orientation": 0.85
             },
             "success_criteria": [
-              "Quickly determines whether search controls are functional",
-              "Finds ratings or other reliability cues",
-              "Assesses whether the page is efficient enough for business travel"
+              "Finds practical fit signals.",
+              "Identifies whether more details are needed."
             ],
             "frustration_triggers": [
-              "Archive navigation slows task completion",
-              "No location-specific search results",
-              "Missing Wi-Fi, workspace, or check-in details"
+              "Work amenities are hidden.",
+              "The next step takes too long."
             ]
           },
           {
             "id": "airbnb_u_010",
             "segment": "remote_worker_business_traveler",
-            "goal": "Determine whether a short-notice work stay can be evaluated from visible content.",
-            "task": "Scan the page for a clear destination field, date inputs, and listing cards, then compare any visible price and rating information for a one-person weekday stay.",
+            "goal": "Find a stay that would work for a quiet remote-work trip.",
+            "task": "Assess whether the page exposes work-readiness, location, and fast booking confidence.",
             "constraints": {
-              "destination": "New York",
+              "destination": "Seattle",
               "guests": 1,
-              "budget_preference": "Prefer under $250 per night if visible"
+              "budget_preference": "fast decision if work-readiness is visible"
             },
             "behavior_style": {
-              "patience": 0.36,
-              "exploration": 0.4,
-              "price_sensitivity": 0.6,
-              "trust_sensitivity": 0.76,
-              "detail_orientation": 0.66
+              "patience": 0.57,
+              "exploration": 0.49,
+              "price_sensitivity": 0.53,
+              "trust_sensitivity": 0.74,
+              "detail_orientation": 0.78
             },
             "success_criteria": [
-              "Identifies available path to set dates or confirms none",
-              "Compares visible price signals",
-              "Stops after deciding whether to continue using the page"
+              "Finds practical fit signals.",
+              "Identifies whether more details are needed."
             ],
             "frustration_triggers": [
-              "No weekday date selection",
-              "Only historical listing content appears",
-              "Cannot filter by business-relevant amenities"
+              "Work amenities are hidden.",
+              "The next step takes too long."
             ]
           },
           {
             "id": "airbnb_u_011",
             "segment": "remote_worker_business_traveler",
-            "goal": "Assess whether the page has enough listing quality information for a remote-work stay.",
-            "task": "Look for high-rated homes or rooms, inspect available listing text and links, and determine whether ratings plus page context are enough to shortlist one option.",
+            "goal": "Find a stay that would work for a quiet remote-work trip.",
+            "task": "Assess whether the page exposes work-readiness, location, and fast booking confidence.",
             "constraints": {
-              "destination": "Kings Beach",
+              "destination": "San Francisco",
               "guests": 1,
-              "budget_preference": "Flexible if rating is high and stay seems reliable"
+              "budget_preference": "company-reimbursable price clarity"
             },
             "behavior_style": {
-              "patience": 0.5,
-              "exploration": 0.52,
-              "price_sensitivity": 0.42,
-              "trust_sensitivity": 0.84,
-              "detail_orientation": 0.74
+              "patience": 0.6,
+              "exploration": 0.48,
+              "price_sensitivity": 0.54,
+              "trust_sensitivity": 0.73,
+              "detail_orientation": 0.8
             },
             "success_criteria": [
-              "Finds highest visible rating if listing cards are present",
-              "Notes absence of remote-work amenities if missing",
-              "Avoids account creation and booking actions"
+              "Finds practical fit signals.",
+              "Identifies whether more details are needed."
             ],
             "frustration_triggers": [
-              "No Wi-Fi or workspace details",
-              "Rating context is incomplete",
-              "Listing path does not provide more detail"
+              "Work amenities are hidden.",
+              "The next step takes too long."
             ]
           },
           {
             "id": "airbnb_u_012",
             "segment": "remote_worker_business_traveler",
-            "goal": "Evaluate whether the page supports fast destination-based browsing for a business trip.",
-            "task": "Use visible city links or destination controls to look for Paris stays, then assess whether the resulting page state provides enough information to compare options for a solo traveler.",
+            "goal": "Find a stay that would work for a quiet remote-work trip.",
+            "task": "Assess whether the page exposes work-readiness, location, and fast booking confidence.",
             "constraints": {
-              "destination": "Paris",
+              "destination": "Denver",
               "guests": 1,
-              "budget_preference": "Moderate business budget with preference for clear pricing"
+              "budget_preference": "business-friendly value with reliable amenities"
             },
             "behavior_style": {
-              "patience": 0.39,
-              "exploration": 0.5,
-              "price_sensitivity": 0.52,
-              "trust_sensitivity": 0.78,
-              "detail_orientation": 0.62
+              "patience": 0.64,
+              "exploration": 0.46,
+              "price_sensitivity": 0.55,
+              "trust_sensitivity": 0.72,
+              "detail_orientation": 0.82
             },
             "success_criteria": [
-              "Uses visible navigation without signing in",
-              "Determines whether destination browsing changes the content",
-              "Summarizes whether comparison is possible"
+              "Finds practical fit signals.",
+              "Identifies whether more details are needed."
             ],
             "frustration_triggers": [
-              "City links are not search filters",
-              "No clear search results update",
-              "Archive timeline competes with task flow"
+              "Work amenities are hidden.",
+              "The next step takes too long."
             ]
           },
           {
             "id": "airbnb_u_013",
             "segment": "experience_seeker",
-            "goal": "Find whether the page offers experiences or unique local stays worth exploring.",
-            "task": "Look for Experiences, Services, city links, or unusual stay content, then compare what is available against normal home listings without making a purchase or account.",
+            "goal": "Discover whether activities or services are easy to find from the page.",
+            "task": "Look for non-stay discovery paths and judge whether the page supports activity intent.",
             "constraints": {
-              "destination": "Paris",
+              "destination": "New York",
               "guests": 2,
-              "budget_preference": "Flexible for distinctive local experiences"
+              "budget_preference": "flexible if the experience feels distinctive"
             },
             "behavior_style": {
-              "patience": 0.65,
-              "exploration": 0.9,
-              "price_sensitivity": 0.38,
-              "trust_sensitivity": 0.58,
-              "detail_orientation": 0.64
+              "patience": 0.73,
+              "exploration": 0.86,
+              "price_sensitivity": 0.43,
+              "trust_sensitivity": 0.61,
+              "detail_orientation": 0.68
             },
             "success_criteria": [
-              "Finds whether Experiences or Services tabs exist or are absent",
-              "Identifies any unique local stay content",
-              "Stops after assessing discovery value"
+              "Finds the experiences path.",
+              "Understands what to do next."
             ],
             "frustration_triggers": [
-              "Tabs mentioned in model are not visible in live page",
-              "Archive chronology is not relevant to trip discovery",
-              "No photos or activity details"
+              "Experiences are secondary.",
+              "Navigation labels compete for attention."
             ]
           },
           {
             "id": "airbnb_u_014",
             "segment": "experience_seeker",
-            "goal": "Explore historically themed Airbnb content while checking whether it can lead to a travel idea.",
-            "task": "Browse the archive timeline buttons, then look for any destination, listing, or experience-like content that could inspire a trip, stopping after an intent assessment.",
+            "goal": "Discover whether activities or services are easy to find from the page.",
+            "task": "Look for non-stay discovery paths and judge whether the page supports activity intent.",
             "constraints": {
-              "destination": "New York",
+              "destination": "Los Angeles",
               "guests": 2,
-              "budget_preference": "Price is secondary to novelty"
+              "budget_preference": "willing to pay more for a unique activity"
             },
             "behavior_style": {
-              "patience": 0.82,
-              "exploration": 0.95,
-              "price_sensitivity": 0.28,
-              "trust_sensitivity": 0.5,
-              "detail_orientation": 0.72
+              "patience": 0.77,
+              "exploration": 0.84,
+              "price_sensitivity": 0.44,
+              "trust_sensitivity": 0.6,
+              "detail_orientation": 0.7
             },
             "success_criteria": [
-              "Interacts with archive/timeline navigation",
-              "Finds at least one destination or listing cue",
-              "States whether the page inspires travel planning despite not being a booking flow"
+              "Finds the experiences path.",
+              "Understands what to do next."
             ],
             "frustration_triggers": [
-              "Timeline entries do not expose stay details",
-              "No current experiences inventory",
-              "Navigation lacks clear next step"
+              "Experiences are secondary.",
+              "Navigation labels compete for attention."
             ]
           },
           {
             "id": "airbnb_u_015",
             "segment": "experience_seeker",
-            "goal": "Compare Lake Tahoe listings for a memorable getaway rather than the cheapest option.",
-            "task": "Review visible Lake Tahoe homes if present, prioritizing guest favorite, rating, and cabin-style signals, then shortlist the most appealing option without wishlisting or booking.",
+            "goal": "Discover whether activities or services are easy to find from the page.",
+            "task": "Look for non-stay discovery paths and judge whether the page supports activity intent.",
             "constraints": {
-              "destination": "Lake Tahoe",
+              "destination": "Miami",
               "guests": 2,
-              "budget_preference": "Flexible up to premium pricing for a standout cabin"
+              "budget_preference": "compare novelty before cost"
             },
             "behavior_style": {
-              "patience": 0.6,
-              "exploration": 0.78,
-              "price_sensitivity": 0.35,
-              "trust_sensitivity": 0.66,
-              "detail_orientation": 0.68
+              "patience": 0.63,
+              "exploration": 0.92,
+              "price_sensitivity": 0.4,
+              "trust_sensitivity": 0.64,
+              "detail_orientation": 0.62
             },
             "success_criteria": [
-              "Compares multiple visible listing cards if available",
-              "Prioritizes standout rating or guest favorite signals",
-              "Avoids wishlist actions that require sign-in"
+              "Finds the experiences path.",
+              "Understands what to do next."
             ],
             "frustration_triggers": [
-              "Listing cards are absent from live archive view",
-              "No photos or descriptive amenities",
-              "Cannot open rich listing detail"
+              "Experiences are secondary.",
+              "Navigation labels compete for attention."
             ]
           },
           {
             "id": "airbnb_u_016",
             "segment": "experience_seeker",
-            "goal": "Assess whether Services or local activities are discoverable from the page.",
-            "task": "Search the visible navigation and content for Services, Experiences, or activity-related paths, then decide whether the page can support planning beyond lodging.",
+            "goal": "Discover whether activities or services are easy to find from the page.",
+            "task": "Look for non-stay discovery paths and judge whether the page supports activity intent.",
             "constraints": {
-              "destination": "San Francisco",
+              "destination": "Chicago",
               "guests": 2,
-              "budget_preference": "Open budget for activities, needs clear offering details"
+              "budget_preference": "flexible if the experience feels distinctive"
             },
             "behavior_style": {
-              "patience": 0.58,
-              "exploration": 0.86,
-              "price_sensitivity": 0.3,
-              "trust_sensitivity": 0.6,
-              "detail_orientation": 0.6
+              "patience": 0.66,
+              "exploration": 0.9,
+              "price_sensitivity": 0.41,
+              "trust_sensitivity": 0.63,
+              "detail_orientation": 0.64
             },
             "success_criteria": [
-              "Finds or confirms absence of Services and Experiences access",
-              "Does not attempt payment or account creation",
-              "Reports whether non-lodging discovery is possible"
+              "Finds the experiences path.",
+              "Understands what to do next."
             ],
             "frustration_triggers": [
-              "Services or Experiences are advertised but not usable",
-              "Archive links replace travel product navigation",
-              "No prices, times, or provider details for activities"
+              "Experiences are secondary.",
+              "Navigation labels compete for attention."
             ]
           },
           {
             "id": "airbnb_u_017",
             "segment": "first_time_cautious_user",
-            "goal": "Determine whether the page feels trustworthy enough to start searching without signing up.",
-            "task": "Inspect the page for clear search controls, ratings, sign-in prompts, company links, and safe navigation, then stop after deciding whether to proceed as a first-time visitor.",
+            "goal": "Understand the site without creating an account or exposing personal data.",
+            "task": "Browse cautiously, check trust and cost clarity, and stop before account or payment steps.",
             "constraints": {
               "destination": "Lake Tahoe",
               "guests": 2,
-              "budget_preference": "Needs clear price and trust signals before continuing"
+              "budget_preference": "needs clear price confidence before continuing"
             },
             "behavior_style": {
-              "patience": 0.7,
-              "exploration": 0.4,
-              "price_sensitivity": 0.7,
-              "trust_sensitivity": 0.98,
-              "detail_orientation": 0.82
+              "patience": 0.52,
+              "exploration": 0.38,
+              "price_sensitivity": 0.76,
+              "trust_sensitivity": 0.92,
+              "detail_orientation": 0.74
             },
             "success_criteria": [
-              "Identifies whether browsing is possible without an account",
-              "Notes visible trust signals and missing safety details",
-              "Avoids sign-up and sign-in"
+              "Avoids unsafe actions.",
+              "Forms confidence or identifies why not."
             ],
             "frustration_triggers": [
-              "Prominent account links",
-              "Archive branding looks unfamiliar",
-              "No modern booking protections or cancellation details"
+              "Sign-in appears too early.",
+              "Trust or fees are not explained."
             ]
           },
           {
             "id": "airbnb_u_018",
             "segment": "first_time_cautious_user",
-            "goal": "Safely test whether destination and date search can be started without personal data.",
-            "task": "Try to locate and use destination, check-in, check-out, and guest controls for a simple trip, but do not enter real personal data or continue into booking.",
+            "goal": "Understand the site without creating an account or exposing personal data.",
+            "task": "Browse cautiously, check trust and cost clarity, and stop before account or payment steps.",
             "constraints": {
-              "destination": "New York",
-              "guests": 1,
-              "budget_preference": "Prefers transparent low-to-moderate pricing"
+              "destination": "San Diego",
+              "guests": 2,
+              "budget_preference": "prefers visible fees before any account step"
             },
             "behavior_style": {
-              "patience": 0.76,
-              "exploration": 0.32,
-              "price_sensitivity": 0.76,
-              "trust_sensitivity": 0.96,
-              "detail_orientation": 0.88
+              "patience": 0.56,
+              "exploration": 0.36,
+              "price_sensitivity": 0.77,
+              "trust_sensitivity": 0.91,
+              "detail_orientation": 0.76
             },
             "success_criteria": [
-              "Confirms whether search can start without account creation",
-              "Checks if any input asks for personal data",
-              "Stops before any reservation, host contact, or payment step"
+              "Avoids unsafe actions.",
+              "Forms confidence or identifies why not."
             ],
             "frustration_triggers": [
-              "Unclear what buttons do",
-              "Sign-up prompts appear early",
-              "No explanation of fees or policies"
+              "Sign-in appears too early.",
+              "Trust or fees are not explained."
             ]
           },
           {
             "id": "airbnb_u_019",
             "segment": "first_time_cautious_user",
-            "goal": "Compare visible options only if the page clearly shows ratings and prices.",
-            "task": "Scan visible listings or featured stay content, compare price and rating details, and stop if the page requires login or lacks enough information to evaluate safety.",
+            "goal": "Understand the site without creating an account or exposing personal data.",
+            "task": "Browse cautiously, check trust and cost clarity, and stop before account or payment steps.",
             "constraints": {
-              "destination": "South Lake Tahoe",
+              "destination": "Portland",
               "guests": 2,
-              "budget_preference": "Moderate budget, trust matters more than saving money"
+              "budget_preference": "will stop if trust or cost feels hidden"
             },
             "behavior_style": {
-              "patience": 0.66,
-              "exploration": 0.38,
-              "price_sensitivity": 0.62,
-              "trust_sensitivity": 1.0,
-              "detail_orientation": 0.84
+              "patience": 0.59,
+              "exploration": 0.34,
+              "price_sensitivity": 0.78,
+              "trust_sensitivity": 0.9,
+              "detail_orientation": 0.78
             },
             "success_criteria": [
-              "Finds price and rating signals if present",
-              "Selects the safest-looking candidate only as a shortlist item",
-              "Does not use wishlist, booking, or contact-host actions"
+              "Avoids unsafe actions.",
+              "Forms confidence or identifies why not."
             ],
             "frustration_triggers": [
-              "Ratings are missing or lack review counts",
-              "Wishlist implies account dependency",
-              "Cannot verify listing legitimacy"
+              "Sign-in appears too early.",
+              "Trust or fees are not explained."
             ]
           },
           {
             "id": "airbnb_u_020",
             "segment": "first_time_cautious_user",
-            "goal": "Assess whether the page provides a clear and safe path for a first Airbnb-style search.",
-            "task": "Start from the homepage/archive view, inspect headings, links, labels, and any search or listing actions, then decide whether a cautious new user would continue.",
+            "goal": "Understand the site without creating an account or exposing personal data.",
+            "task": "Browse cautiously, check trust and cost clarity, and stop before account or payment steps.",
             "constraints": {
-              "destination": "Paris",
+              "destination": "Denver",
               "guests": 2,
-              "budget_preference": "Willing to compare prices only after trust is established"
+              "budget_preference": "needs clear price confidence before continuing"
             },
             "behavior_style": {
-              "patience": 0.8,
-              "exploration": 0.35,
-              "price_sensitivity": 0.58,
-              "trust_sensitivity": 0.97,
-              "detail_orientation": 0.9
+              "patience": 0.45,
+              "exploration": 0.42,
+              "price_sensitivity": 0.74,
+              "trust_sensitivity": 0.94,
+              "detail_orientation": 0.7
             },
             "success_criteria": [
-              "Understands the purpose of the page from visible content",
-              "Identifies whether current search controls are usable",
-              "Stops after confidence assessment without creating an account"
+              "Avoids unsafe actions.",
+              "Forms confidence or identifies why not."
             ],
             "frustration_triggers": [
-              "Archive/timeline purpose is confusing",
-              "Modern search tabs are absent or inconsistent",
-              "Company and social links do not answer booking safety questions"
+              "Sign-in appears too early.",
+              "Trust or fees are not explained."
             ]
           }
         ],
@@ -2554,7 +2443,7 @@
           {
             "persona_id": "airbnb_u_001",
             "segment": "budget_weekend_couple",
-            "goal": "Find a low-cost two-night weekend stay option and assess whether the page supports a normal search flow.",
+            "goal": "Find an affordable two-night stay that still feels trustworthy.",
             "steps": [
               {
                 "step": 1,
@@ -2668,7 +2557,121 @@
           {
             "persona_id": "airbnb_u_005",
             "segment": "family_planner",
-            "goal": "Assess whether a family can search for a practical multi-guest stay with clear dates and enough trust signals.",
+            "goal": "Find a reliable stay that looks suitable for a family trip.",
+            "steps": [
+              {
+                "step": 1,
+                "observation": "The page opens as Airbnb Archive with a chronological product-history navigation.",
+                "persona_thought": "This looks like brand history, not a place to book a stay.",
+                "intent": "orient_on_archive",
+                "action": "scan timeline and hero content",
+                "target_ui": "Archive timeline",
+                "expected_result": "Understand the page purpose before trying to search.",
+                "friction": 0.48,
+                "event_type": "view",
+                "clicked": false,
+                "like_signal": false,
+                "primary_action": false,
+                "detail_action": false,
+                "elapsed_seconds": 22
+              },
+              {
+                "step": 2,
+                "observation": "Timeline entries such as 2009 AirBed, 2010 Human, and later product eras dominate the first screen.",
+                "persona_thought": "The historical content is interesting, but it does not answer my trip-planning goal.",
+                "intent": "scan_history",
+                "action": "read visible archive milestones",
+                "target_ui": "Timeline list",
+                "expected_result": "Determine whether any milestone leads to a stay search.",
+                "friction": 0.62,
+                "event_type": "scroll",
+                "clicked": false,
+                "like_signal": false,
+                "primary_action": false,
+                "detail_action": false,
+                "elapsed_seconds": 42
+              },
+              {
+                "step": 3,
+                "observation": "The archive navigation offers many era buttons, so users click around the timeline instead of progressing toward a stay task.",
+                "persona_thought": "I will try another era, but this is exploration rather than booking progress.",
+                "intent": "timeline_click",
+                "action": "click a timeline era such as 2025 Services",
+                "target_ui": "Archive timeline button",
+                "expected_result": "Switch archive era, not booking context.",
+                "friction": 0.58,
+                "event_type": "secondary_click",
+                "clicked": true,
+                "like_signal": false,
+                "primary_action": false,
+                "detail_action": false,
+                "elapsed_seconds": 18
+              },
+              {
+                "step": 4,
+                "observation": "Some archived eras expose SearchSurface forms, but they feel like historical examples rather than the primary current booking flow.",
+                "persona_thought": "I am unsure whether this search will produce useful current listings.",
+                "intent": "probe_archive_search",
+                "action": "scan archived search form without committing",
+                "target_ui": "Archive SearchSurface",
+                "expected_result": "Recognize that the CTA is not clearly tied to the task.",
+                "friction": 0.72,
+                "event_type": "dwell",
+                "clicked": false,
+                "like_signal": false,
+                "primary_action": false,
+                "detail_action": false,
+                "elapsed_seconds": 38
+              },
+              {
+                "step": 5,
+                "observation": "No clear listing cards, price comparison, or mock checkout path is visible from the archive experience.",
+                "persona_thought": "I cannot evaluate price, trust, or purchase intent from this page.",
+                "intent": "abandon_booking_task",
+                "action": "stop before any account or personal-data step",
+                "target_ui": "Archive page",
+                "expected_result": "Exit with low booking confidence.",
+                "friction": 0.86,
+                "event_type": "dropoff",
+                "clicked": false,
+                "like_signal": false,
+                "primary_action": false,
+                "detail_action": false,
+                "elapsed_seconds": 20
+              }
+            ],
+            "final_feedback": {
+              "task_success": false,
+              "scores": {
+                "ease_of_search": 4,
+                "price_clarity": 4,
+                "trust": 8,
+                "purchase_intent": 3
+              },
+              "liked_features": [
+                "The timeline communicates brand evolution clearly."
+              ],
+              "confusion_points": [
+                "The page reads as a historical archive rather than a booking or comparison experience.",
+                "Destination, date, guest, listing, and price controls are not available in the expected place."
+              ],
+              "friction_themes": [
+                "price_clarity",
+                "date_picker_friction"
+              ],
+              "recommendation": "Do not send booking-intent traffic to the archive page; route users to a searchable stay flow or add a clear booking CTA."
+            },
+            "variant": "B",
+            "trace_source": "rule_ui_specific",
+            "task_seconds": 140,
+            "converted": false,
+            "dropoff": true,
+            "satisfaction": 3.0
+          },
+          {
+            "persona_id": "airbnb_u_009",
+            "segment": "remote_worker_business_traveler",
+            "goal": "Find a stay that would work for a quiet remote-work trip.",
             "steps": [
               {
                 "step": 1,
@@ -2780,123 +2783,9 @@
             "satisfaction": 2.8
           },
           {
-            "persona_id": "airbnb_u_009",
-            "segment": "remote_worker_business_traveler",
-            "goal": "Check whether the page can support a work-trip stay search with quick comparison.",
-            "steps": [
-              {
-                "step": 1,
-                "observation": "The page opens as Airbnb Archive with a chronological product-history navigation.",
-                "persona_thought": "This looks like brand history, not a place to book a stay.",
-                "intent": "orient_on_archive",
-                "action": "scan timeline and hero content",
-                "target_ui": "Archive timeline",
-                "expected_result": "Understand the page purpose before trying to search.",
-                "friction": 0.48,
-                "event_type": "view",
-                "clicked": false,
-                "like_signal": false,
-                "primary_action": false,
-                "detail_action": false,
-                "elapsed_seconds": 22
-              },
-              {
-                "step": 2,
-                "observation": "Timeline entries such as 2009 AirBed, 2010 Human, and later product eras dominate the first screen.",
-                "persona_thought": "The historical content is interesting, but it does not answer my trip-planning goal.",
-                "intent": "scan_history",
-                "action": "read visible archive milestones",
-                "target_ui": "Timeline list",
-                "expected_result": "Determine whether any milestone leads to a stay search.",
-                "friction": 0.62,
-                "event_type": "scroll",
-                "clicked": false,
-                "like_signal": false,
-                "primary_action": false,
-                "detail_action": false,
-                "elapsed_seconds": 42
-              },
-              {
-                "step": 3,
-                "observation": "The archive navigation offers many era buttons, so users click around the timeline instead of progressing toward a stay task.",
-                "persona_thought": "I will try another era, but this is exploration rather than booking progress.",
-                "intent": "timeline_click",
-                "action": "click a timeline era such as 2025 Services",
-                "target_ui": "Archive timeline button",
-                "expected_result": "Switch archive era, not booking context.",
-                "friction": 0.58,
-                "event_type": "secondary_click",
-                "clicked": true,
-                "like_signal": false,
-                "primary_action": false,
-                "detail_action": false,
-                "elapsed_seconds": 18
-              },
-              {
-                "step": 4,
-                "observation": "Some archived eras expose SearchSurface forms, but they feel like historical examples rather than the primary current booking flow.",
-                "persona_thought": "I am unsure whether this search will produce useful current listings.",
-                "intent": "probe_archive_search",
-                "action": "scan archived search form without committing",
-                "target_ui": "Archive SearchSurface",
-                "expected_result": "Recognize that the CTA is not clearly tied to the task.",
-                "friction": 0.72,
-                "event_type": "dwell",
-                "clicked": false,
-                "like_signal": false,
-                "primary_action": false,
-                "detail_action": false,
-                "elapsed_seconds": 38
-              },
-              {
-                "step": 5,
-                "observation": "No clear listing cards, price comparison, or mock checkout path is visible from the archive experience.",
-                "persona_thought": "I cannot evaluate price, trust, or purchase intent from this page.",
-                "intent": "abandon_booking_task",
-                "action": "stop before any account or personal-data step",
-                "target_ui": "Archive page",
-                "expected_result": "Exit with low booking confidence.",
-                "friction": 0.86,
-                "event_type": "dropoff",
-                "clicked": false,
-                "like_signal": false,
-                "primary_action": false,
-                "detail_action": false,
-                "elapsed_seconds": 20
-              }
-            ],
-            "final_feedback": {
-              "task_success": false,
-              "scores": {
-                "ease_of_search": 4,
-                "price_clarity": 5,
-                "trust": 7,
-                "purchase_intent": 3
-              },
-              "liked_features": [
-                "The timeline communicates brand evolution clearly."
-              ],
-              "confusion_points": [
-                "The page reads as a historical archive rather than a booking or comparison experience.",
-                "Destination, date, guest, listing, and price controls are not available in the expected place."
-              ],
-              "friction_themes": [
-                "price_clarity",
-                "date_picker_friction"
-              ],
-              "recommendation": "Do not send booking-intent traffic to the archive page; route users to a searchable stay flow or add a clear booking CTA."
-            },
-            "variant": "B",
-            "trace_source": "rule_ui_specific",
-            "task_seconds": 140,
-            "converted": false,
-            "dropoff": true,
-            "satisfaction": 2.8
-          },
-          {
             "persona_id": "airbnb_u_013",
             "segment": "experience_seeker",
-            "goal": "Find whether the page offers experiences or unique local stays worth exploring.",
+            "goal": "Discover whether activities or services are easy to find from the page.",
             "steps": [
               {
                 "step": 1,
@@ -3011,7 +2900,7 @@
           {
             "persona_id": "airbnb_u_017",
             "segment": "first_time_cautious_user",
-            "goal": "Determine whether the page feels trustworthy enough to start searching without signing up.",
+            "goal": "Understand the site without creating an account or exposing personal data.",
             "steps": [
               {
                 "step": 1,
@@ -3186,83 +3075,67 @@
         "summary": {
           "top_findings": [
             {
-              "theme": "Archive content blocks booking intent",
+              "theme": "date_picker_friction",
               "affected_users": 5,
               "severity": "high",
-              "evidence": "run_count 5; task_success_rate 0.0; conversion_rate 0.0; dropoff_rate 1.0; completion_rate 0.0; avg_satisfaction 2.84.",
-              "suggestion": "Do not route booking-intent traffic to the archive page. Add a prominent path to the current searchable stays flow."
+              "evidence": "5 users spent effort on date, calendar, or trip timing decisions.",
+              "suggestion": "Reduce date-selection work with flexible-date defaults and clearer calendar affordances."
             },
             {
-              "theme": "Search controls are unclear or non-functional for trip planning",
+              "theme": "price_clarity",
               "affected_users": 5,
               "severity": "high",
-              "evidence": "date_picker_friction count 5; avg ease_of_search 4.0; primary_cta_rate 0.0.",
-              "suggestion": "Make destination, check-in, check-out, guests, and search CTA clearly active, or label the archive as non-bookable."
+              "evidence": "5 users referenced price, fees, total cost, or value confidence during the run.",
+              "suggestion": "Expose total price and likely fees earlier in comparison moments."
             },
             {
-              "theme": "Users cannot compare listings or prices",
-              "affected_users": 5,
-              "severity": "high",
-              "evidence": "price_clarity count 5; avg price_clarity 4.2; detail_open_rate 0.0; avg_clicks_per_user 1.0.",
-              "suggestion": "Show real listing cards with nightly/total prices, ratings, and detail links, or replace archive examples with a clear handoff to search results."
-            },
-            {
-              "theme": "Brand trust is present but does not convert",
-              "affected_users": 5,
-              "severity": "medium",
-              "evidence": "avg trust 7.2 while avg purchase_intent is 2.6 and conversion_rate is 0.0.",
-              "suggestion": "Preserve the archive as brand storytelling, but separate it from task-based booking flows and add safety, fee, and policy context near any search CTA."
-            },
-            {
-              "theme": "Experiences discovery is weak",
+              "theme": "experiences_discoverability",
               "affected_users": 1,
-              "severity": "medium",
-              "evidence": "experiences_discoverability count 1; the experience seeker saw archive navigation instead of usable Services or Experiences paths.",
-              "suggestion": "Expose current Services and Experiences navigation separately from historical timeline entries."
+              "severity": "low",
+              "evidence": "5 synthetic traces completed with avg_satisfaction=2.88.",
+              "suggestion": "Make Experiences and Services discoverable without competing with the stay search path."
             }
           ],
           "segment_notes": [
             {
               "segment": "budget_weekend_couple",
-              "note": "Could not compare low-cost weekend options because visible content did not provide usable destination, date, guest, or price comparison controls."
-            },
-            {
-              "segment": "family_planner",
-              "note": "Could not assess family suitability because capacity, bedroom, amenity, total cost, and listing detail paths were missing."
-            },
-            {
-              "segment": "remote_worker_business_traveler",
-              "note": "The page was too slow and indirect for work-trip planning, with no reliable destination results, dates, or business-relevant amenities."
+              "note": "Budget travelers prioritized visible total cost and fast value comparison."
             },
             {
               "segment": "experience_seeker",
-              "note": "The timeline had some discovery appeal, but it did not expose usable Experiences, Services, photos, activity details, or bookable inspiration."
+              "note": "Experience seekers needed the activity path to stand out from the default stay flow."
+            },
+            {
+              "segment": "family_planner",
+              "note": "Family planners looked for trust, suitability, and enough detail before continuing."
             },
             {
               "segment": "first_time_cautious_user",
-              "note": "Brand history supported trust, but the archive purpose and lack of current booking protections left cautious users unwilling to proceed."
+              "note": "Cautious users were sensitive to account, trust, and fee surprises."
+            },
+            {
+              "segment": "remote_worker_business_traveler",
+              "note": "Work travelers needed practical fit signals such as quietness and setup confidence."
             }
           ],
           "recommendations": [
-            "Split the archive from the booking journey: keep it for storytelling, but send search-intent users to the live stays search page.",
-            "Add a clear primary CTA such as Search current stays that opens a functional destination/date/guest flow.",
-            "If archived search surfaces remain visible, label them as historical examples and avoid making them look like active booking controls.",
-            "Add listing comparison essentials near any booking path: price, total cost context, rating, review count, capacity, and detail links.",
-            "Create a separate current Services and Experiences entry point so exploration users are not trapped in the timeline."
+            "Reduce date-selection work with flexible-date defaults and clearer calendar affordances.",
+            "Expose total price and likely fees earlier in comparison moments.",
+            "Make Experiences and Services discoverable without competing with the stay search path."
           ],
-          "demo_readout": "Across 5 synthetic users, task_success_rate was 0.0, conversion_rate was 0.0, and dropoff_rate was 1.0. Users averaged 140.0 seconds and 5.0 steps, clicked once on average, but never reached a primary CTA, detail view, like action, or completion. The archive communicates brand history, but it does not support booking, comparison shopping, family planning, business travel, or experiences discovery.",
+          "demo_readout": "5 synthetic runs completed with conversion_rate=0.0, dropoff_rate=1.0, avg_task_seconds=140.0, avg_satisfaction=2.88, and avg_steps=5.0.",
           "metrics": {
             "run_count": 5,
             "task_success_rate": 0.0,
             "conversion_rate": 0.0,
             "dropoff_rate": 1.0,
             "avg_task_seconds": 140.0,
-            "avg_satisfaction": 2.84,
+            "avg_satisfaction": 2.88,
             "avg_steps": 5.0,
             "avg_scores": {
               "ease_of_search": 4.0,
-              "price_clarity": 4.2,
-              "trust": 7.2,
+              "price_clarity": 4.0,
+              "trust": 7.4,
               "purchase_intent": 2.6
             },
             "interaction_metrics": {
@@ -3350,7 +3223,7 @@
         "conversion": 0.0,
         "dropoff": 1.0,
         "time_to_task": 2.33,
-        "satisfaction": 2.84,
+        "satisfaction": 2.88,
         "completion_rate": 0,
         "click_rate": 0.2,
         "primary_cta_rate": 0,
@@ -3363,24 +3236,24 @@
       "feedback": [
         {
           "icon": "circle-dollar-sign",
-          "title": "Archive content blocks booking intent",
-          "body": "run_count 5; task success rate 0.0; conversion_rate 0.0; dropoff_rate 1.0; completion_rat...",
+          "title": "date_picker_friction",
+          "body": "5 users spent effort on date, calendar, or trip timing decisions.",
           "level": "high",
           "badge": "High Evidence"
         },
         {
           "icon": "circle-dollar-sign",
-          "title": "Search controls are unclear or non-...",
-          "body": "date_picker_friction count 5; avg ease of search 4.0; primary CTA rate 0.0.",
+          "title": "price clarity",
+          "body": "5 users referenced price, fees, total cost, or value confidence during the run.",
           "level": "high",
           "badge": "High Evidence"
         },
         {
-          "icon": "circle-dollar-sign",
-          "title": "Users cannot compare listings or pr...",
-          "body": "price clarity count 5; avg price clarity 4.2; detail open rate 0.0; avg_clicks_per_user 1.0.",
-          "level": "high",
-          "badge": "High Evidence"
+          "icon": "triangle-alert",
+          "title": "experiences discoverability",
+          "body": "5 synthetic traces completed with avg_satisfaction=2.88.",
+          "level": "low",
+          "badge": "Low Evidence"
         }
       ],
       "logs": [
@@ -3639,25 +3512,25 @@
         {
           "persona": "airbnb_u_001",
           "segment": "Budget Weekend Couple",
-          "goal": "Find a low-cost two-night weekend stay option and assess whether the page supports a norm...",
+          "goal": "Find an affordable two-night stay that still feels trustworthy.",
           "tags": [
             "Price",
-            "Detail Orientation"
+            "Trust"
           ]
         },
         {
           "persona": "airbnb_u_002",
           "segment": "Budget Weekend Couple",
-          "goal": "Check whether a cheap city weekend stay can be found from the visible archive content.",
+          "goal": "Find an affordable two-night stay that still feels trustworthy.",
           "tags": [
             "Price",
-            "Detail Orientation"
+            "Trust"
           ]
         },
         {
           "persona": "airbnb_u_003",
           "segment": "Budget Weekend Couple",
-          "goal": "Evaluate whether a couple can shortlist an affordable cabin-style weekend stay.",
+          "goal": "Find an affordable two-night stay that still feels trustworthy.",
           "tags": [
             "Price",
             "Trust"
@@ -3666,7 +3539,7 @@
         {
           "persona": "airbnb_u_004",
           "segment": "Budget Weekend Couple",
-          "goal": "Determine whether the page can support a last-minute budget getaway search.",
+          "goal": "Find an affordable two-night stay that still feels trustworthy.",
           "tags": [
             "Price",
             "Detail Orientation"
@@ -3675,16 +3548,16 @@
         {
           "persona": "airbnb_u_005",
           "segment": "Family Planner",
-          "goal": "Assess whether a family can search for a practical multi-guest stay with clear dates and...",
+          "goal": "Find a reliable stay that looks suitable for a family trip.",
           "tags": [
-            "Detail Orientation",
-            "Trust"
+            "Trust",
+            "Detail Orientation"
           ]
         },
         {
           "persona": "airbnb_u_006",
           "segment": "Family Planner",
-          "goal": "Compare safe-looking family options without creating an account.",
+          "goal": "Find a reliable stay that looks suitable for a family trip.",
           "tags": [
             "Trust",
             "Detail Orientation"
@@ -3693,7 +3566,7 @@
         {
           "persona": "airbnb_u_007",
           "segment": "Family Planner",
-          "goal": "Find whether the archive page gives enough information to shortlist a family-friendly home.",
+          "goal": "Find a reliable stay that looks suitable for a family trip.",
           "tags": [
             "Trust",
             "Detail Orientation"
@@ -3702,7 +3575,7 @@
         {
           "persona": "airbnb_u_008",
           "segment": "Family Planner",
-          "goal": "Evaluate date and guest selection clarity for a family vacation search.",
+          "goal": "Find a reliable stay that looks suitable for a family trip.",
           "tags": [
             "Trust",
             "Detail Orientation"
@@ -3711,43 +3584,43 @@
         {
           "persona": "airbnb_u_009",
           "segment": "Remote Worker Business Traveler",
-          "goal": "Check whether the page can support a work-trip stay search with quick comparison.",
+          "goal": "Find a stay that would work for a quiet remote-work trip.",
           "tags": [
-            "Trust",
-            "Detail Orientation"
+            "Detail Orientation",
+            "Patience"
           ]
         },
         {
           "persona": "airbnb_u_010",
           "segment": "Remote Worker Business Traveler",
-          "goal": "Determine whether a short-notice work stay can be evaluated from visible content.",
+          "goal": "Find a stay that would work for a quiet remote-work trip.",
           "tags": [
-            "Trust",
-            "Detail Orientation"
+            "Detail Orientation",
+            "Trust"
           ]
         },
         {
           "persona": "airbnb_u_011",
           "segment": "Remote Worker Business Traveler",
-          "goal": "Assess whether the page has enough listing quality information for a remote-work stay.",
+          "goal": "Find a stay that would work for a quiet remote-work trip.",
           "tags": [
-            "Trust",
-            "Detail Orientation"
+            "Detail Orientation",
+            "Trust"
           ]
         },
         {
           "persona": "airbnb_u_012",
           "segment": "Remote Worker Business Traveler",
-          "goal": "Evaluate whether the page supports fast destination-based browsing for a business trip.",
+          "goal": "Find a stay that would work for a quiet remote-work trip.",
           "tags": [
-            "Trust",
-            "Detail Orientation"
+            "Detail Orientation",
+            "Trust"
           ]
         },
         {
           "persona": "airbnb_u_013",
           "segment": "Experience Seeker",
-          "goal": "Find whether the page offers experiences or unique local stays worth exploring.",
+          "goal": "Discover whether activities or services are easy to find from the page.",
           "tags": [
             "Exploration",
             "Patience"
@@ -3756,7 +3629,7 @@
         {
           "persona": "airbnb_u_014",
           "segment": "Experience Seeker",
-          "goal": "Explore historically themed Airbnb content while checking whether it can lead to a travel...",
+          "goal": "Discover whether activities or services are easy to find from the page.",
           "tags": [
             "Exploration",
             "Patience"
@@ -3765,64 +3638,62 @@
         {
           "persona": "airbnb_u_015",
           "segment": "Experience Seeker",
-          "goal": "Compare Lake Tahoe listings for a memorable getaway rather than the cheapest option.",
-          "tags": [
-            "Exploration",
-            "Detail Orientation"
-          ]
-        },
-        {
-          "persona": "airbnb_u_016",
-          "segment": "Experience Seeker",
-          "goal": "Assess whether Services or local activities are discoverable from the page.",
+          "goal": "Discover whether activities or services are easy to find from the page.",
           "tags": [
             "Exploration",
             "Trust"
           ]
         },
         {
+          "persona": "airbnb_u_016",
+          "segment": "Experience Seeker",
+          "goal": "Discover whether activities or services are easy to find from the page.",
+          "tags": [
+            "Exploration",
+            "Patience"
+          ]
+        },
+        {
           "persona": "airbnb_u_017",
           "segment": "First Time Cautious User",
-          "goal": "Determine whether the page feels trustworthy enough to start searching without signing up.",
+          "goal": "Understand the site without creating an account or exposing personal data.",
           "tags": [
             "Trust",
-            "Detail Orientation"
+            "Price"
           ]
         },
         {
           "persona": "airbnb_u_018",
           "segment": "First Time Cautious User",
-          "goal": "Safely test whether destination and date search can be started without personal data.",
+          "goal": "Understand the site without creating an account or exposing personal data.",
           "tags": [
             "Trust",
-            "Detail Orientation"
+            "Price"
           ]
         },
         {
           "persona": "airbnb_u_019",
           "segment": "First Time Cautious User",
-          "goal": "Compare visible options only if the page clearly shows ratings and prices.",
+          "goal": "Understand the site without creating an account or exposing personal data.",
           "tags": [
             "Trust",
-            "Detail Orientation"
+            "Price"
           ]
         },
         {
           "persona": "airbnb_u_020",
           "segment": "First Time Cautious User",
-          "goal": "Assess whether the page provides a clear and safe path for a first Airbnb-style search.",
+          "goal": "Understand the site without creating an account or exposing personal data.",
           "tags": [
             "Trust",
-            "Detail Orientation"
+            "Price"
           ]
         }
       ],
       "recommendations": [
-        "Split the archive from the booking journey: keep it for storytelling, but send search-intent users to the live stays search page.",
-        "Add a clear primary CTA such as Search current stays that opens a functional destination/date/guest flow.",
-        "If archived search surfaces remain visible, label them as historical examples and avoid making them look like active booking controls.",
-        "Add listing comparison essentials near any booking path: price, total cost context, rating, review count, capacity, and detail links.",
-        "Create a separate current Services and Experiences entry point so exploration users are not trapped in the timeline."
+        "Reduce date-selection work with flexible-date defaults and clearer calendar affordances.",
+        "Expose total price and likely fees earlier in comparison moments.",
+        "Make Experiences and Services discoverable without competing with the stay search path."
       ]
     }
   },
@@ -3914,24 +3785,24 @@
     "attribution_conclusion": [
       {
         "icon": "target",
-        "title": "Compact flow performed well",
-        "conclusion": "5 runs completed successfully: task success rate 1.0, conversion_rate 1.0, dropoff_rate 0...",
+        "title": "price clarity",
+        "conclusion": "5 users referenced price, fees, total cost, or value confidence during the run.",
         "level": "high",
         "badge": "High Evidence",
         "badge_icon": "trending-up"
       },
       {
         "icon": "badge-dollar-sign",
-        "title": "Price clarity is the main blocker",
-        "conclusion": "price clarity appeared in friction_counts for 5 users, and avg price clarity was 5.2 vers...",
+        "title": "experiences discoverability",
+        "conclusion": "5 synthetic traces completed with avg_satisfaction=4.08.",
         "level": "medium",
         "badge": "Medium Evidence",
         "badge_icon": "chart-column"
       },
       {
         "icon": "smartphone",
-        "title": "Detail view drives intent",
-        "conclusion": "detail open rate 1.0, like rate 1.0, primary CTA rate 1.0, and purchase intent averaged 6...",
+        "title": "synthetic_behavior_pattern",
+        "conclusion": "5 synthetic traces completed with structured browser-observed steps.",
         "level": "low",
         "badge": "Low Evidence",
         "badge_icon": "chart-no-axes-combined"
@@ -3960,9 +3831,9 @@
         "title": "Feature Changes",
         "icon": "wand-sparkles",
         "items": [
-          "An upfront price breakdown on listing car...",
-          "Add trust explanations behind Guest favor...",
-          "Expose family and work-trip decision deta..."
+          "Expose total price and likely fees earlie...",
+          "Make Experiences and Services discoverabl...",
+          "Review logs and profile-level traces befo..."
         ]
       }
     ]

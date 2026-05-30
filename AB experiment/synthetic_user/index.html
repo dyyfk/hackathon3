@@ -74,16 +74,29 @@
             <span class="status-pill" id="statusPill"><span></span> Ready</span>
             <button class="primary-run" id="startButton" type="button">
               <i data-lucide="play" aria-hidden="true"></i>
-              <span>Start Run</span>
+              <span>Generate</span>
             </button>
           </div>
         </section>
 
-        <section class="variant-grid" aria-label="A/B synthetic user results">
+        <section class="stage-panel panel" id="stagePanel" aria-label="Generation Progress"></section>
+        <section class="profile-panel panel hidden" id="profilePanel" aria-label="Generated User Profiles"></section>
+        <section class="agent-summary panel hidden" id="agentSummary" aria-label="Agent Summary"></section>
+
+        <section class="variant-grid hidden" id="variantGrid" aria-label="A/B synthetic user results">
           <article class="variant-column" id="variantA"></article>
           <article class="variant-column" id="variantB"></article>
         </section>
       </main>
+    </div>
+
+    <div class="modal-backdrop hidden" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="detail-modal">
+        <button class="modal-close" id="modalClose" type="button" aria-label="Close detail">
+          <i data-lucide="x" aria-hidden="true"></i>
+        </button>
+        <div id="modalContent"></div>
+      </div>
     </div>
 
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>

@@ -393,12 +393,24 @@ class SyntheticUserGenerator:
 
 
 class SyntheticTraceGenerator:
-    def __init__(self, codex: CodexClient, page_model: AirbnbPageModel, variant: str) -> None:
+    def __init__(
+        self, codex: CodexClient, page_model: AirbnbPageModel, variant: str, batch_size: int = 3
+    ) -> None:
         self.codex = codex
         self.page_model = page_model
         self.variant = variant
+        self.batch_size = max(1, batch_size)
 
     def generate(self, profiles: Sequence[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        traces: List[Dict[str, Any]] = []
+        for start in range(0, len(profiles), self.batch_size):
+            chunk = profiles[start : start + self.batch_size]
+            traces.extend(self._generate_batch(chunk, start))
+        return traces
+
+    def _generate_batch(
+        self, profiles: Sequence[Dict[str, Any]], offset: int
+    ) -> List[Dict[str, Any]]:
         page_context = self.page_model.to_dict()
         prompt = (
             "You are the Synthetic Trace Generator for an A/B product research demo.\n"
@@ -406,6 +418,7 @@ class SyntheticTraceGenerator:
             "Return JSON only. Do not use tools. Do not produce prose outside JSON.\n\n"
             f"Variant: {self.variant}\n"
             f"URL: {self.page_model.url}\n\n"
+            f"Trace batch starts at run index: {offset + 1}\n\n"
             "Browser-observed page context:\n"
             f"{json.dumps(page_context, indent=2)}\n\n"
             "Profiles to run:\n"
@@ -429,7 +442,7 @@ class SyntheticTraceGenerator:
         data = self.codex.generate_json(
             prompt,
             trace_output_schema(len(profiles)),
-            "browser-observed behavior trace generation",
+            f"browser-observed behavior trace generation batch {offset + 1}",
         )
         traces = data.get("traces", [])
         return normalize_lm_traces(traces, profiles, self.variant)
@@ -1260,6 +1273,141 @@ def segment_quotas(profile_count: int) -> Dict[str, int]:
     }
 
 
+def rule_based_profiles(profile_count: int) -> List[Dict[str, Any]]:
+    templates = {
+        "budget_weekend_couple": {
+            "goal": "Find an affordable two-night stay that still feels trustworthy.",
+            "task": "Compare visible stay options by price, rating, and value signals without booking.",
+            "destination": "Lake Tahoe",
+            "guests": 2,
+            "budget": "lowest credible visible total",
+            "style": [0.48, 0.42, 0.94, 0.62, 0.58],
+            "success": ["Compares at least two options.", "Forms a shortlist without booking."],
+            "frustration": ["Fees are unclear.", "Low-price options are hard to compare."],
+        },
+        "family_planner": {
+            "goal": "Find a reliable stay that looks suitable for a family trip.",
+            "task": "Search for a family-sized stay and compare trust, space, and suitability signals.",
+            "destination": "Lake Tahoe",
+            "guests": 4,
+            "budget": "moderate budget with strong trust signals",
+            "style": [0.78, 0.58, 0.62, 0.9, 0.86],
+            "success": ["Checks suitability signals.", "Avoids account or payment actions."],
+            "frustration": ["Family details are missing.", "Cancellation or fee details are unclear."],
+        },
+        "remote_worker_business_traveler": {
+            "goal": "Find a stay that would work for a quiet remote-work trip.",
+            "task": "Assess whether the page exposes work-readiness, location, and fast booking confidence.",
+            "destination": "Austin",
+            "guests": 1,
+            "budget": "business-friendly value with reliable amenities",
+            "style": [0.64, 0.46, 0.55, 0.72, 0.82],
+            "success": ["Finds practical fit signals.", "Identifies whether more details are needed."],
+            "frustration": ["Work amenities are hidden.", "The next step takes too long."],
+        },
+        "experience_seeker": {
+            "goal": "Discover whether activities or services are easy to find from the page.",
+            "task": "Look for non-stay discovery paths and judge whether the page supports activity intent.",
+            "destination": "New York",
+            "guests": 2,
+            "budget": "flexible if the experience feels distinctive",
+            "style": [0.7, 0.88, 0.42, 0.62, 0.66],
+            "success": ["Finds the experiences path.", "Understands what to do next."],
+            "frustration": ["Experiences are secondary.", "Navigation labels compete for attention."],
+        },
+        "first_time_cautious_user": {
+            "goal": "Understand the site without creating an account or exposing personal data.",
+            "task": "Browse cautiously, check trust and cost clarity, and stop before account or payment steps.",
+            "destination": "Lake Tahoe",
+            "guests": 2,
+            "budget": "needs clear price confidence before continuing",
+            "style": [0.52, 0.38, 0.76, 0.92, 0.74],
+            "success": ["Avoids unsafe actions.", "Forms confidence or identifies why not."],
+            "frustration": ["Sign-in appears too early.", "Trust or fees are not explained."],
+        },
+    }
+    destinations = {
+        "budget_weekend_couple": ["Lake Tahoe", "Joshua Tree", "San Diego", "Portland"],
+        "family_planner": ["Lake Tahoe", "San Francisco", "San Diego", "Seattle"],
+        "remote_worker_business_traveler": ["Austin", "Seattle", "San Francisco", "Denver"],
+        "experience_seeker": ["New York", "Los Angeles", "Miami", "Chicago"],
+        "first_time_cautious_user": ["Lake Tahoe", "San Diego", "Portland", "Denver"],
+    }
+    budget_variants = {
+        "budget_weekend_couple": [
+            "lowest credible visible total",
+            "under budget if ratings stay above average",
+            "clear total price before opening checkout",
+        ],
+        "family_planner": [
+            "moderate budget with strong trust signals",
+            "family-fit value over cheapest option",
+            "flexible budget if cancellation is clear",
+        ],
+        "remote_worker_business_traveler": [
+            "business-friendly value with reliable amenities",
+            "fast decision if work-readiness is visible",
+            "company-reimbursable price clarity",
+        ],
+        "experience_seeker": [
+            "flexible if the experience feels distinctive",
+            "willing to pay more for a unique activity",
+            "compare novelty before cost",
+        ],
+        "first_time_cautious_user": [
+            "needs clear price confidence before continuing",
+            "prefers visible fees before any account step",
+            "will stop if trust or cost feels hidden",
+        ],
+    }
+    quotas = segment_quotas(profile_count)
+    profiles: List[Dict[str, Any]] = []
+    for segment in SEGMENTS:
+        template = templates[segment]
+        for ordinal in range(quotas[segment]):
+            index = len(profiles) + 1
+            patience, exploration, price, trust, detail = template["style"]
+            adjustment = ((index % 5) - 2) * 0.035
+            style_values = [
+                max(0.05, min(0.98, patience + adjustment)),
+                max(0.05, min(0.98, exploration - adjustment / 2)),
+                max(0.05, min(0.98, price + adjustment / 3)),
+                max(0.05, min(0.98, trust - adjustment / 4)),
+                max(0.05, min(0.98, detail + adjustment / 2)),
+            ]
+            destination = destinations[segment][ordinal % len(destinations[segment])]
+            budget = budget_variants[segment][ordinal % len(budget_variants[segment])]
+            guest_delta = 1 if segment == "family_planner" and ordinal % 3 == 2 else 0
+            profiles.append(
+                {
+                    "id": f"airbnb_u_{index:03d}",
+                    "segment": segment,
+                    "goal": template["goal"],
+                    "task": template["task"],
+                    "constraints": {
+                        "destination": destination,
+                        "guests": template["guests"] + guest_delta,
+                        "budget_preference": budget,
+                    },
+                    "behavior_style": {
+                        "patience": round(style_values[0], 2),
+                        "exploration": round(style_values[1], 2),
+                        "price_sensitivity": round(style_values[2], 2),
+                        "trust_sensitivity": round(style_values[3], 2),
+                        "detail_orientation": round(style_values[4], 2),
+                    },
+                    "success_criteria": template["success"],
+                    "frustration_triggers": template["frustration"],
+                }
+            )
+    validate_profiles(profiles, profile_count)
+    return profiles
+
+
+def fallback_profiles(profile_count: int) -> List[Dict[str, Any]]:
+    return rule_based_profiles(profile_count)
+
+
 def validate_profiles(profiles: List[Dict[str, Any]], expected_count: int) -> None:
     if len(profiles) != expected_count:
         raise DemoError(f"Expected {expected_count} profiles, received {len(profiles)}.")
@@ -1849,10 +1997,28 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--profiles", type=int, default=20, help="Number of profiles to generate.")
     parser.add_argument("--runs", type=int, default=5, help="Number of profiles to run.")
     parser.add_argument(
+        "--profile-mode",
+        choices=["rule", "lm"],
+        default="rule",
+        help="Use deterministic profiles or LM-generated profiles.",
+    )
+    parser.add_argument(
         "--trace-mode",
         choices=["rule", "lm"],
-        default="lm",
+        default="rule",
         help="Use LM-generated traces or deterministic UI-specific fallback traces.",
+    )
+    parser.add_argument(
+        "--trace-batch-size",
+        type=int,
+        default=3,
+        help="Number of synthetic users per LM trace batch.",
+    )
+    parser.add_argument(
+        "--summary-mode",
+        choices=["rule", "lm"],
+        default="rule",
+        help="Use deterministic summary metrics or an LM-generated feedback summary.",
     )
     parser.add_argument("--codex-cmd", default="codex", help="Codex CLI command path.")
     parser.add_argument(
@@ -1904,13 +2070,22 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
 
     try:
-        generator = SyntheticUserGenerator(codex, page_model)
-        profiles = generator.generate(args.profiles)
+        if args.profile_mode == "lm":
+            generator = SyntheticUserGenerator(codex, page_model)
+            try:
+                profiles = generator.generate(args.profiles)
+            except DemoError as exc:
+                print(f"WARN: LM profile generation failed; using deterministic profiles: {exc}", file=sys.stderr)
+                profiles = rule_based_profiles(args.profiles)
+        else:
+            profiles = rule_based_profiles(args.profiles)
         run_profiles = select_profiles_for_runs(profiles, min(args.runs, len(profiles)))
 
         if args.trace_mode == "lm":
             try:
-                trace_generator = SyntheticTraceGenerator(codex, page_model, args.variant)
+                trace_generator = SyntheticTraceGenerator(
+                    codex, page_model, args.variant, args.trace_batch_size
+                )
                 traces = trace_generator.generate(run_profiles)
             except DemoError as exc:
                 print(f"WARN: LM trace generation failed; using rule-based fallback: {exc}", file=sys.stderr)
@@ -1918,8 +2093,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         else:
             traces = rule_based_traces(page_model, run_profiles, args.variant, "rule_ui_specific")
 
-        summarizer = FeedbackSummarizer(codex)
-        summary = summarizer.summarize(profiles, traces)
+        if args.summary_mode == "lm":
+            summarizer = FeedbackSummarizer(codex)
+            summary = summarizer.summarize(profiles, traces)
+        else:
+            metrics = compute_metrics(traces)
+            summary = local_feedback_summary(profiles, traces, metrics)
+            summary["metrics"] = metrics
 
         print_json_section("1) GENERATED_SYNTHETIC_USERS_JSON", {"profiles": profiles})
         print_json_section(

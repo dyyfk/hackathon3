@@ -18,6 +18,15 @@ from pathlib import Path
 from typing import Any, Dict, Sequence
 from urllib.parse import unquote, urlparse
 
+from scripts.airbnb_synth_demo import (
+    AirbnbPageModel,
+    compute_metrics,
+    local_feedback_summary,
+    observe_page_context,
+    rule_based_profiles,
+    rule_based_traces,
+    select_profiles_for_runs,
+)
 from scripts.normalize_ab_run import normalize_ab_run
 
 
@@ -164,11 +173,55 @@ def get_job(job_id: str) -> Dict[str, Any]:
 def run_job(job_id: str, config: Dict[str, Any]) -> None:
     update_job(job_id, status="running", started_at=datetime.now(timezone.utc).isoformat())
     try:
-        with ThreadPoolExecutor(max_workers=2) as variant_executor:
-            a_future = variant_executor.submit(run_variant, "A", config)
-            b_future = variant_executor.submit(run_variant, "B", config)
-            a_stdout = a_future.result()
-            b_stdout = b_future.result()
+        update_job(job_id, phase="observing_pages", progress=0.12)
+        with ThreadPoolExecutor(max_workers=2) as context_executor:
+            a_context_future = context_executor.submit(observe_page_context, config["a_url"], BASE_DIR / "scripts", 15000)
+            b_context_future = context_executor.submit(observe_page_context, config["b_url"], BASE_DIR / "scripts", 15000)
+            a_model = AirbnbPageModel(config["a_url"], a_context_future.result())
+            b_model = AirbnbPageModel(config["b_url"], b_context_future.result())
+
+        update_job(job_id, phase="generating_profiles", progress=0.28)
+        profiles = rule_based_profiles(int(config["profiles"]))
+        run_profiles = select_profiles_for_runs(profiles, min(int(config["runs"]), len(profiles)))
+        update_job(
+            job_id,
+            phase="profiles_ready",
+            progress=0.44,
+            partial={
+                "profiles": profiles,
+                "run_profiles": [profile["id"] for profile in run_profiles],
+            },
+        )
+
+        update_job(job_id, phase="generating_trajectories", progress=0.58)
+        with ThreadPoolExecutor(max_workers=2) as trace_executor:
+            a_trace_future = trace_executor.submit(generate_traces, a_model, run_profiles, "A")
+            b_trace_future = trace_executor.submit(generate_traces, b_model, run_profiles, "B")
+            a_traces = a_trace_future.result()
+            b_traces = b_trace_future.result()
+        update_job(
+            job_id,
+            phase="trajectories_ready",
+            progress=0.72,
+            partial={
+                "profiles": profiles,
+                "run_profiles": [profile["id"] for profile in run_profiles],
+                "variants": {
+                    "A": {"url": config["a_url"], "page_context": a_model.live_snapshot, "traces": a_traces},
+                    "B": {"url": config["b_url"], "page_context": b_model.live_snapshot, "traces": b_traces},
+                },
+            },
+        )
+
+        update_job(job_id, phase="summarizing_feedback", progress=0.84)
+        with ThreadPoolExecutor(max_workers=2) as summary_executor:
+            a_summary_future = summary_executor.submit(summarize_traces, profiles, a_traces)
+            b_summary_future = summary_executor.submit(summarize_traces, profiles, b_traces)
+            a_summary = a_summary_future.result()
+            b_summary = b_summary_future.result()
+
+        a_stdout = synthetic_stdout(profiles, a_model.live_snapshot, a_traces, a_summary)
+        b_stdout = synthetic_stdout(profiles, b_model.live_snapshot, b_traces, b_summary)
         (RUNS_DIR / f"{job_id}_A.out").write_text(a_stdout, encoding="utf-8")
         (RUNS_DIR / f"{job_id}_B.out").write_text(b_stdout, encoding="utf-8")
         result = normalize_ab_run(a_stdout=a_stdout, b_stdout=b_stdout, config=config, run_id=job_id)
@@ -178,12 +231,49 @@ def run_job(job_id: str, config: Dict[str, Any]) -> None:
         update_job(
             job_id,
             status="completed",
+            phase="completed",
+            progress=1,
             completed_at=datetime.now(timezone.utc).isoformat(),
             result=result,
             result_path=str(result_path.relative_to(BASE_DIR)),
         )
     except Exception as exc:  # noqa: BLE001 - keep job failure visible in UI.
         update_job(job_id, status="failed", completed_at=datetime.now(timezone.utc).isoformat(), error=str(exc))
+
+
+def synthetic_stdout(
+    profiles: Sequence[Dict[str, Any]],
+    page_context: Dict[str, Any] | None,
+    traces: Sequence[Dict[str, Any]],
+    summary: Dict[str, Any],
+) -> str:
+    sections = [
+        ("1) GENERATED_SYNTHETIC_USERS_JSON", {"profiles": list(profiles)}),
+        ("2) SYNTHETIC_USER_BEHAVIOR_TRACES_JSON", {"page_context": page_context, "traces": list(traces)}),
+        ("3) SYNTHETIC_FEEDBACK_SUMMARY_JSON", summary),
+    ]
+    return "\n".join(
+        f"\n=== {title} ===\n{json.dumps(payload, ensure_ascii=False, indent=2)}"
+        for title, payload in sections
+    )
+
+
+def summarize_traces(
+    profiles: Sequence[Dict[str, Any]],
+    traces: Sequence[Dict[str, Any]],
+) -> Dict[str, Any]:
+    metrics = compute_metrics(list(traces))
+    summary = local_feedback_summary(profiles, traces, metrics)
+    summary["metrics"] = metrics
+    return summary
+
+
+def generate_traces(
+    page_model: AirbnbPageModel,
+    profiles: Sequence[Dict[str, Any]],
+    variant: str,
+) -> Sequence[Dict[str, Any]]:
+    return rule_based_traces(page_model, profiles, variant, "rule_ui_specific")
 
 
 def run_variant(label: str, config: Dict[str, Any]) -> str:
@@ -195,7 +285,13 @@ def run_variant(label: str, config: Dict[str, Any]) -> str:
         url,
         "--variant",
         label,
+        "--profile-mode",
+        "rule",
         "--trace-mode",
+        "rule",
+        "--trace-batch-size",
+        "3",
+        "--summary-mode",
         "rule",
         "--profiles",
         str(config["profiles"]),
