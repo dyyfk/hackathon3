@@ -332,3 +332,40 @@ turns the collected feedback into ranked UX changes. The `/synthetic` page shows
 the A/B scorecard, the current winner, and a projected self-improved variant
 that applies the highest-impact recommendations as synthetic score and dwell
 adjustments.
+
+## Modal UserTwin dashboard
+
+The Modal dashboard is available at `/dashboard`. It runs cloud Playwright
+agents against two public URLs and summarizes success rate, average time,
+friction, top issues, and per-run operation logs.
+
+To avoid changing the existing `/versionA` and `/versionB` demos, this branch
+adds Modal-specific variants:
+
+- `/modal-versionA` baseline UserTwin test page
+- `/modal-versionB` improved UserTwin test page
+
+When running Modal locally, expose the app through a public tunnel because Modal
+cannot access `localhost` from the cloud:
+
+```bash
+npm run dev -- --hostname 0.0.0.0 --port 3000
+npx --yes cloudflared tunnel --url http://127.0.0.1:3000
+```
+
+Use the generated public URLs in the dashboard:
+
+- `https://<tunnel>.trycloudflare.com/modal-versionA`
+- `https://<tunnel>.trycloudflare.com/modal-versionB`
+
+The Modal endpoint is configured through `.env.local`:
+
+```env
+MODAL_AGENT_URL=https://your-modal-endpoint.modal.run
+```
+
+Deploy the runner with:
+
+```bash
+modal deploy modal_app/agent_runner.py
+```
