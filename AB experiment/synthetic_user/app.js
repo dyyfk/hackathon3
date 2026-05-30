@@ -194,7 +194,7 @@ async function pollJob(jobId) {
 
 function renderJob(job) {
   const phase = job.phase || job.status || "queued";
-  renderStage(phase, job.progress || 0.08);
+  renderStage(phase, job.progress || 0.08, job);
   setStatus(phaseLabel(phase), "running");
   if (job.partial?.profiles) {
     renderProfiles(job.partial.profiles, job.partial.run_profiles || []);
@@ -209,21 +209,38 @@ function renderJob(job) {
   }
 }
 
-function renderStage(phase, progress) {
+function renderStage(phase, progress, source = {}) {
   refs.stage.replaceChildren();
+  const history = source.phase_history || source.result?.phase_history || [];
   const header = el("div", "stage-header");
-  header.append(el("h2", "", phaseLabel(phase)), el("p", "", "Synthetic generation runs from profiles to trajectories to metrics."));
+  header.append(el("h2", "", phaseLabel(phase)), stageMeta(source, history));
   const bar = el("div", "progress-track");
   bar.append(el("span", "progress-fill"));
   bar.firstElementChild.style.width = `${Math.max(4, Math.min(100, Math.round(progress * 100)))}%`;
   const rail = el("div", "stage-rail");
   const activeIndex = Math.max(0, phases.findIndex(([key]) => key === phase));
-  phases.forEach(([, label], index) => {
+  phases.forEach(([key, label], index) => {
     const item = el("div", `stage-chip ${index < activeIndex ? "done" : ""} ${index === activeIndex ? "active" : ""}`);
     item.append(el("span", "", String(index + 1)), document.createTextNode(label));
+    const duration = phaseDurationLabel(key, history);
+    if (duration) {
+      item.append(el("small", "", duration));
+    }
     rail.append(item);
   });
   refs.stage.append(header, bar, rail);
+}
+
+function stageMeta(source, history) {
+  const wrap = el("p", "stage-meta");
+  const runMode = source.metadata?.run_mode || source.run_mode || source.result?.metadata?.run_mode || "deterministic_rule";
+  const completedAt = source.completed_at || source.result?.completed_at || lastCompletedAt(history);
+  if (completedAt) {
+    wrap.textContent = `Generated at ${formatTime(completedAt)} · Completed in ${formatDuration(totalDurationMs(history))} · ${humanizeMode(runMode)}`;
+  } else {
+    wrap.textContent = `Synthetic generation runs from profiles to trajectories to metrics · ${humanizeMode(runMode)}`;
+  }
+  return wrap;
 }
 
 function phaseLabel(phase) {
@@ -240,8 +257,41 @@ function phaseLabel(phase) {
   }[phase] || "Running";
 }
 
+function phaseDurationLabel(phase, history) {
+  const item = history.find((entry) => entry.phase === phase && Number.isFinite(entry.duration_ms));
+  return item ? formatDuration(item.duration_ms) : "";
+}
+
+function totalDurationMs(history) {
+  return history.reduce((total, entry) => total + (Number(entry.duration_ms) || 0), 0);
+}
+
+function lastCompletedAt(history) {
+  const last = [...history].reverse().find((entry) => entry.completed_at);
+  return last?.completed_at || "";
+}
+
+function formatDuration(ms) {
+  const value = Number(ms) || 0;
+  if (value < 1000) {
+    return `${Math.round(value)}ms`;
+  }
+  return `${(value / 1000).toFixed(value < 10_000 ? 1 : 0)}s`;
+}
+
+function formatTime(value) {
+  if (!value) return "n/a";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "n/a";
+  return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+}
+
+function humanizeMode(mode) {
+  return String(mode || "deterministic_rule").replace(/_/g, " ");
+}
+
 function renderRun(run) {
-  renderStage("completed", 1);
+  renderStage("completed", 1, run);
   renderProfiles(run.variants.A.raw.profiles, run.variants.A.profiles.map((profile) => profile.persona));
   renderAgentSummary(run);
   refs.variantGrid.classList.remove("hidden");
@@ -297,7 +347,7 @@ function renderVariant(root, key, variant, config) {
     summaryCards(variant.summary_stats, key),
     feedbackCard(variant.feedback),
     metricSnapshot(variant.metric_snapshot, key),
-    logsCard(variant.logs, variant, key),
+    userLogsCard(variant, key),
     profilesCard(variant.raw.profiles),
   );
 }
@@ -372,34 +422,125 @@ function metricSnapshot(metrics, key) {
   return card;
 }
 
-function logsCard(logs, variant, key) {
-  const card = sectionCard("Behavior Logs", "list");
-  const table = document.createElement("table");
-  table.className = "logs-table interactive-table";
-  table.innerHTML = "<thead><tr><th>Step</th><th>Event</th><th>Intent</th><th>Action</th><th>Friction</th><th>Observation</th></tr></thead>";
-  const body = document.createElement("tbody");
-  logs.forEach((log, index) => {
-    const row = document.createElement("tr");
-    row.tabIndex = 0;
-    row.append(
-      td(String(index + 1), "step-dot-cell"),
-      td(log.event || "View"),
-      td(log.intent),
-      td(log.action),
-      td(log.friction, `friction ${log.friction.toLowerCase()}`),
-      td(log.observation),
+function userLogsCard(variant, key) {
+  const card = sectionCard("Behavior Logs by User", "list");
+  const help = el(
+    "span",
+    "friction-help",
+    "Friction means hesitation, confusion, or risk of drop-off during this step.",
+  );
+  help.title = help.textContent;
+  card.querySelector("h3").append(help);
+
+  const profiles = variant.raw.profiles || [];
+  const list = el("div", "user-log-list");
+  (variant.raw.traces || []).forEach((trace) => {
+    const profileId = trace.persona_id || trace.profile_id;
+    const profile = profiles.find((item) => item.id === profileId) || { id: profileId, segment: trace.segment, goal: trace.goal };
+    const summary = traceSummary(trace);
+    const userCard = el("article", "user-log-card");
+    userCard.tabIndex = 0;
+    userCard.setAttribute("role", "button");
+    userCard.setAttribute("aria-label", `${profileId} Variant ${key} behavior details`);
+
+    const header = el("div", "user-log-header");
+    const identity = el("div", "");
+    identity.append(el("strong", "", profileId), el("span", "", titleCase(profile.segment || trace.segment)));
+    const status = el("b", `completion-badge ${trace.converted ? "completed" : "dropped"}`, trace.converted ? "Completed" : "Dropped");
+    const statusWrap = el("div", "user-log-status");
+    statusWrap.append(status, el("small", "", "View user"));
+    header.append(identity, statusWrap);
+
+    const stats = el("div", "user-log-stats");
+    stats.append(
+      miniStat("Dwell", `${summary.dwell}s`),
+      miniStat("Clicks", String(summary.clicks)),
+      miniStat("Friction", summary.highestFriction),
     );
-    row.addEventListener("click", () => openStepModal(log, variant, key));
-    row.addEventListener("keydown", (event) => {
+
+    const actions = el("div", "action-chip-grid");
+    (trace.steps || []).forEach((step) => {
+      const action = el("button", "action-chip");
+      action.type = "button";
+      const friction = frictionInfo(step.friction);
+      action.append(
+        el("span", "action-step", String(step.step)),
+        el("strong", "", eventLabel(step.event_type)),
+        el("em", "", shortText(step.action || step.intent || "Observe", 54)),
+        el("b", `friction-badge ${friction.level}`, friction.label),
+      );
+      action.addEventListener("click", (event) => {
+        event.stopPropagation();
+        openStepModalFromStep(step, trace, key);
+      });
+      actions.append(action);
+    });
+
+    userCard.append(header, stats, actions);
+    userCard.addEventListener("click", () => openProfileModal(profile, key));
+    userCard.addEventListener("keydown", (event) => {
       if (event.key === "Enter") {
-        openStepModal(log, variant, key);
+        openProfileModal(profile, key);
       }
     });
-    body.append(row);
+    list.append(userCard);
   });
-  table.append(body);
-  card.append(table);
+  card.append(list);
   return card;
+}
+
+function miniStat(label, value) {
+  const item = el("span", "user-mini-stat");
+  item.append(el("em", "", label), el("strong", "", value));
+  return item;
+}
+
+function traceSummary(trace) {
+  const steps = trace.steps || [];
+  return {
+    dwell: steps.reduce((sum, step) => sum + (Number(step.elapsed_seconds) || 0), 0),
+    clicks: steps.filter((step) => step.clicked || clickableEvent(step.event_type)).length,
+    highestFriction: highestFrictionLabel(steps),
+  };
+}
+
+function highestFrictionLabel(steps) {
+  if (!steps.length) return "None";
+  const highest = steps.reduce((max, step) => Math.max(max, frictionInfo(step.friction).score), 0);
+  return frictionInfo(highest).label;
+}
+
+function clickableEvent(eventType) {
+  return ["input", "primary_click", "secondary_click", "detail_open", "like_save"].includes(String(eventType || "").toLowerCase());
+}
+
+function frictionInfo(value) {
+  if (typeof value === "string") {
+    const lower = value.toLowerCase();
+    if (lower === "high") return { label: "High", level: "high", score: 0.85 };
+    if (lower === "medium") return { label: "Medium", level: "medium", score: 0.55 };
+    if (lower === "low") return { label: "Low", level: "low", score: 0.25 };
+    return { label: "None", level: "none", score: 0 };
+  }
+  const score = Number(value) || 0;
+  if (score >= 0.75) return { label: "High", level: "high", score };
+  if (score >= 0.45) return { label: "Medium", level: "medium", score };
+  if (score >= 0.2) return { label: "Low", level: "low", score };
+  return { label: "None", level: "none", score };
+}
+
+function eventLabel(value) {
+  return {
+    view: "View",
+    input: "Input",
+    primary_click: "CTA",
+    secondary_click: "Click",
+    detail_open: "Detail",
+    like_save: "Like",
+    scroll: "Scroll",
+    dwell: "Dwell",
+    dropoff: "Dropoff",
+  }[String(value || "").toLowerCase()] || "View";
 }
 
 function profilesCard(profiles) {
@@ -427,7 +568,7 @@ function profilesCard(profiles) {
   return card;
 }
 
-function openProfileModal(profile) {
+function openProfileModal(profile, focusVariant = "") {
   const traces = currentRun ? tracesForProfile(profile.id || profile.persona) : [];
   const body = el("div", "modal-stack");
   body.append(
@@ -442,12 +583,24 @@ function openProfileModal(profile) {
   );
   if (traces.length) {
     const traceWrap = el("div", "modal-two-col");
-    traces.forEach(({ key, trace }) => {
-      const section = el("section", "modal-card");
-      section.append(el("h3", "", `Variant ${key} trajectory`), trajectoryList(trace.steps || []));
+    sortFocusedTraces(traces, focusVariant).forEach(({ key, trace }) => {
+      const section = el("section", `modal-card ${key === focusVariant ? "focused" : ""}`);
+      section.append(
+        el("h3", "", `Variant ${key} trajectory`),
+        keyValueGrid({
+          Completion: trace.converted ? "Completed" : "Dropped",
+          "Task Time": `${trace.task_seconds || 0}s`,
+          Satisfaction: trace.satisfaction || "n/a",
+        }),
+        trajectoryList(trace.steps || []),
+      );
       traceWrap.append(section);
     });
-    body.append(traceWrap);
+    const feedbackWrap = el("div", "modal-two-col");
+    sortFocusedTraces(traces, focusVariant).forEach(({ key, trace }) => {
+      feedbackWrap.append(feedbackPanel(trace, key));
+    });
+    body.append(traceWrap, el("h3", "modal-section-title", "Generated Feedback"), feedbackWrap);
   }
   showModal(body);
 }
@@ -467,23 +620,22 @@ function openTraceModal(trace, key) {
   showModal(body);
 }
 
-function openStepModal(log, variant, key) {
-  const rawStep = findRawStep(log, variant);
-  const impact = metricImpact(rawStep || log);
+function openStepModalFromStep(step, trace, key) {
+  const impact = metricImpact(step);
+  const friction = frictionInfo(step.friction);
   const body = el("div", "modal-stack");
   body.append(
-    el("h2", "", `${log.intent} - Variant ${key}`),
-    el("p", "modal-muted", log.observation),
+    el("h2", "", `${titleCase(step.intent || "Action")} - Variant ${key}`),
+    el("p", "modal-muted", step.observation || step.expected_result || ""),
     keyValueGrid({
-      Event: log.event || rawStep?.event_type || "View",
-      Action: log.action,
-      Friction: log.friction,
+      User: trace.persona_id || trace.profile_id || "n/a",
+      Event: eventLabel(step.event_type),
+      Action: step.action || "n/a",
+      Friction: `${friction.label} - hesitation, confusion, or drop-off risk`,
       "Metric Impact": impact,
     }),
+    trajectoryList([step]),
   );
-  if (rawStep) {
-    body.append(trajectoryList([rawStep]));
-  }
   showModal(body);
 }
 
@@ -491,6 +643,66 @@ function openFindingModal(row) {
   const body = el("div", "modal-stack");
   body.append(el("h2", "", row.title || row.badge), el("p", "modal-muted", row.body), keyValueGrid({ Evidence: row.badge, Level: row.level }));
   showModal(body);
+}
+
+function feedbackPanel(trace, key) {
+  const feedback = normalizeFeedback(trace.final_feedback);
+  const panel = el("section", "modal-card feedback-panel");
+  panel.append(el("h3", "", `Variant ${key}`));
+  panel.append(
+    feedbackList("Liked", feedback.liked_features),
+    feedbackList("Confusion", feedback.confusion_points),
+    keyValueGrid({ Recommendation: feedback.recommendation || "Review this user's trajectory." }),
+    feedbackList("What's Next", nextActions(trace, feedback)),
+  );
+  return panel;
+}
+
+function feedbackList(title, items) {
+  const section = el("div", "feedback-list");
+  section.append(el("strong", "", title));
+  const list = document.createElement("ul");
+  (items && items.length ? items : ["No specific note generated."]).slice(0, 3).forEach((item) => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    list.append(li);
+  });
+  section.append(list);
+  return section;
+}
+
+function normalizeFeedback(feedback) {
+  if (feedback && typeof feedback === "object") {
+    return {
+      liked_features: feedback.liked_features || [],
+      confusion_points: feedback.confusion_points || [],
+      friction_themes: feedback.friction_themes || [],
+      recommendation: feedback.recommendation || "",
+    };
+  }
+  return {
+    liked_features: [],
+    confusion_points: [String(feedback || "No feedback generated.")],
+    friction_themes: [],
+    recommendation: "Review this user's behavior before changing the design.",
+  };
+}
+
+function nextActions(trace, feedback) {
+  const actions = [];
+  const themes = new Set(feedback.friction_themes || []);
+  if (feedback.recommendation) {
+    actions.push(feedback.recommendation);
+  }
+  if (themes.has("price_clarity")) actions.push("Test earlier total-price exposure for this segment.");
+  if (themes.has("date_picker_friction")) actions.push("Instrument calendar hesitation and flexible-date selection.");
+  if (themes.has("trust_review_confidence")) actions.push("Move trust, rating, or review signals closer to the decision point.");
+  if (themes.has("wishlist_account_wall")) actions.push("Clarify save behavior before any sign-in requirement appears.");
+  if (themes.has("navigation_clarity")) actions.push("Tighten the next-step CTA after the highest-friction action.");
+  if (themes.has("experiences_discoverability")) actions.push("Make Experiences and Services easier to discover from the first screen.");
+  if (trace.dropoff || !trace.converted) actions.push("Replay this user in the next design review as a drop-off scenario.");
+  actions.push("Compare this user's A and B trajectory before deciding the winner.");
+  return Array.from(new Set(actions)).slice(0, 3);
 }
 
 function tracesForProfile(profileId) {
@@ -503,12 +715,15 @@ function tracesForProfile(profileId) {
     .filter(Boolean);
 }
 
-function findRawStep(log, variant) {
-  const trace = variant.raw.traces.find((item) => (item.persona_id || item.profile_id) === log.persona);
-  if (!trace) {
-    return null;
+function sortFocusedTraces(traces, focusVariant) {
+  if (!focusVariant) {
+    return traces;
   }
-  return trace.steps.find((step) => Number(step.step) === Number(log.step)) || null;
+  return [...traces].sort((left, right) => {
+    if (left.key === focusVariant) return -1;
+    if (right.key === focusVariant) return 1;
+    return left.key.localeCompare(right.key);
+  });
 }
 
 function metricImpact(step) {
@@ -610,6 +825,14 @@ function behaviorTags(style) {
 
 function titleCase(value) {
   return String(value || "").replace(/[_-]/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function shortText(value, limit) {
+  const text = String(value || "").trim();
+  if (text.length <= limit) {
+    return text;
+  }
+  return `${text.slice(0, Math.max(0, limit - 3)).trim()}...`;
 }
 
 function td(text, className = "") {

@@ -151,6 +151,8 @@ def create_job(payload: Dict[str, Any]) -> Dict[str, Any]:
         "job_id": job_id,
         "status": "queued",
         "config": config,
+        "run_mode": "deterministic_rule",
+        "phase_history": [],
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
     with JOBS_LOCK:
@@ -173,36 +175,36 @@ def get_job(job_id: str) -> Dict[str, Any]:
 def run_job(job_id: str, config: Dict[str, Any]) -> None:
     update_job(job_id, status="running", started_at=datetime.now(timezone.utc).isoformat())
     try:
-        update_job(job_id, phase="observing_pages", progress=0.12)
+        begin_phase(job_id, "observing_pages", 0.12)
         with ThreadPoolExecutor(max_workers=2) as context_executor:
             a_context_future = context_executor.submit(observe_page_context, config["a_url"], BASE_DIR / "scripts", 15000)
             b_context_future = context_executor.submit(observe_page_context, config["b_url"], BASE_DIR / "scripts", 15000)
             a_model = AirbnbPageModel(config["a_url"], a_context_future.result())
             b_model = AirbnbPageModel(config["b_url"], b_context_future.result())
 
-        update_job(job_id, phase="generating_profiles", progress=0.28)
+        begin_phase(job_id, "generating_profiles", 0.28)
         profiles = rule_based_profiles(int(config["profiles"]))
         run_profiles = select_profiles_for_runs(profiles, min(int(config["runs"]), len(profiles)))
-        update_job(
+        begin_phase(
             job_id,
-            phase="profiles_ready",
-            progress=0.44,
+            "profiles_ready",
+            0.44,
             partial={
                 "profiles": profiles,
                 "run_profiles": [profile["id"] for profile in run_profiles],
             },
         )
 
-        update_job(job_id, phase="generating_trajectories", progress=0.58)
+        begin_phase(job_id, "generating_trajectories", 0.58)
         with ThreadPoolExecutor(max_workers=2) as trace_executor:
             a_trace_future = trace_executor.submit(generate_traces, a_model, run_profiles, "A")
             b_trace_future = trace_executor.submit(generate_traces, b_model, run_profiles, "B")
             a_traces = a_trace_future.result()
             b_traces = b_trace_future.result()
-        update_job(
+        begin_phase(
             job_id,
-            phase="trajectories_ready",
-            progress=0.72,
+            "trajectories_ready",
+            0.72,
             partial={
                 "profiles": profiles,
                 "run_profiles": [profile["id"] for profile in run_profiles],
@@ -213,7 +215,7 @@ def run_job(job_id: str, config: Dict[str, Any]) -> None:
             },
         )
 
-        update_job(job_id, phase="summarizing_feedback", progress=0.84)
+        begin_phase(job_id, "summarizing_feedback", 0.84)
         with ThreadPoolExecutor(max_workers=2) as summary_executor:
             a_summary_future = summary_executor.submit(summarize_traces, profiles, a_traces)
             b_summary_future = summary_executor.submit(summarize_traces, profiles, b_traces)
@@ -225,6 +227,11 @@ def run_job(job_id: str, config: Dict[str, Any]) -> None:
         (RUNS_DIR / f"{job_id}_A.out").write_text(a_stdout, encoding="utf-8")
         (RUNS_DIR / f"{job_id}_B.out").write_text(b_stdout, encoding="utf-8")
         result = normalize_ab_run(a_stdout=a_stdout, b_stdout=b_stdout, config=config, run_id=job_id)
+        completed_at = datetime.now(timezone.utc).isoformat()
+        phase_history = complete_phase_history(job_id, completed_at)
+        result["completed_at"] = completed_at
+        result["phase_history"] = phase_history
+        result["metadata"]["run_mode"] = "deterministic_rule"
         result_path = RUNS_DIR / f"{job_id}.json"
         result_path.write_text(json.dumps(result, indent=2), encoding="utf-8")
         LATEST_PATH.write_text(json.dumps(result, indent=2), encoding="utf-8")
@@ -233,12 +240,16 @@ def run_job(job_id: str, config: Dict[str, Any]) -> None:
             status="completed",
             phase="completed",
             progress=1,
-            completed_at=datetime.now(timezone.utc).isoformat(),
+            completed_at=completed_at,
+            phase_history=phase_history,
+            run_mode="deterministic_rule",
             result=result,
             result_path=str(result_path.relative_to(BASE_DIR)),
         )
     except Exception as exc:  # noqa: BLE001 - keep job failure visible in UI.
-        update_job(job_id, status="failed", completed_at=datetime.now(timezone.utc).isoformat(), error=str(exc))
+        completed_at = datetime.now(timezone.utc).isoformat()
+        phase_history = complete_phase_history(job_id, completed_at)
+        update_job(job_id, status="failed", completed_at=completed_at, phase_history=phase_history, error=str(exc))
 
 
 def synthetic_stdout(
@@ -343,6 +354,52 @@ def read_latest() -> Dict[str, Any]:
     if not LATEST_PATH.exists():
         return {"status": "missing", "error": "No latest run is available yet."}
     return {"status": "completed", "result": json.loads(LATEST_PATH.read_text(encoding="utf-8"))}
+
+
+def begin_phase(job_id: str, phase: str, progress: float, **updates: Any) -> None:
+    now = datetime.now(timezone.utc).isoformat()
+    with JOBS_LOCK:
+        job = JOBS.setdefault(job_id, {"job_id": job_id})
+        history = job.setdefault("phase_history", [])
+        close_open_phase(history, now)
+        history.append({"phase": phase, "started_at": now})
+        job.update({"phase": phase, "progress": progress, "phase_history": history, **updates})
+
+
+def complete_phase_history(job_id: str, completed_at: str) -> list[Dict[str, Any]]:
+    with JOBS_LOCK:
+        job = JOBS.setdefault(job_id, {"job_id": job_id})
+        history = job.setdefault("phase_history", [])
+        close_open_phase(history, completed_at)
+        history.append(
+            {
+                "phase": "completed",
+                "started_at": completed_at,
+                "completed_at": completed_at,
+                "duration_ms": 0,
+            }
+        )
+        job["phase_history"] = history
+        return json.loads(json.dumps(history))
+
+
+def close_open_phase(history: list[Dict[str, Any]], completed_at: str) -> None:
+    if not history:
+        return
+    latest = history[-1]
+    if latest.get("completed_at"):
+        return
+    latest["completed_at"] = completed_at
+    latest["duration_ms"] = phase_duration_ms(str(latest["started_at"]), completed_at)
+
+
+def phase_duration_ms(started_at: str, completed_at: str) -> int:
+    try:
+        start = datetime.fromisoformat(started_at)
+        end = datetime.fromisoformat(completed_at)
+    except ValueError:
+        return 0
+    return max(0, round((end - start).total_seconds() * 1000))
 
 
 def update_job(job_id: str, **updates: Any) -> None:

@@ -80,6 +80,7 @@ def normalize_ab_run(
         "matrix_summary": matrix,
         "metadata": {
             "source": "AB experiment/scripts/airbnb_synth_demo.py",
+            "run_mode": config.get("run_mode", "deterministic_rule"),
             "data_status": {
                 "synthetic": "from_runner_stdout",
                 "real_user": "generated_placeholder",
