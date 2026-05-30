@@ -12,6 +12,7 @@ const refs = {
   stage: document.getElementById("stagePanel"),
   profilesPanel: document.getElementById("profilePanel"),
   agentSummary: document.getElementById("agentSummary"),
+  featurePanel: document.getElementById("featurePanel"),
   variantGrid: document.getElementById("variantGrid"),
   variantA: document.getElementById("variantA"),
   variantB: document.getElementById("variantB"),
@@ -83,10 +84,12 @@ function renderIdle() {
   refs.stage.replaceChildren();
   refs.profilesPanel.replaceChildren();
   refs.agentSummary.replaceChildren();
+  refs.featurePanel.replaceChildren();
   refs.variantA.replaceChildren();
   refs.variantB.replaceChildren();
   refs.profilesPanel.classList.add("hidden");
   refs.agentSummary.classList.add("hidden");
+  refs.featurePanel.classList.add("hidden");
   refs.variantGrid.classList.add("hidden");
   refs.stage.append(emptyState());
   setStatus("Ready", "ready");
@@ -125,9 +128,11 @@ async function startRun() {
   currentRun = null;
   refs.profilesPanel.classList.add("hidden");
   refs.agentSummary.classList.add("hidden");
+  refs.featurePanel.classList.add("hidden");
   refs.variantGrid.classList.add("hidden");
   refs.profilesPanel.replaceChildren();
   refs.agentSummary.replaceChildren();
+  refs.featurePanel.replaceChildren();
   refs.variantA.replaceChildren();
   refs.variantB.replaceChildren();
   renderStage("queued", 0.04);
@@ -294,6 +299,7 @@ function renderRun(run) {
   renderStage("completed", 1, run);
   renderProfiles(run.variants.A.raw.profiles, run.variants.A.profiles.map((profile) => profile.persona));
   renderAgentSummary(run);
+  renderFeatureCandidate(run);
   refs.variantGrid.classList.remove("hidden");
   renderVariant(refs.variantA, "A", run.variants.A, run.config);
   renderVariant(refs.variantB, "B", run.variants.B, run.config);
@@ -338,6 +344,54 @@ function renderAgentSummary(run) {
     findings.append(item);
   });
   refs.agentSummary.append(panelTitle("Agent Summary", "bot", matrix.title), el("p", "agent-copy", matrix.summary_primary), stats, findings);
+}
+
+function renderFeatureCandidate(run) {
+  const candidate = window.syntheticFeatureCandidate?.buildFeatureCandidate(run);
+  refs.featurePanel.replaceChildren();
+  if (!candidate) {
+    refs.featurePanel.classList.add("hidden");
+    return;
+  }
+  refs.featurePanel.classList.remove("hidden");
+  const header = el("div", "feature-header");
+  const iconWrap = el("div", "feature-icon");
+  iconWrap.append(icon("sparkles"));
+  const copy = el("div", "");
+  copy.append(el("h2", "", "Next Feature Candidate"), el("p", "", candidate.source));
+  header.append(iconWrap, copy, featureConfidence(candidate.confidence));
+
+  const body = el("div", "feature-body");
+  const brief = el("section", "feature-brief");
+  brief.append(el("h3", "", candidate.title), el("p", "", candidate.problem));
+  body.append(brief, featureList("MVP", candidate.mvp), featureList("Success Metrics", candidate.metrics));
+
+  const evidence = el("div", "feature-evidence");
+  candidate.evidence.forEach((item) => {
+    const row = el("span", "");
+    row.append(icon("check"), document.createTextNode(item));
+    evidence.append(row);
+  });
+  refs.featurePanel.append(header, body, evidence);
+}
+
+function featureConfidence(value) {
+  const badge = el("span", "feature-confidence");
+  badge.append(icon("gauge"), document.createTextNode(value));
+  return badge;
+}
+
+function featureList(title, items) {
+  const section = el("section", "feature-list");
+  section.append(el("strong", "", title));
+  const list = document.createElement("ul");
+  items.slice(0, 4).forEach((item) => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    list.append(li);
+  });
+  section.append(list);
+  return section;
 }
 
 function renderVariant(root, key, variant, config) {
