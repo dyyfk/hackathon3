@@ -1,9 +1,12 @@
+import asyncio
 import unittest
 
 from modal_app.agent_runner import (
     compact_error_message,
+    configure_playwright_event_loop,
     evaluate_success,
-    target_listing_test_id,
+    target_staybnb_listing_test_id,
+    target_stayfinder_listing_test_id,
     tunnel_bypass_headers,
 )
 
@@ -20,16 +23,38 @@ class AgentRunnerTests(unittest.TestCase):
 
         self.assertEqual(compact_error_message(error), "first line second line")
 
-    def test_pet_parking_task_selects_the_pet_and_parking_candidate(self) -> None:
-        case = {"task": {"id": "find_pet_friendly_parking"}}
+    def test_configure_playwright_event_loop_restores_windows_subprocess_support(
+        self,
+    ) -> None:
+        if not hasattr(asyncio, "WindowsSelectorEventLoopPolicy"):
+            self.skipTest("Windows event loop policy is not available")
 
-        self.assertEqual(target_listing_test_id(case), "listing-card-2")
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+        configure_playwright_event_loop()
 
-    def test_budget_task_can_succeed_with_late_information_issues(self) -> None:
+        self.assertEqual(
+            type(asyncio.get_event_loop_policy()).__name__,
+            "WindowsProactorEventLoopPolicy",
+        )
+
+    def test_parking_task_selects_existing_staybnb_parking_candidate(self) -> None:
+        case = {"task": {"id": "verify_parking_decision_details"}}
+
+        self.assertEqual(target_staybnb_listing_test_id(case), "listing-card-open-sf-003")
+
+    def test_stayfinder_flow_targets_existing_cabin_with_parking(self) -> None:
+        case = {"task": {"id": "verify_parking_decision_details"}}
+
+        self.assertEqual(
+            target_stayfinder_listing_test_id(case),
+            "stayfinder-listing-tahoe-glass-cabin",
+        )
+
+    def test_primary_flow_can_succeed_with_late_information_issues(self) -> None:
         self.assertTrue(
             evaluate_success(
-                "find_budget_stay",
-                checkout_reached=True,
+                "complete_primary_flow",
+                primary_action_reached=True,
                 issues=[
                     "total_price_not_visible_before_checkout",
                     "cancellation_policy_not_visible_before_checkout",
@@ -37,12 +62,12 @@ class AgentRunnerTests(unittest.TestCase):
             ),
         )
 
-    def test_pet_parking_task_fails_when_required_signals_are_missing(self) -> None:
+    def test_parking_task_fails_when_required_signals_are_missing(self) -> None:
         self.assertFalse(
             evaluate_success(
-                "find_pet_friendly_parking",
-                checkout_reached=True,
-                issues=["pet_friendly_signal_not_visible"],
+                "verify_parking_decision_details",
+                primary_action_reached=True,
+                issues=["parking_signal_not_visible"],
             ),
         )
 

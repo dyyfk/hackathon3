@@ -1,44 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { buildExperimentCases } from "../src/lib/buildExperimentCases";
 
-const requiredVariantTestIds = [
-  "variant-label",
-  "search-input",
-  "search-button",
-  "filter-button",
-  "listing-card-0",
-  "listing-card-1",
-  "checkout-button",
-  "total-price",
-  "cancellation-policy",
-  "checkout-summary",
-];
-
-for (const variant of ["A", "B"] as const) {
-  test(`Variant ${variant} exposes the UserTwin synthetic-user flow`, async ({
-    page,
-  }) => {
-    await page.goto(`/modal-version${variant}`);
-
-    await expect(page.getByTestId("variant-label")).toContainText(
-      variant === "A" ? "Variant A" : "Variant B",
-    );
-    await expect(page.getByTestId("client-ready")).toBeAttached();
-    await page.getByTestId("search-input").fill("San Francisco");
-    await page.getByTestId("search-button").click();
-
-    await expect(page.getByTestId("listing-card-0")).toBeVisible();
-    await expect(page.getByTestId("listing-card-1")).toBeVisible();
-    await page.getByTestId("listing-card-0").click();
-    await page.getByTestId("checkout-button").click();
-
-    for (const testId of requiredVariantTestIds) {
-      await expect(page.getByTestId(testId)).toBeVisible();
-    }
-  });
-}
-
-test("dashboard renders fallback Modal results for the hackathon demo", async ({
+test("dashboard defaults to the existing GitHub A/B website routes", async ({
   page,
 }) => {
   await page.goto("/dashboard");
@@ -51,6 +14,58 @@ test("dashboard renders fallback Modal results for the hackathon demo", async ({
   ).toBeVisible();
   await expect(page.getByLabel("Version A URL")).toBeVisible();
   await expect(page.getByLabel("Version B URL")).toBeVisible();
+  await expect(page.getByTestId("variant-a-url")).toHaveValue(/\/versionA$/);
+  await expect(page.getByTestId("variant-b-url")).toHaveValue(/\/versionB$/);
+});
+
+test("existing Version A route exposes the Modal booking flow target", async ({
+  page,
+}) => {
+  await page.goto("/versionA?variant=A&actor=agent&task=complete_primary_flow");
+
+  await page.getByTestId("location-input").fill("San Francisco");
+  await page.getByTestId("checkin-input").fill("2026-06-14");
+  await page.getByTestId("checkout-input").fill("2026-06-16");
+  await page.getByTestId("search-submit").click();
+  await expect(page.getByTestId("spa-search-results")).toBeVisible();
+
+  await page.getByTestId("filters-button").click();
+  await page.getByTestId("parking-checkbox").check();
+  await page.getByTestId("apply-filters-button").click();
+  await page.getByTestId("listing-card-open-sf-003").click();
+
+  await expect(page.getByTestId("listing-detail-page")).toBeVisible();
+  await expect(page.getByTestId("detail-title")).toContainText(
+    "Garden Suite by Golden Gate",
+  );
+  await page.getByTestId("reserve-button").click();
+  await expect(page.getByTestId("checkout-page")).toBeVisible();
+  await expect(page.getByTestId("checkout-price-breakdown")).toBeVisible();
+  await page.getByTestId("confirm-reservation-button").click();
+  await expect(page.getByTestId("reservation-success")).toBeVisible();
+});
+
+test("existing Version B route exposes the Modal request flow target", async ({
+  page,
+}) => {
+  await page.goto("/versionB?variant=B&actor=agent&task=complete_primary_flow");
+
+  await expect(page.getByTestId("stayfinder-app")).toBeVisible();
+  await page.getByTestId("category-tab-Cabins").click();
+  await page.getByTestId("stayfinder-listing-tahoe-glass-cabin").click();
+  await expect(page.getByTestId("stayfinder-detail")).toContainText(
+    "Driveway parking",
+  );
+  await page.getByTestId("stayfinder-request").click();
+  await expect(page.getByTestId("stayfinder-modal")).toContainText(
+    "Request sent",
+  );
+});
+
+test("dashboard renders fallback Modal results for the hackathon demo", async ({
+  page,
+}) => {
+  await page.goto("/dashboard");
 
   await page.getByRole("button", { name: "Use fallback demo results" }).click();
 
@@ -92,7 +107,7 @@ test("run-agents API returns summarized fallback data without Modal", async ({
   const topIssues = payload.summary.A.topIssues.map(
     ({ issue }: { issue: string }) => issue,
   );
-  expect(topIssues).toContain("pet_friendly_signal_not_visible");
+  expect(topIssues).toContain("parking_signal_not_visible");
 });
 
 test("dashboard exposes concrete operation logs for agent runs", async ({

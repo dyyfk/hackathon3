@@ -1,3 +1,5 @@
+import asyncio
+import re
 import time
 from typing import Any
 
@@ -23,29 +25,44 @@ def compact_error_message(error: Exception, limit: int = 500) -> str:
     return " ".join(str(error).split())[:limit]
 
 
+def configure_playwright_event_loop() -> None:
+    if not hasattr(asyncio, "WindowsProactorEventLoopPolicy"):
+        return
+
+    if type(asyncio.get_event_loop_policy()).__name__ != "WindowsProactorEventLoopPolicy":
+        asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
+
+
 def task_id(case: dict[str, Any]) -> str:
     task = case.get("task", {})
     return str(task.get("id", ""))
 
 
-def target_listing_test_id(case: dict[str, Any]) -> str:
-    if task_id(case) == "find_pet_friendly_parking":
-        return "listing-card-2"
+def is_parking_detail_task(task: str) -> bool:
+    return task in {
+        "verify_parking_decision_details",
+        "find_pet_friendly_parking",
+    }
 
-    return "listing-card-0"
+
+def target_staybnb_listing_test_id(case: dict[str, Any]) -> str:
+    return "listing-card-open-sf-003"
+
+
+def target_stayfinder_listing_test_id(case: dict[str, Any]) -> str:
+    return "stayfinder-listing-tahoe-glass-cabin"
 
 
 def evaluate_success(
     task: str,
-    checkout_reached: bool,
+    primary_action_reached: bool,
     issues: list[str],
 ) -> bool:
-    if not checkout_reached:
+    if not primary_action_reached:
         return False
 
-    if task == "find_pet_friendly_parking":
+    if is_parking_detail_task(task):
         blocking_issues = {
-            "pet_friendly_signal_not_visible",
             "parking_signal_not_visible",
         }
         return not blocking_issues.intersection(issues)
@@ -68,12 +85,14 @@ def run_agent(case: dict[str, Any]) -> dict[str, Any]:
       "task": {"id": "find_budget_stay", "name": "Find a stay under budget"}
     }
     """
+    configure_playwright_event_loop()
+
     from playwright.sync_api import sync_playwright
 
     start = time.time()
     events: list[dict[str, Any]] = []
     issues: list[str] = []
-    checkout_reached = False
+    primary_action_reached = False
     success = False
     current_task_id = task_id(case)
 
@@ -141,6 +160,29 @@ def run_agent(case: dict[str, Any]) -> dict[str, Any]:
             )
             return False
 
+    def safe_check(
+        page: Any,
+        test_id: str,
+        label: str,
+        timeout: int = 4000,
+    ) -> bool:
+        try:
+            page.get_by_test_id(test_id).check(timeout=timeout)
+            record(
+                "check",
+                label,
+                {"selector": f"[data-testid='{test_id}']"},
+            )
+            return True
+        except Exception:
+            issues.append(f"{test_id}_not_found_or_not_checkable")
+            record(
+                "friction",
+                f"failed_{label}",
+                {"selector": f"[data-testid='{test_id}']"},
+            )
+            return False
+
     def observe_signal(
         page: Any,
         test_id: str,
@@ -166,6 +208,173 @@ def run_agent(case: dict[str, Any]) -> dict[str, Any]:
             )
             return False
 
+    def observe_text(
+        page: Any,
+        test_id: str,
+        pattern: str,
+        label: str,
+        issue: str,
+        timeout: int = 3000,
+    ) -> bool:
+        selector = f"[data-testid='{test_id}']"
+        try:
+            locator = page.locator(selector).first
+            locator.wait_for(timeout=timeout)
+            text = locator.inner_text(timeout=timeout)
+
+            if re.search(pattern, text, re.IGNORECASE):
+                record(
+                    "observe",
+                    label,
+                    {"selector": selector},
+                )
+                return True
+        except Exception:
+            pass
+
+        issues.append(issue)
+        record(
+            "friction",
+            issue,
+            {"selector": selector},
+        )
+        return False
+
+    def run_existing_staybnb_flow(page: Any) -> bool:
+        observe_signal(
+            page,
+            "location-input",
+            "client_ready",
+            "client_ready_not_observed",
+            timeout=10000,
+        )
+        safe_fill(page, "location-input", "San Francisco", "search_location")
+        safe_fill(page, "checkin-input", "2026-06-14", "set_checkin")
+        safe_fill(page, "checkout-input", "2026-06-16", "set_checkout")
+        safe_click(page, "search-submit", "submit_search")
+        observe_signal(
+            page,
+            "spa-search-results",
+            "search_results_visible",
+            "search_results_not_visible",
+        )
+
+        safe_click(page, "filters-button", "open_filter")
+        if is_parking_detail_task(current_task_id):
+            safe_check(page, "parking-checkbox", "require_parking")
+        safe_click(page, "apply-filters-button", "apply_filters")
+
+        listing_test_id = target_staybnb_listing_test_id(case)
+        if safe_click(page, listing_test_id, f"open_{listing_test_id}"):
+            record(
+                "decision",
+                "selected_listing_candidate",
+                {"test_id": listing_test_id},
+            )
+
+        observe_signal(
+            page,
+            "listing-detail-page",
+            "listing_detail_visible",
+            "listing_detail_not_visible",
+        )
+        observe_signal(page, "detail-title", "detail_title_visible", "detail_title_not_visible")
+        if is_parking_detail_task(current_task_id):
+            observe_text(
+                page,
+                "detail-amenities",
+                "parking|driveway|garage",
+                "parking_signal_visible",
+                "parking_signal_not_visible",
+            )
+        observe_signal(
+            page,
+            "detail-cancellation-policy",
+            "cancellation_policy_visible_before_checkout",
+            "cancellation_policy_not_visible_before_checkout",
+        )
+        observe_signal(
+            page,
+            "checkout-total-line",
+            "total_price_visible_before_checkout",
+            "total_price_not_visible_before_checkout",
+            timeout=1000,
+        )
+
+        if safe_click(page, "reserve-button", "start_checkout", timeout=5000):
+            checkout_seen = observe_signal(
+                page,
+                "checkout-page",
+                "checkout_page_visible",
+                "checkout_page_not_visible",
+            )
+            observe_signal(
+                page,
+                "checkout-price-breakdown",
+                "checkout_price_breakdown_visible",
+                "checkout_summary_not_visible",
+            )
+            safe_click(page, "confirm-reservation-button", "confirm_reservation")
+            observe_signal(
+                page,
+                "reservation-success",
+                "reservation_success_visible",
+                "reservation_success_not_visible",
+            )
+            return checkout_seen
+
+        return False
+
+    def run_existing_stayfinder_flow(page: Any) -> bool:
+        observe_signal(
+            page,
+            "stayfinder-app",
+            "client_ready",
+            "client_ready_not_observed",
+            timeout=10000,
+        )
+        safe_click(page, "category-tab-Cabins", "filter_cabins")
+
+        listing_test_id = target_stayfinder_listing_test_id(case)
+        if safe_click(page, listing_test_id, f"open_{listing_test_id}"):
+            record(
+                "decision",
+                "selected_listing_candidate",
+                {"test_id": listing_test_id},
+            )
+
+        observe_signal(
+            page,
+            "stayfinder-detail",
+            "listing_detail_visible",
+            "listing_detail_not_visible",
+        )
+        if is_parking_detail_task(current_task_id):
+            observe_text(
+                page,
+                "stayfinder-detail",
+                "parking|driveway|garage",
+                "parking_signal_visible",
+                "parking_signal_not_visible",
+            )
+        observe_text(
+            page,
+            "stayfinder-detail",
+            r"\$[0-9]",
+            "nightly_price_visible_before_request",
+            "price_signal_not_visible",
+        )
+
+        if safe_click(page, "stayfinder-request", "send_request", timeout=5000):
+            return observe_signal(
+                page,
+                "stayfinder-modal",
+                "request_confirmation_visible",
+                "request_confirmation_not_visible",
+            )
+
+        return False
+
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True, args=["--no-sandbox"])
         page = browser.new_page(viewport={"width": 1280, "height": 800})
@@ -183,69 +392,24 @@ def run_agent(case: dict[str, Any]) -> dict[str, Any]:
                     "task_id": current_task_id,
                 },
             )
-            try:
-                page.get_by_test_id("client-ready").wait_for(
-                    state="attached",
-                    timeout=10000,
-                )
-                record("observe", "client_ready")
-            except Exception:
-                issues.append("client_ready_not_observed")
-                record("friction", "client_ready_not_observed")
 
-            safe_fill(page, "search-input", "San Francisco", "search_location")
-            safe_click(page, "search-button", "submit_search")
-            safe_click(page, "filter-button", "open_filter")
+            variant = str(case.get("variant", "")).upper()
+            if variant == "B" or "/versionB" in page.url:
+                primary_action_reached = run_existing_stayfinder_flow(page)
+            else:
+                primary_action_reached = run_existing_staybnb_flow(page)
 
-            if current_task_id == "find_pet_friendly_parking":
-                observe_signal(
-                    page,
-                    "pet-friendly-badge",
-                    "pet_friendly_signal_visible",
-                    "pet_friendly_signal_not_visible",
-                    timeout=2500,
-                )
-                observe_signal(
-                    page,
-                    "parking-badge",
-                    "parking_signal_visible",
-                    "parking_signal_not_visible",
-                    timeout=2500,
-                )
-
-            listing_test_id = target_listing_test_id(case)
-            if safe_click(page, listing_test_id, f"open_{listing_test_id}"):
-                record("decision", "selected_listing_candidate", {"test_id": listing_test_id})
-
-            observe_signal(
-                page,
-                "total-price",
-                "total_price_visible_before_checkout",
-                "total_price_not_visible_before_checkout",
+            success = evaluate_success(
+                current_task_id,
+                primary_action_reached,
+                issues,
             )
-            observe_signal(
-                page,
-                "cancellation-policy",
-                "cancellation_policy_visible_before_checkout",
-                "cancellation_policy_not_visible_before_checkout",
-            )
-
-            if safe_click(page, "checkout-button", "start_checkout", timeout=5000):
-                try:
-                    page.get_by_test_id("checkout-summary").wait_for(timeout=3000)
-                    record("observe", "checkout_summary_visible")
-                    checkout_reached = True
-                except Exception:
-                    issues.append("checkout_summary_not_visible")
-                    record("friction", "checkout_summary_not_visible")
-
-            success = evaluate_success(current_task_id, checkout_reached, issues)
             record(
                 "evaluation",
                 "task_success_evaluated",
                 {
                     "success": success,
-                    "checkout_reached": checkout_reached,
+                    "primary_action_reached": primary_action_reached,
                     "issues": sorted(set(issues)),
                 },
             )
@@ -264,7 +428,9 @@ def run_agent(case: dict[str, Any]) -> dict[str, Any]:
             browser.close()
 
     duration = now()
-    action_events = [event for event in events if event["type"] in ["click", "input"]]
+    action_events = [
+        event for event in events if event["type"] in ["check", "click", "input"]
+    ]
     friction_events = [event for event in events if event["type"] in ["friction", "error"]]
 
     return {

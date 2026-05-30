@@ -7,23 +7,23 @@ export type Task = {
 
 export const tasks: Task[] = [
   {
-    id: "find_budget_stay",
-    name: "Find a stay under budget",
-    goal: "Search for a two-night stay and reach checkout with a clearly visible total price.",
+    id: "complete_primary_flow",
+    name: "Complete primary stay flow",
+    goal: "Reach the main conversion point for the variant: checkout confirmation for Version A or request confirmation for Version B.",
     successCriteria: [
-      "listing selected",
-      "checkout reached",
-      "total price visible",
+      "stay selected",
+      "primary action reached",
+      "confirmation observed",
     ],
   },
   {
-    id: "find_pet_friendly_parking",
-    name: "Find pet-friendly stay with parking",
-    goal: "Find a listing that clearly shows pet-friendly and parking information.",
+    id: "verify_parking_decision_details",
+    name: "Verify parking and decision details",
+    goal: "Find a stay with parking and verify the key price or detail signals before the primary action.",
     successCriteria: [
-      "pet-friendly visible",
       "parking visible",
-      "checkout reached",
+      "price signal visible",
+      "primary action reached",
     ],
   },
 ];

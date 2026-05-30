@@ -1,37 +1,36 @@
 {
   "results": [
     {
-      "run_id": "a_budget_0",
+      "run_id": "a_primary_0",
       "variant": "A",
       "persona": "Budget traveler",
-      "task": "Find a stay under budget",
+      "task": "Complete primary stay flow",
       "success": true,
       "time_to_complete_sec": 10.8,
-      "step_count": 5,
-      "friction_count": 2,
+      "step_count": 8,
+      "friction_count": 1,
       "issues": [
-        "total_price_not_visible_before_checkout",
-        "cancellation_policy_not_visible_before_checkout"
+        "total_price_not_visible_before_checkout"
       ],
       "events": [
         { "t": 0, "type": "page_view", "label": "open_variant" },
         { "t": 1.2, "type": "observe", "label": "client_ready" },
         { "t": 1.4, "type": "input", "label": "search_location" },
+        { "t": 1.5, "type": "input", "label": "set_checkin" },
+        { "t": 1.6, "type": "input", "label": "set_checkout" },
         { "t": 1.7, "type": "click", "label": "submit_search" },
         { "t": 2.1, "type": "click", "label": "open_filter" },
-        { "t": 2.5, "type": "click", "label": "open_listing-card-0" },
+        { "t": 2.4, "type": "click", "label": "apply_filters" },
+        { "t": 3.1, "type": "click", "label": "open_listing-card-open-sf-003" },
         {
-          "t": 5.5,
+          "t": 4.2,
           "type": "friction",
           "label": "total_price_not_visible_before_checkout"
         },
-        {
-          "t": 8.5,
-          "type": "friction",
-          "label": "cancellation_policy_not_visible_before_checkout"
-        },
-        { "t": 8.8, "type": "click", "label": "start_checkout" },
-        { "t": 9.1, "type": "observe", "label": "checkout_summary_visible" },
+        { "t": 6.8, "type": "click", "label": "start_checkout" },
+        { "t": 7.1, "type": "observe", "label": "checkout_price_breakdown_visible" },
+        { "t": 7.4, "type": "click", "label": "confirm_reservation" },
+        { "t": 7.8, "type": "observe", "label": "reservation_success_visible" },
         {
           "t": 9.2,
           "type": "evaluation",
@@ -41,49 +40,43 @@
       ]
     },
     {
-      "run_id": "a_pet_0",
+      "run_id": "a_parking_0",
       "variant": "A",
       "persona": "Pet owner",
-      "task": "Find pet-friendly stay with parking",
+      "task": "Verify parking and decision details",
       "success": false,
       "time_to_complete_sec": 13.7,
-      "step_count": 5,
-      "friction_count": 4,
+      "step_count": 9,
+      "friction_count": 2,
       "issues": [
-        "pet_friendly_signal_not_visible",
         "parking_signal_not_visible",
-        "total_price_not_visible_before_checkout",
-        "cancellation_policy_not_visible_before_checkout"
+        "total_price_not_visible_before_checkout"
       ],
       "events": [
         { "t": 0, "type": "page_view", "label": "open_variant" },
         { "t": 1.1, "type": "observe", "label": "client_ready" },
         { "t": 1.3, "type": "input", "label": "search_location" },
-        { "t": 1.6, "type": "click", "label": "submit_search" },
-        { "t": 2.0, "type": "click", "label": "open_filter" },
+        { "t": 1.4, "type": "input", "label": "set_checkin" },
+        { "t": 1.5, "type": "input", "label": "set_checkout" },
+        { "t": 1.7, "type": "click", "label": "submit_search" },
+        { "t": 2.1, "type": "click", "label": "open_filter" },
+        { "t": 2.4, "type": "check", "label": "require_parking" },
+        { "t": 2.7, "type": "click", "label": "apply_filters" },
+        { "t": 3.3, "type": "click", "label": "open_listing-card-open-sf-003" },
         {
-          "t": 4.5,
-          "type": "friction",
-          "label": "pet_friendly_signal_not_visible"
-        },
-        {
-          "t": 7.0,
+          "t": 5.2,
           "type": "friction",
           "label": "parking_signal_not_visible"
         },
-        { "t": 7.3, "type": "click", "label": "open_listing-card-2" },
         {
-          "t": 10.3,
+          "t": 7.3,
           "type": "friction",
           "label": "total_price_not_visible_before_checkout"
         },
-        {
-          "t": 13.3,
-          "type": "friction",
-          "label": "cancellation_policy_not_visible_before_checkout"
-        },
-        { "t": 13.4, "type": "click", "label": "start_checkout" },
-        { "t": 13.5, "type": "observe", "label": "checkout_summary_visible" },
+        { "t": 8.4, "type": "click", "label": "start_checkout" },
+        { "t": 8.7, "type": "observe", "label": "checkout_price_breakdown_visible" },
+        { "t": 9.1, "type": "click", "label": "confirm_reservation" },
+        { "t": 9.5, "type": "observe", "label": "reservation_success_visible" },
         {
           "t": 13.6,
           "type": "evaluation",
@@ -93,34 +86,23 @@
       ]
     },
     {
-      "run_id": "b_budget_0",
+      "run_id": "b_primary_0",
       "variant": "B",
       "persona": "Budget traveler",
-      "task": "Find a stay under budget",
+      "task": "Complete primary stay flow",
       "success": true,
       "time_to_complete_sec": 4.2,
-      "step_count": 5,
+      "step_count": 3,
       "friction_count": 0,
       "issues": [],
       "events": [
         { "t": 0, "type": "page_view", "label": "open_variant" },
         { "t": 0.8, "type": "observe", "label": "client_ready" },
-        { "t": 1.0, "type": "input", "label": "search_location" },
-        { "t": 1.2, "type": "click", "label": "submit_search" },
-        { "t": 1.5, "type": "click", "label": "open_filter" },
-        { "t": 1.8, "type": "click", "label": "open_listing-card-0" },
-        {
-          "t": 2.0,
-          "type": "observe",
-          "label": "total_price_visible_before_checkout"
-        },
-        {
-          "t": 2.1,
-          "type": "observe",
-          "label": "cancellation_policy_visible_before_checkout"
-        },
-        { "t": 2.3, "type": "click", "label": "start_checkout" },
-        { "t": 2.5, "type": "observe", "label": "checkout_summary_visible" },
+        { "t": 1.2, "type": "click", "label": "filter_cabins" },
+        { "t": 1.8, "type": "click", "label": "open_stayfinder-listing-tahoe-glass-cabin" },
+        { "t": 2.0, "type": "observe", "label": "nightly_price_visible_before_request" },
+        { "t": 2.3, "type": "click", "label": "send_request" },
+        { "t": 2.5, "type": "observe", "label": "request_confirmation_visible" },
         {
           "t": 2.6,
           "type": "evaluation",
@@ -130,40 +112,24 @@
       ]
     },
     {
-      "run_id": "b_pet_0",
+      "run_id": "b_parking_0",
       "variant": "B",
       "persona": "Pet owner",
-      "task": "Find pet-friendly stay with parking",
+      "task": "Verify parking and decision details",
       "success": true,
       "time_to_complete_sec": 4.7,
-      "step_count": 5,
+      "step_count": 3,
       "friction_count": 0,
       "issues": [],
       "events": [
         { "t": 0, "type": "page_view", "label": "open_variant" },
         { "t": 0.9, "type": "observe", "label": "client_ready" },
-        { "t": 1.1, "type": "input", "label": "search_location" },
-        { "t": 1.3, "type": "click", "label": "submit_search" },
-        { "t": 1.6, "type": "click", "label": "open_filter" },
-        {
-          "t": 1.8,
-          "type": "observe",
-          "label": "pet_friendly_signal_visible"
-        },
-        { "t": 1.9, "type": "observe", "label": "parking_signal_visible" },
-        { "t": 2.1, "type": "click", "label": "open_listing-card-2" },
-        {
-          "t": 2.3,
-          "type": "observe",
-          "label": "total_price_visible_before_checkout"
-        },
-        {
-          "t": 2.4,
-          "type": "observe",
-          "label": "cancellation_policy_visible_before_checkout"
-        },
-        { "t": 2.6, "type": "click", "label": "start_checkout" },
-        { "t": 2.8, "type": "observe", "label": "checkout_summary_visible" },
+        { "t": 1.2, "type": "click", "label": "filter_cabins" },
+        { "t": 1.8, "type": "click", "label": "open_stayfinder-listing-tahoe-glass-cabin" },
+        { "t": 2.0, "type": "observe", "label": "parking_signal_visible" },
+        { "t": 2.2, "type": "observe", "label": "nightly_price_visible_before_request" },
+        { "t": 2.6, "type": "click", "label": "send_request" },
+        { "t": 2.8, "type": "observe", "label": "request_confirmation_visible" },
         {
           "t": 2.9,
           "type": "evaluation",

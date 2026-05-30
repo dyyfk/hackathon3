@@ -48,10 +48,10 @@ export default function DashboardPage() {
 
   useEffect(() => {
     setVariantAUrl(
-      (current) => current || `${window.location.origin}/modal-versionA`,
+      (current) => current || `${window.location.origin}/versionA`,
     );
     setVariantBUrl(
-      (current) => current || `${window.location.origin}/modal-versionB`,
+      (current) => current || `${window.location.origin}/versionB`,
     );
   }, []);
 

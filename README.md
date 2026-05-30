@@ -336,14 +336,9 @@ adjustments.
 ## Modal UserTwin dashboard
 
 The Modal dashboard is available at `/dashboard`. It runs cloud Playwright
-agents against two public URLs and summarizes success rate, average time,
-friction, top issues, and per-run operation logs.
-
-To avoid changing the existing `/versionA` and `/versionB` demos, this branch
-adds Modal-specific variants:
-
-- `/modal-versionA` baseline UserTwin test page
-- `/modal-versionB` improved UserTwin test page
+agents against the existing `/versionA` and `/versionB` websites, then
+summarizes success rate, average time, friction, top issues, and per-run
+operation logs.
 
 When running Modal locally, expose the app through a public tunnel because Modal
 cannot access `localhost` from the cloud:
@@ -355,8 +350,8 @@ npx --yes cloudflared tunnel --url http://127.0.0.1:3000
 
 Use the generated public URLs in the dashboard:
 
-- `https://<tunnel>.trycloudflare.com/modal-versionA`
-- `https://<tunnel>.trycloudflare.com/modal-versionB`
+- `https://<tunnel>.trycloudflare.com/versionA`
+- `https://<tunnel>.trycloudflare.com/versionB`
 
 The Modal endpoint is configured through `.env.local`:
 
