@@ -1,5 +1,3 @@
-const DATA_URL = "./data/latest_ab_run.json";
-
 const refs = {
   title: document.getElementById("experimentTitle"),
   subtitle: document.getElementById("experimentSubtitle"),
@@ -40,12 +38,53 @@ refs.exportButton.addEventListener("click", () => {
 });
 
 async function loadDashboard() {
-  const response = await fetch(DATA_URL, { cache: "no-store" });
-  if (!response.ok) {
-    throw new Error(`Could not load ${DATA_URL}: ${response.status}`);
+  const runId = requestedRunId();
+  if (!runId) {
+    renderEmptyDashboard();
+    return;
   }
-  dashboardData = await response.json();
-  render(dashboardData);
+  try {
+    const response = await fetch(`/api/synthetic-runs/${encodeURIComponent(runId)}`, { cache: "no-store" });
+    if (response.ok) {
+      const job = await response.json();
+      if (job.status === "completed" && job.result) {
+        dashboardData = job.result;
+        render(dashboardData);
+        return;
+      }
+    }
+  } catch (error) {
+    console.warn(error);
+  }
+  renderEmptyDashboard();
+}
+
+function requestedRunId() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("run");
+}
+
+function renderEmptyDashboard() {
+  dashboardData = null;
+  refs.subtitle.textContent = "Generate a synthetic run first";
+  refs.dateRange.textContent = "No run yet";
+  refs.winnerTitle.textContent = "No experiment generated";
+  refs.winnerLabel.textContent = "Waiting for synthetic users";
+  refs.summaryPrimary.textContent = "Open Synthetic Users, enter A/B URLs, then generate profiles, trajectories, metrics, and agent feedback.";
+  refs.summarySecondary.textContent = "";
+  refs.summaryStats.replaceChildren();
+  refs.metricGrid.replaceChildren(emptyPanel("Metric Matrix"));
+  refs.evidenceTable.replaceChildren(emptyPanel("Attribution"));
+  refs.suggestionGrid.replaceChildren(emptyPanel("Suggestions"));
+  if (window.lucide) {
+    window.lucide.createIcons();
+  }
+}
+
+function emptyPanel(label) {
+  const node = el("article", "empty-state compact-empty");
+  node.append(icon("sparkles"), el("h3", "", label), el("p", "", "Generated results will appear here after the run completes."));
+  return node;
 }
 
 function render(data) {
