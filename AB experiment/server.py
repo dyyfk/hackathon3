@@ -6,6 +6,9 @@ from __future__ import annotations
 import argparse
 import json
 import shutil
+import subprocess
+import sys
+import tempfile
 import threading
 import uuid
 from concurrent.futures import ThreadPoolExecutor
@@ -32,9 +35,11 @@ from scripts.normalize_ab_run import normalize_ab_run
 
 
 BASE_DIR = Path(__file__).resolve().parent
+REPO_DIR = BASE_DIR.parent
 DATA_DIR = BASE_DIR / "data"
 RUNS_DIR = DATA_DIR / "runs"
 LATEST_PATH = DATA_DIR / "latest_ab_run.json"
+GENERATE_VERSION_SCRIPT = BASE_DIR / "scripts" / "generate_version.py"
 
 JOBS: Dict[str, Dict[str, Any]] = {}
 JOBS_LOCK = threading.Lock()
@@ -79,6 +84,12 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:
         parsed = urlparse(self.path)
+        if parsed.path == "/api/generated-versions":
+            try:
+                self.send_json(create_generated_version(self.read_json()), status=HTTPStatus.CREATED)
+            except Exception as exc:  # noqa: BLE001 - return readable API errors.
+                self.send_json({"status": "failed", "error": str(exc)}, status=HTTPStatus.BAD_REQUEST)
+            return
         if parsed.path != "/api/synthetic-runs":
             self.send_error(HTTPStatus.NOT_FOUND)
             return
@@ -336,6 +347,56 @@ def read_latest() -> Dict[str, Any]:
     return {"status": "completed", "result": json.loads(LATEST_PATH.read_text(encoding="utf-8"))}
 
 
+def create_generated_version(payload: Dict[str, Any]) -> Dict[str, Any]:
+    candidate = payload.get("candidate") or {}
+    if not isinstance(candidate, dict):
+        raise ValueError("candidate must be an object.")
+
+    with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8") as handle:
+        json.dump({"candidate": candidate}, handle)
+        payload_path = Path(handle.name)
+    try:
+        completed = subprocess.run(
+            [
+                sys.executable,
+                str(GENERATE_VERSION_SCRIPT),
+                "--repo-root",
+                str(REPO_DIR),
+                "--payload-file",
+                str(payload_path),
+            ],
+            cwd=str(REPO_DIR),
+            text=True,
+            capture_output=True,
+            timeout=30,
+            check=False,
+        )
+    finally:
+        payload_path.unlink(missing_ok=True)
+
+    if completed.returncode != 0:
+        raise RuntimeError(
+            "Version generation failed.\nSTDOUT:\n{stdout}\nSTDERR:\n{stderr}".format(
+                stdout=tail(completed.stdout),
+                stderr=tail(completed.stderr),
+            )
+        )
+    result = json.loads(completed.stdout)
+    origin = app_origin(str(payload.get("source_url") or ""))
+    return {
+        "status": "completed",
+        **result,
+        "url": f"{origin}/{result['slug']}",
+    }
+
+
+def app_origin(source_url: str) -> str:
+    parsed = urlparse(source_url)
+    if parsed.scheme and parsed.netloc:
+        return f"{parsed.scheme}://{parsed.netloc}"
+    return "http://127.0.0.1:3000"
+
+
 def begin_phase(job_id: str, phase: str, progress: float, **updates: Any) -> None:
     now = datetime.now(timezone.utc).isoformat()
     with JOBS_LOCK:
@@ -380,6 +441,10 @@ def phase_duration_ms(started_at: str, completed_at: str) -> int:
     except ValueError:
         return 0
     return max(0, round((end - start).total_seconds() * 1000))
+
+
+def tail(text: str, limit: int = 4000) -> str:
+    return text if len(text) <= limit else text[-limit:]
 
 
 def update_job(job_id: str, **updates: Any) -> None:

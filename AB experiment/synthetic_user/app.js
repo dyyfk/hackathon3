@@ -384,7 +384,7 @@ function renderFeatureCandidate(run) {
     row.append(icon("check"), document.createTextNode(item));
     evidence.append(row);
   });
-  refs.featurePanel.append(header, body, evidence);
+  refs.featurePanel.append(header, body, evidence, featureActions(candidate, () => currentRun?.config?.a_url));
 }
 
 function featureConfidence(value) {
@@ -404,6 +404,45 @@ function featureList(title, items) {
   });
   section.append(list);
   return section;
+}
+
+function featureActions(candidate, sourceUrlFn) {
+  const wrap = el("div", "feature-actions");
+  const button = el("button", "feature-generate", "Generate a new version based on suggestions");
+  button.type = "button";
+  const status = el("p", "generated-version-status", "");
+  button.addEventListener("click", () => generateVersion(candidate, sourceUrlFn(), button, status));
+  wrap.append(button, status);
+  return wrap;
+}
+
+async function generateVersion(candidate, sourceUrl, button, status) {
+  const preview = window.open("about:blank", "_blank");
+  button.disabled = true;
+  button.textContent = "Generating version...";
+  status.textContent = "Writing a local Next.js route from this suggestion.";
+  try {
+    const result = await window.syntheticFeatureCandidate.requestGeneratedVersion(candidate, sourceUrl);
+    const link = document.createElement("a");
+    link.href = result.url;
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    link.textContent = result.route;
+    status.replaceChildren(document.createTextNode("Generated "), link, document.createTextNode(" - local only, ignored by git."));
+    if (preview) {
+      preview.location.href = result.url;
+    } else {
+      window.open(result.url, "_blank", "noreferrer");
+    }
+  } catch (error) {
+    if (preview) {
+      preview.close();
+    }
+    status.textContent = error.message || "Version generation failed.";
+  } finally {
+    button.disabled = false;
+    button.textContent = "Generate a new version based on suggestions";
+  }
 }
 
 function renderVariant(root, key, variant, config) {

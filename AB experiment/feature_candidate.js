@@ -189,5 +189,18 @@
     return String(value || "").replace(/_/g, " ");
   }
 
-  window.syntheticFeatureCandidate = { buildFeatureCandidate };
+  async function requestGeneratedVersion(candidate, sourceUrl = "") {
+    const response = await fetch("/api/generated-versions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ candidate, source_url: sourceUrl }),
+    });
+    const payload = await response.json();
+    if (!response.ok) {
+      throw new Error(payload.error || "Version generation failed.");
+    }
+    return payload;
+  }
+
+  window.syntheticFeatureCandidate = { buildFeatureCandidate, requestGeneratedVersion };
 })();

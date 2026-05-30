@@ -542,6 +542,47 @@ h1 {
   color: var(--blue);
 }
 
+.feature-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  border-top: 1px solid var(--line-soft);
+  padding-top: 12px;
+}
+
+.feature-generate {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 8px;
+  padding: 0 14px;
+  background: linear-gradient(180deg, #0b9f45, #087b2f);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 780;
+  cursor: pointer;
+}
+
+.feature-generate:disabled {
+  cursor: wait;
+  opacity: 0.68;
+}
+
+.generated-version-status {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.generated-version-status a {
+  color: var(--blue);
+  font-weight: 760;
+  text-decoration: none;
+}
+
 .suggestions-panel {
   padding-bottom: 12px;
 }
