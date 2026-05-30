@@ -59,6 +59,9 @@ test("synthetic A/B feedback produces a self-improvement projection", () => {
   expect(report.optimizedProjection.summary.score).toBeGreaterThanOrEqual(
     report.winner.score,
   );
+  expect(report.featureCandidate.title).toBeTruthy();
+  expect(report.featureCandidate.mvp.length).toBeGreaterThan(0);
+  expect(report.featureCandidate.evidence.length).toBeGreaterThan(0);
 });
 
 test("policy-sensitive profile checks cancellation before reserving", () => {
@@ -96,6 +99,8 @@ test("synthetic inspector renders profile and candidate breakdowns", async ({
   await expect(page.getByTestId("synthetic-improvement-panel")).toBeVisible();
   await expect(page.getByText("Synthetic A/B feedback")).toBeVisible();
   await expect(page.getByText("Projected self-improvement")).toBeVisible();
+  await expect(page.getByTestId("synthetic-feature-candidate")).toBeVisible();
+  await expect(page.getByText("Next feature candidate")).toBeVisible();
   await expect(page.getByTestId("synthetic-step-1")).toBeVisible();
   await expect(page.getByText("Candidate actions")).toBeVisible();
   await expect(page.getByText("Dwell breakdown")).toBeVisible();

@@ -197,6 +197,13 @@ function detectPageKind(text) {
   if (lower.includes("airbnb archive") || lower.includes("airbed & breakfast")) {
     return "airbnb_archive";
   }
+  if (
+    lower.includes("stayfinder") ||
+    lower.includes("homes with character") ||
+    lower.includes("show homes")
+  ) {
+    return "stayfinder_gallery";
+  }
   if (lower.includes("staybnb") || lower.includes("mock checkout") || lower.includes("search stays")) {
     return "staybnb_booking";
   }

@@ -115,6 +115,13 @@ class AirbnbPageModel:
                 "Guests may need clearer listing detail before continuing.",
                 "Mock checkout intent can be measured, but booking must not be submitted.",
             ]
+        elif self.page_kind == "stayfinder_gallery":
+            model["page_type"] = "StayFinder gallery flow"
+            model["likely_friction"] = [
+                "The gallery is visually rich but begins with browsing instead of trip setup.",
+                "Category tabs and wishlist actions can compete with a direct booking task.",
+                "Price is shown per night, but total trip cost and fees arrive late.",
+            ]
         elif self.page_kind == "airbnb_archive":
             model["likely_friction"] = [
                 "The page presents a brand archive/timeline instead of a booking search flow.",
@@ -276,6 +283,8 @@ def detect_page_kind(text: str) -> str:
     lower = text.lower()
     if "airbnb archive" in lower or "airbed & breakfast" in lower or "2009 airbed" in lower:
         return "airbnb_archive"
+    if "stayfinder" in lower or "homes with character" in lower or "show homes" in lower:
+        return "stayfinder_gallery"
     if "staybnb" in lower or "mock checkout" in lower or "search stays" in lower:
         return "staybnb_booking"
     return "airbnb_homepage"
@@ -463,6 +472,8 @@ class SyntheticRunner:
             steps = self._archive_steps(profile)
         elif self.page_model.page_kind == "staybnb_booking":
             steps = self._staybnb_steps(profile, destination, guests)
+        elif self.page_model.page_kind == "stayfinder_gallery":
+            steps = self._stayfinder_steps(profile, destination, guests)
         elif segment == "experience_seeker":
             steps = self._experience_steps(profile, destination, guests)
         elif segment == "first_time_cautious_user":
@@ -562,6 +573,103 @@ class SyntheticRunner:
                 event_type="primary_click",
                 primary_action=True,
                 elapsed_seconds=18,
+            ),
+        ]
+
+    def _stayfinder_steps(
+        self, profile: Dict[str, Any], destination: str, guests: int
+    ) -> List[Dict[str, Any]]:
+        price_focus = profile["behavior_style"]["price_sensitivity"]
+        detail_focus = profile["behavior_style"]["detail_orientation"]
+        exploration = profile["behavior_style"]["exploration"]
+        return [
+            step(
+                1,
+                "StayFinder opens with a visual gallery, category tabs, and a Show homes CTA instead of a trip setup form.",
+                f"I can browse homes, but I do not yet see where to set {destination}, dates, or {guests} guest(s).",
+                "orient_on_stayfinder",
+                "scan StayFinder hero, category tabs, and Show homes CTA",
+                "StayFinder gallery",
+                "Understand whether this supports a booking task or just browsing.",
+                round(0.18 + exploration * 0.08, 2),
+                event_type="view",
+                elapsed_seconds=14,
+            ),
+            step(
+                2,
+                "Show homes is the clearest action, but it moves into browsing before trip requirements are captured.",
+                "I will enter the gallery, then see whether the listings match my trip.",
+                "enter_gallery",
+                "click Show homes",
+                "Show homes button",
+                "Move into the listing gallery.",
+                0.24,
+                event_type="primary_click",
+                primary_action=True,
+                elapsed_seconds=12,
+            ),
+            step(
+                3,
+                "Category chips such as Beachfront, Cabins, City, Countryside, and Design are prominent.",
+                "The categories are engaging, but they are not the same as destination, date, and guest filters.",
+                "narrow_by_mood",
+                "click a category tab that best matches the trip mood",
+                "Category tabs",
+                "Narrow visually without confirming booking constraints.",
+                round(0.3 + exploration * 0.18, 2),
+                event_type="secondary_click",
+                elapsed_seconds=18,
+            ),
+            step(
+                4,
+                "Listing cards show photos, nightly prices, ratings, and wishlist buttons.",
+                "I can compare appealing places, but total trip price and fit for my dates are still unclear.",
+                "compare_gallery_cards",
+                "scan listing cards, photos, nightly prices, and ratings",
+                "Listing gallery",
+                "Build a shortlist from browse-first signals.",
+                round(0.34 + price_focus * 0.18, 2),
+                event_type="scroll",
+                elapsed_seconds=28,
+            ),
+            step(
+                5,
+                "View details is available on every listing card.",
+                "I need the detail page to compensate for the missing trip setup context.",
+                "open_listing_detail",
+                "click View details for the strongest listing",
+                "View details button",
+                "Open the selected stay details.",
+                round(0.22 + detail_focus * 0.1, 2),
+                event_type="detail_open",
+                detail_action=True,
+                elapsed_seconds=26,
+            ),
+            step(
+                6,
+                "Wishlist is easy to trigger before checkout intent.",
+                "Saving helps me compare, but it may distract from the booking task.",
+                "save_shortlist",
+                "click Wishlist for the listing",
+                "Wishlist button",
+                "Capture save intent as a separate signal from purchase intent.",
+                0.32,
+                event_type="like_save",
+                like_signal=True,
+                elapsed_seconds=10,
+            ),
+            step(
+                7,
+                "The detail view offers a request CTA, but total fees and trip dates are still not resolved.",
+                "I can express interest, yet I would want stronger total-price confidence first.",
+                "request_booking_intent",
+                "click Request to book after reviewing detail",
+                "Request to book button",
+                "Measure intent after a browse-heavy path.",
+                round(0.42 + price_focus * 0.16, 2),
+                event_type="primary_click",
+                primary_action=True,
+                elapsed_seconds=24,
             ),
         ]
 
@@ -889,6 +997,17 @@ class SyntheticRunner:
                 "The single-page flow makes search, comparison, and mock checkout easy to understand.",
                 "Event capture signals make the experiment instrumentation visible to the team.",
             ]
+        elif self.page_model.page_kind == "stayfinder_gallery":
+            recommendation = "Add trip setup and total-price confidence to the gallery before users reach request intent."
+            confusion = [
+                "The browse-first gallery delays destination, date, guest, and total-price confidence.",
+                "Wishlist and category exploration can compete with direct booking progress.",
+            ]
+            liked = [
+                "Large photos, category tabs, and detail pages make the listings feel engaging.",
+                "Wishlist behavior gives a useful save-intent signal before checkout.",
+            ]
+            purchase_intent = clamp_score(purchase_intent - 0.4)
         elif segment == "experience_seeker":
             recommendation = "Make Experiences and Services more discoverable from the default Homes flow."
             confusion = ["Experiences are visible but secondary to the stronger Homes default."]
