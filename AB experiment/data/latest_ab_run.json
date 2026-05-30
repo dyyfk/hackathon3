@@ -1,0 +1,3697 @@
+{
+  "schema_version": "synthetic_ab_run_v1",
+  "run_id": "sample-airbnb-ab",
+  "created_at": "2026-05-30T21:08:46.708688+00:00",
+  "config": {
+    "a_url": "https://www.airbnb.com",
+    "b_url": "https://www.airbnb.com",
+    "profiles": 20,
+    "runs": 5,
+    "model": "auto",
+    "codex_timeout": 240
+  },
+  "variants": {
+    "A": {
+      "label": "Variant A",
+      "url": "https://www.airbnb.com",
+      "raw": {
+        "profiles": [
+          {
+            "id": "airbnb_u_001",
+            "segment": "budget_weekend_couple",
+            "goal": "Find a low-cost two-night Lake Tahoe stay for two people and decide whether any visible option is worth investigating further.",
+            "task": "On the Airbnb homepage, keep the Homes tab active, review the Popular homes in Lake Tahoe carousel, compare the visible condo and cabin cards by total displayed price, rating, and Guest favorite signal, then identify the best intent-to-consider option without opening checkout or saving to a wishlist.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 2,
+              "budget_preference": "Prefer the lowest visible two-night total under $550."
+            },
+            "behavior_style": {
+              "patience": 0.48,
+              "exploration": 0.42,
+              "price_sensitivity": 0.92,
+              "trust_sensitivity": 0.62,
+              "detail_orientation": 0.58
+            },
+            "success_criteria": [
+              "Compares at least three visible Lake Tahoe cards.",
+              "Selects one best candidate based on displayed price and rating.",
+              "Notes that fees or full total are not confirmed from the card."
+            ],
+            "frustration_triggers": [
+              "Prices change after opening a listing.",
+              "Fees are not visible on the card.",
+              "Wishlist prompts require signing in."
+            ]
+          },
+          {
+            "id": "airbnb_u_002",
+            "segment": "budget_weekend_couple",
+            "goal": "Check whether a weekend cabin near Lake Tahoe looks affordable enough to continue researching.",
+            "task": "Use the Where searchbox to search Lake Tahoe, open date selection only far enough to assess a two-night weekend search flow, set Who to two guests if available, submit Search, and compare budget-friendly visible stays without booking or entering personal data.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 2,
+              "budget_preference": "Target stays around $500 for two nights before unknown fees."
+            },
+            "behavior_style": {
+              "patience": 0.55,
+              "exploration": 0.5,
+              "price_sensitivity": 0.95,
+              "trust_sensitivity": 0.55,
+              "detail_orientation": 0.52
+            },
+            "success_criteria": [
+              "Search is submitted for Lake Tahoe with two guests.",
+              "At least two lower-priced results are compared.",
+              "Decision stops at shortlist or no-shortlist assessment."
+            ],
+            "frustration_triggers": [
+              "Date picker takes too long to use.",
+              "Displayed totals do not include fees clearly.",
+              "Search results feel more expensive than homepage cards."
+            ]
+          },
+          {
+            "id": "airbnb_u_003",
+            "segment": "budget_weekend_couple",
+            "goal": "Decide whether Kings Beach is a better value than South Lake Tahoe for a short couple trip.",
+            "task": "From the Lake Tahoe homepage carousel, compare the Cabin in Kings Beach against South Lake Tahoe options using price, rating, and Guest favorite indicators, then state which area appears better for value based only on visible listing information.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 2,
+              "budget_preference": "Prefer Guest favorite listings under $600 for two nights."
+            },
+            "behavior_style": {
+              "patience": 0.44,
+              "exploration": 0.36,
+              "price_sensitivity": 0.9,
+              "trust_sensitivity": 0.7,
+              "detail_orientation": 0.46
+            },
+            "success_criteria": [
+              "Reviews both Kings Beach and South Lake Tahoe visible listings.",
+              "Identifies the strongest value candidate.",
+              "Does not click wishlist or attempt account creation."
+            ],
+            "frustration_triggers": [
+              "Area names are hard to compare quickly.",
+              "Guest favorite competes with a lower price option.",
+              "Total costs are incomplete from the carousel."
+            ]
+          },
+          {
+            "id": "airbnb_u_004",
+            "segment": "budget_weekend_couple",
+            "goal": "Assess whether the homepage offers any realistic budget stay for a spontaneous two-night getaway.",
+            "task": "Scan the visible Lake Tahoe cards, sort mentally by displayed two-night price, ignore listings above the budget comfort range, and decide whether to continue searching or abandon based on visible price and rating signals.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 2,
+              "budget_preference": "Avoid options above $700 for two nights unless the rating signal is exceptional."
+            },
+            "behavior_style": {
+              "patience": 0.35,
+              "exploration": 0.3,
+              "price_sensitivity": 0.98,
+              "trust_sensitivity": 0.5,
+              "detail_orientation": 0.4
+            },
+            "success_criteria": [
+              "Recognizes the cheapest visible listing.",
+              "Filters out visibly expensive options.",
+              "Produces an intent assessment instead of starting a booking."
+            ],
+            "frustration_triggers": [
+              "High displayed prices dominate the carousel.",
+              "Fees are not exposed before deeper browsing.",
+              "Account-wall appears when trying to save."
+            ]
+          },
+          {
+            "id": "airbnb_u_005",
+            "segment": "family_planner",
+            "goal": "Find a reliable Lake Tahoe stay candidate for a family that values ratings and enough space.",
+            "task": "Use the homepage Homes search controls to search Lake Tahoe, set Who to four guests if possible, submit the search, and compare family-suitable visible homes by rating, price, and trust signals without contacting hosts or booking.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 4,
+              "budget_preference": "Comfortable paying more for high ratings, but compare against lower-cost options."
+            },
+            "behavior_style": {
+              "patience": 0.78,
+              "exploration": 0.58,
+              "price_sensitivity": 0.63,
+              "trust_sensitivity": 0.88,
+              "detail_orientation": 0.82
+            },
+            "success_criteria": [
+              "Search reflects four guests or notes if guest selection is unclear.",
+              "Compares at least three listings by rating and price.",
+              "Shortlists one or two options for later review only."
+            ],
+            "frustration_triggers": [
+              "Guest controls are ambiguous for family size.",
+              "Fees and taxes are not visible early.",
+              "Listings lack enough family-relevant detail on cards."
+            ]
+          },
+          {
+            "id": "airbnb_u_006",
+            "segment": "family_planner",
+            "goal": "Evaluate whether a highly rated larger home is worth the higher visible price for a family trip.",
+            "task": "Review the Lake Tahoe carousel and compare Home in Carnelian Bay with lower-priced cabin and condo options, focusing on rating, Guest favorite signal, and displayed two-night price, then decide whether the premium appears justified.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 4,
+              "budget_preference": "Can consider premium options if trust signals are strong."
+            },
+            "behavior_style": {
+              "patience": 0.72,
+              "exploration": 0.52,
+              "price_sensitivity": 0.58,
+              "trust_sensitivity": 0.93,
+              "detail_orientation": 0.76
+            },
+            "success_criteria": [
+              "Uses the Carnelian Bay card as the premium comparison point.",
+              "Compares it with at least two less expensive options.",
+              "Stops at value assessment, not reservation flow."
+            ],
+            "frustration_triggers": [
+              "High price lacks visible explanation.",
+              "Card does not show bedrooms or family amenities.",
+              "Full trip cost is hidden until later."
+            ]
+          },
+          {
+            "id": "airbnb_u_007",
+            "segment": "family_planner",
+            "goal": "Check whether the search flow can support a family planning dates before comparing options.",
+            "task": "Click When from the homepage, assess how easy it is to add travel dates for a family trip, set a broad date range if practical, set Who to four guests, and determine whether the resulting search feels usable enough for planning.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 4,
+              "budget_preference": "Prefer predictable total pricing over lowest price."
+            },
+            "behavior_style": {
+              "patience": 0.86,
+              "exploration": 0.46,
+              "price_sensitivity": 0.55,
+              "trust_sensitivity": 0.84,
+              "detail_orientation": 0.9
+            },
+            "success_criteria": [
+              "Interacts with date and guest controls.",
+              "Assesses whether planning friction is acceptable.",
+              "Does not provide real personal information or proceed to book."
+            ],
+            "frustration_triggers": [
+              "Date selection slows down comparison.",
+              "Guest count options are hard to confirm.",
+              "Price totals remain incomplete after search."
+            ]
+          },
+          {
+            "id": "airbnb_u_008",
+            "segment": "family_planner",
+            "goal": "Compare family trip options by balancing cost, rating, and confidence signals.",
+            "task": "From the visible Popular homes in Lake Tahoe section, compare the Cabin in Kings Beach, Cabin in South Lake Tahoe, and Home in Carnelian Bay, then rank them for a family shortlist based on visible trust and cost information only.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 5,
+              "budget_preference": "Moderate budget; avoid the most expensive option unless it clearly looks safer or better."
+            },
+            "behavior_style": {
+              "patience": 0.7,
+              "exploration": 0.55,
+              "price_sensitivity": 0.68,
+              "trust_sensitivity": 0.9,
+              "detail_orientation": 0.8
+            },
+            "success_criteria": [
+              "Ranks three named visible listings.",
+              "Mentions rating and Guest favorite signals in the ranking.",
+              "Leaves booking, messaging, and wishlist actions untouched."
+            ],
+            "frustration_triggers": [
+              "No bedroom count visible on the card.",
+              "Expensive listings may still hide fees.",
+              "Family suitability is hard to infer from homepage cards."
+            ]
+          },
+          {
+            "id": "airbnb_u_009",
+            "segment": "remote_worker_business_traveler",
+            "goal": "Identify a practical Lake Tahoe stay candidate for a solo work trip based on price, rating, and efficient search flow.",
+            "task": "Use the Homes tab, search Lake Tahoe, set Who to one guest if available, submit Search, and compare the visible results for a reliable, reasonably priced stay without booking or entering work details.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 1,
+              "budget_preference": "Prefer mid-priced options with strong ratings over the cheapest option."
+            },
+            "behavior_style": {
+              "patience": 0.52,
+              "exploration": 0.38,
+              "price_sensitivity": 0.62,
+              "trust_sensitivity": 0.76,
+              "detail_orientation": 0.65
+            },
+            "success_criteria": [
+              "Completes a destination and guest search.",
+              "Compares price and rating on at least two listings.",
+              "Identifies one practical candidate or explains why none is clear."
+            ],
+            "frustration_triggers": [
+              "Search requires too many clicks.",
+              "Cards do not expose workspace or Wi-Fi details.",
+              "Fees are hidden until later."
+            ]
+          },
+          {
+            "id": "airbnb_u_010",
+            "segment": "remote_worker_business_traveler",
+            "goal": "Quickly decide whether a high-rated Tahoe cabin is suitable enough to save for later business-trip review outside Airbnb.",
+            "task": "Scan the Lake Tahoe carousel for Guest favorite and high-rating signals, prioritize the Cabin in Kings Beach and Cabin in South Lake Tahoe, and decide which listing to manually note as a candidate without using the wishlist button.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 1,
+              "budget_preference": "Accept higher price if rating and trust signals reduce risk."
+            },
+            "behavior_style": {
+              "patience": 0.4,
+              "exploration": 0.28,
+              "price_sensitivity": 0.5,
+              "trust_sensitivity": 0.82,
+              "detail_orientation": 0.55
+            },
+            "success_criteria": [
+              "Identifies the most efficient visible candidate.",
+              "Avoids wishlist account-wall risk.",
+              "Stops after intent assessment."
+            ],
+            "frustration_triggers": [
+              "Wishlist asks for login.",
+              "Listing cards lack work-specific amenities.",
+              "Too many leisure-oriented options appear first."
+            ]
+          },
+          {
+            "id": "airbnb_u_011",
+            "segment": "remote_worker_business_traveler",
+            "goal": "Assess whether Airbnb Services are discoverable for a work trip without losing the lodging search context.",
+            "task": "From the homepage, note the Homes search controls, click the Services tab, observe whether service discovery appears relevant to a business stay, then return to Homes and compare one visible Lake Tahoe lodging option by rating and price.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 1,
+              "budget_preference": "Keep lodging cost reasonable; services are secondary."
+            },
+            "behavior_style": {
+              "patience": 0.57,
+              "exploration": 0.66,
+              "price_sensitivity": 0.56,
+              "trust_sensitivity": 0.7,
+              "detail_orientation": 0.6
+            },
+            "success_criteria": [
+              "Checks the Services tab without making purchases or sharing data.",
+              "Returns focus to lodging comparison.",
+              "Reports whether the new tab was useful or distracting."
+            ],
+            "frustration_triggers": [
+              "New tabs are easy to miss or confusing.",
+              "Switching tabs disrupts the lodging search.",
+              "Service options imply purchase flows."
+            ]
+          },
+          {
+            "id": "airbnb_u_012",
+            "segment": "remote_worker_business_traveler",
+            "goal": "Compare visible Tahoe options for a quiet, efficient solo stay and avoid time-consuming exploratory flows.",
+            "task": "Stay on the homepage carousel, compare the lowest priced condo with the higher-rated cabin options, and decide which listing is worth opening later based on displayed price, rating, and Guest favorite status.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 1,
+              "budget_preference": "Prefer a sensible balance of price and reliability."
+            },
+            "behavior_style": {
+              "patience": 0.32,
+              "exploration": 0.22,
+              "price_sensitivity": 0.67,
+              "trust_sensitivity": 0.78,
+              "detail_orientation": 0.5
+            },
+            "success_criteria": [
+              "Compares condo versus cabin options.",
+              "Chooses one candidate for later investigation.",
+              "Does not enter booking, payment, or messaging flows."
+            ],
+            "frustration_triggers": [
+              "Important amenities are not visible on cards.",
+              "Homepage carousel requires extra scanning.",
+              "Full cost is not available immediately."
+            ]
+          },
+          {
+            "id": "airbnb_u_013",
+            "segment": "experience_seeker",
+            "goal": "Discover whether Airbnb Experiences are prominent enough for a Tahoe activity-focused trip.",
+            "task": "Click the Experiences tab from the homepage, search or inspect Lake Tahoe-related options if available, and assess whether Experiences are easier to explore than Homes without reserving or sharing personal details.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 2,
+              "budget_preference": "Flexible for memorable activities; lodging cost is secondary."
+            },
+            "behavior_style": {
+              "patience": 0.69,
+              "exploration": 0.92,
+              "price_sensitivity": 0.42,
+              "trust_sensitivity": 0.64,
+              "detail_orientation": 0.58
+            },
+            "success_criteria": [
+              "Finds and evaluates the Experiences tab.",
+              "Determines whether relevant activities are discoverable.",
+              "Stops before booking or account creation."
+            ],
+            "frustration_triggers": [
+              "Experiences tab is missed or unclear.",
+              "Search defaults back to Homes.",
+              "Activity pricing or availability is not obvious."
+            ]
+          },
+          {
+            "id": "airbnb_u_014",
+            "segment": "experience_seeker",
+            "goal": "Compare whether Homes or Experiences better supports planning a short Tahoe getaway.",
+            "task": "Inspect the Homes carousel for Lake Tahoe stays, then switch to Experiences and compare the perceived usefulness of each tab for a two-person getaway, ending with an intent recommendation rather than a transaction.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 2,
+              "budget_preference": "Willing to trade lodging quality for better local activities."
+            },
+            "behavior_style": {
+              "patience": 0.74,
+              "exploration": 0.88,
+              "price_sensitivity": 0.45,
+              "trust_sensitivity": 0.6,
+              "detail_orientation": 0.62
+            },
+            "success_criteria": [
+              "Reviews both Homes and Experiences.",
+              "Compares lodging value against activity discovery.",
+              "Gives a non-booking intent assessment."
+            ],
+            "frustration_triggers": [
+              "New tabs do not clearly explain their scope.",
+              "Switching tabs loses search context.",
+              "Visible home prices make activity planning feel secondary."
+            ]
+          },
+          {
+            "id": "airbnb_u_015",
+            "segment": "experience_seeker",
+            "goal": "Find an inspiring high-trust stay as a base for an experience-led trip.",
+            "task": "On the Homes tab, review the Guest favorite Tahoe listings, compare ratings and displayed prices, and identify which stay would best support an experience-focused weekend without interacting with wishlist or reservation controls.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 2,
+              "budget_preference": "Moderate flexibility; avoid very high-priced stays unless clearly exceptional."
+            },
+            "behavior_style": {
+              "patience": 0.61,
+              "exploration": 0.76,
+              "price_sensitivity": 0.52,
+              "trust_sensitivity": 0.75,
+              "detail_orientation": 0.56
+            },
+            "success_criteria": [
+              "Focuses on Guest favorite and high-rating cards.",
+              "Compares at least three visible stays.",
+              "Selects a base candidate for later exploration only."
+            ],
+            "frustration_triggers": [
+              "Listings do not show proximity to activities.",
+              "Price differences are large without context.",
+              "Wishlist prompts interrupt browsing."
+            ]
+          },
+          {
+            "id": "airbnb_u_016",
+            "segment": "experience_seeker",
+            "goal": "Assess whether new Airbnb tabs invite exploration beyond stays.",
+            "task": "Starting from the homepage, inspect the primary tabs Homes, Experiences, and Services, note what each appears to offer, then decide which path to pursue for a trip plan without submitting payment, account, or booking actions.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 2,
+              "budget_preference": "Flexible, but wants clear value before deeper browsing."
+            },
+            "behavior_style": {
+              "patience": 0.67,
+              "exploration": 0.95,
+              "price_sensitivity": 0.38,
+              "trust_sensitivity": 0.58,
+              "detail_orientation": 0.5
+            },
+            "success_criteria": [
+              "Visits or inspects all three primary tabs.",
+              "Identifies which tab best matches an experience-led trip.",
+              "Avoids purchases, reservations, and personal data entry."
+            ],
+            "frustration_triggers": [
+              "New tabs are visually subtle.",
+              "Services appear unrelated to travel planning.",
+              "The page does not preserve context across tabs."
+            ]
+          },
+          {
+            "id": "airbnb_u_017",
+            "segment": "first_time_cautious_user",
+            "goal": "Understand how to search for a safe-looking Tahoe stay without creating an account.",
+            "task": "On the Airbnb homepage, identify the Where, When, Who, and Search controls, search Lake Tahoe for two guests only if the steps are clear, and compare visible listing trust signals while avoiding wishlist, booking, host messaging, and sign-in prompts.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 2,
+              "budget_preference": "Prefer clearly rated options over lowest price."
+            },
+            "behavior_style": {
+              "patience": 0.64,
+              "exploration": 0.34,
+              "price_sensitivity": 0.6,
+              "trust_sensitivity": 0.96,
+              "detail_orientation": 0.86
+            },
+            "success_criteria": [
+              "Understands the basic search control sequence.",
+              "Compares ratings and Guest favorite labels.",
+              "Stops immediately if account creation is requested."
+            ],
+            "frustration_triggers": [
+              "Unclear control labels or popovers.",
+              "Login prompts appear unexpectedly.",
+              "Fees are hidden or hard to understand."
+            ]
+          },
+          {
+            "id": "airbnb_u_018",
+            "segment": "first_time_cautious_user",
+            "goal": "Determine whether a visible Guest favorite listing is trustworthy enough to investigate later.",
+            "task": "Review the Lake Tahoe homepage carousel, focus on listings marked Guest favorite, compare their ratings and prices, and choose one to investigate later without clicking wishlist or starting a reservation.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 2,
+              "budget_preference": "Accept moderate cost for stronger trust signals."
+            },
+            "behavior_style": {
+              "patience": 0.58,
+              "exploration": 0.27,
+              "price_sensitivity": 0.57,
+              "trust_sensitivity": 0.98,
+              "detail_orientation": 0.78
+            },
+            "success_criteria": [
+              "Identifies all visible Guest favorite listings.",
+              "Compares them against at least one non-Guest favorite option.",
+              "Makes a cautious shortlist decision only."
+            ],
+            "frustration_triggers": [
+              "Trust labels are not explained.",
+              "Wishlist button resembles a required next step.",
+              "Full price details are not visible."
+            ]
+          },
+          {
+            "id": "airbnb_u_019",
+            "segment": "first_time_cautious_user",
+            "goal": "Check whether the Airbnb homepage can be used safely without submitting personal information.",
+            "task": "Interact lightly with the Where, When, and Who controls to understand the search flow, back out of any step that requests sign-in or personal information, and assess whether browsing listings can continue anonymously.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 1,
+              "budget_preference": "Price matters, but safety and clarity matter more."
+            },
+            "behavior_style": {
+              "patience": 0.73,
+              "exploration": 0.31,
+              "price_sensitivity": 0.5,
+              "trust_sensitivity": 0.94,
+              "detail_orientation": 0.88
+            },
+            "success_criteria": [
+              "Tests search controls without submitting personal data.",
+              "Confirms whether anonymous browsing is possible.",
+              "Ends with a confidence assessment, not a booking."
+            ],
+            "frustration_triggers": [
+              "Unexpected account wall.",
+              "Date picker feels irreversible or confusing.",
+              "Buttons imply commitment before the user is ready."
+            ]
+          },
+          {
+            "id": "airbnb_u_020",
+            "segment": "first_time_cautious_user",
+            "goal": "Compare visible Tahoe listings and learn what information is missing before deciding to continue.",
+            "task": "Stay on the Homes tab, review each visible Popular homes in Lake Tahoe card, record title, displayed price, rating, and Guest favorite status, then list what is still unknown before any booking decision.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 2,
+              "budget_preference": "Prefer transparent pricing and strong ratings."
+            },
+            "behavior_style": {
+              "patience": 0.8,
+              "exploration": 0.25,
+              "price_sensitivity": 0.64,
+              "trust_sensitivity": 0.97,
+              "detail_orientation": 0.95
+            },
+            "success_criteria": [
+              "Captures the visible details from all four provided cards.",
+              "Identifies missing information such as fees or policies.",
+              "Does not click booking, payment, messaging, or account actions."
+            ],
+            "frustration_triggers": [
+              "Important cost details are missing from cards.",
+              "Safety or cancellation information is not visible.",
+              "The site nudges toward account-based actions."
+            ]
+          }
+        ],
+        "traces": [
+          {
+            "persona_id": "airbnb_u_001",
+            "segment": "budget_weekend_couple",
+            "goal": "Find a low-cost two-night Lake Tahoe stay for two people and decide whether any visible option is worth investigating further.",
+            "steps": [
+              {
+                "step": 1,
+                "observation": "Homepage shows Homes, Experiences, Services, plus Where, When, Who, Search.",
+                "persona_thought": "I need a stay in Lake Tahoe, so I will start with the main search controls.",
+                "intent": "orient_on_homepage",
+                "action": "scan visible header search",
+                "target_ui": "Homepage search area",
+                "expected_result": "Understand the quickest path to a stay search.",
+                "friction": 0.08
+              },
+              {
+                "step": 2,
+                "observation": "The Where field is empty and prominent.",
+                "persona_thought": "My destination is Lake Tahoe; I expect search suggestions or a direct query.",
+                "intent": "enter_destination",
+                "action": "type 'Lake Tahoe' into Where",
+                "target_ui": "Where searchbox",
+                "expected_result": "Destination query is ready.",
+                "friction": 0.12
+              },
+              {
+                "step": 3,
+                "observation": "The When control says Add dates.",
+                "persona_thought": "Dates matter, but I do not want to spend too long in a calendar.",
+                "intent": "choose_dates",
+                "action": "choose a flexible weekend date range",
+                "target_ui": "When button and date picker",
+                "expected_result": "A short trip date range is selected or the date step is identified as friction.",
+                "friction": 0.28
+              },
+              {
+                "step": 4,
+                "observation": "The Who control says Add guests.",
+                "persona_thought": "I need the results to match 2 guest(s).",
+                "intent": "set_guests",
+                "action": "set guests to 2",
+                "target_ui": "Who guest selector",
+                "expected_result": "Guest count is reflected in the search.",
+                "friction": 0.16
+              },
+              {
+                "step": 5,
+                "observation": "Search button is visible after destination, dates, and guests.",
+                "persona_thought": "Now I want result cards I can compare quickly.",
+                "intent": "submit_search",
+                "action": "click Search",
+                "target_ui": "Search button",
+                "expected_result": "Results or relevant listing cards are displayed.",
+                "friction": 0.1
+              },
+              {
+                "step": 6,
+                "observation": "Visible Lake Tahoe cards include prices for 2 nights and ratings.",
+                "persona_thought": "I will compare value using price, rating, and Guest favorite labels.",
+                "intent": "compare_listing_cards",
+                "action": "compare Cabin in Kings Beach, Condo in South Lake Tahoe, and Home in Carnelian Bay",
+                "target_ui": "Listing cards",
+                "expected_result": "Shortlist one or two options without committing.",
+                "friction": 0.23
+              },
+              {
+                "step": 7,
+                "observation": "The listing cards show nightly-like totals but not a full checkout-style breakdown.",
+                "persona_thought": "I can see rough value, but I still wonder about fees and final total.",
+                "intent": "evaluate_price_clarity",
+                "action": "inspect price text and note missing total-price detail",
+                "target_ui": "Price text on listing cards",
+                "expected_result": "Decide whether price information is enough to continue.",
+                "friction": 0.48
+              },
+              {
+                "step": 8,
+                "observation": "Ratings and Guest favorite labels provide trust signals.",
+                "persona_thought": "The cards make me comfortable browsing, but I need details before a real decision.",
+                "intent": "assess_trust",
+                "action": "use ratings and Guest favorite labels as trust signals",
+                "target_ui": "Rating and badge text",
+                "expected_result": "Estimate confidence in the shortlisted listings.",
+                "friction": 0.15
+              }
+            ],
+            "final_feedback": {
+              "task_success": true,
+              "scores": {
+                "ease_of_search": 7,
+                "price_clarity": 4,
+                "trust": 8,
+                "purchase_intent": 6
+              },
+              "liked_features": [
+                "Price and rating are visible enough to build an initial shortlist."
+              ],
+              "confusion_points": [
+                "Budget comparison is slowed by incomplete total-price detail."
+              ],
+              "friction_themes": [
+                "price_clarity"
+              ],
+              "recommendation": "Show estimated total price and fees earlier in the listing-card comparison flow."
+            }
+          },
+          {
+            "persona_id": "airbnb_u_005",
+            "segment": "family_planner",
+            "goal": "Find a reliable Lake Tahoe stay candidate for a family that values ratings and enough space.",
+            "steps": [
+              {
+                "step": 1,
+                "observation": "Homepage shows Homes, Experiences, Services, plus Where, When, Who, Search.",
+                "persona_thought": "I need a stay in Lake Tahoe, so I will start with the main search controls.",
+                "intent": "orient_on_homepage",
+                "action": "scan visible header search",
+                "target_ui": "Homepage search area",
+                "expected_result": "Understand the quickest path to a stay search.",
+                "friction": 0.08
+              },
+              {
+                "step": 2,
+                "observation": "The Where field is empty and prominent.",
+                "persona_thought": "My destination is Lake Tahoe; I expect search suggestions or a direct query.",
+                "intent": "enter_destination",
+                "action": "type 'Lake Tahoe' into Where",
+                "target_ui": "Where searchbox",
+                "expected_result": "Destination query is ready.",
+                "friction": 0.12
+              },
+              {
+                "step": 3,
+                "observation": "The When control says Add dates.",
+                "persona_thought": "Dates matter, but I do not want to spend too long in a calendar.",
+                "intent": "choose_dates",
+                "action": "choose a flexible weekend date range",
+                "target_ui": "When button and date picker",
+                "expected_result": "A short trip date range is selected or the date step is identified as friction.",
+                "friction": 0.28
+              },
+              {
+                "step": 4,
+                "observation": "The Who control says Add guests.",
+                "persona_thought": "I need the results to match 4 guest(s).",
+                "intent": "set_guests",
+                "action": "set guests to 4",
+                "target_ui": "Who guest selector",
+                "expected_result": "Guest count is reflected in the search.",
+                "friction": 0.16
+              },
+              {
+                "step": 5,
+                "observation": "Search button is visible after destination, dates, and guests.",
+                "persona_thought": "Now I want result cards I can compare quickly.",
+                "intent": "submit_search",
+                "action": "click Search",
+                "target_ui": "Search button",
+                "expected_result": "Results or relevant listing cards are displayed.",
+                "friction": 0.1
+              },
+              {
+                "step": 6,
+                "observation": "Visible Lake Tahoe cards include prices for 2 nights and ratings.",
+                "persona_thought": "I will compare value using price, rating, and Guest favorite labels.",
+                "intent": "compare_listing_cards",
+                "action": "compare Cabin in Kings Beach, Condo in South Lake Tahoe, and Home in Carnelian Bay",
+                "target_ui": "Listing cards",
+                "expected_result": "Shortlist one or two options without committing.",
+                "friction": 0.2
+              },
+              {
+                "step": 7,
+                "observation": "The listing cards show nightly-like totals but not a full checkout-style breakdown.",
+                "persona_thought": "I can see rough value, but I still wonder about fees and final total.",
+                "intent": "evaluate_price_clarity",
+                "action": "inspect price text and note missing total-price detail",
+                "target_ui": "Price text on listing cards",
+                "expected_result": "Decide whether price information is enough to continue.",
+                "friction": 0.4
+              },
+              {
+                "step": 8,
+                "observation": "Ratings and Guest favorite labels provide trust signals.",
+                "persona_thought": "The cards make me comfortable browsing, but I need details before a real decision.",
+                "intent": "assess_trust",
+                "action": "use ratings and Guest favorite labels as trust signals",
+                "target_ui": "Rating and badge text",
+                "expected_result": "Estimate confidence in the shortlisted listings.",
+                "friction": 0.17
+              }
+            ],
+            "final_feedback": {
+              "task_success": true,
+              "scores": {
+                "ease_of_search": 7,
+                "price_clarity": 5,
+                "trust": 8,
+                "purchase_intent": 6
+              },
+              "liked_features": [
+                "Guest count is easy to include in the search intent."
+              ],
+              "confusion_points": [
+                "Family suitability requires more detail than the card provides."
+              ],
+              "friction_themes": [
+                "price_clarity"
+              ],
+              "recommendation": "Surface family-fit signals, sleeping setup, and flexible cancellation earlier."
+            }
+          },
+          {
+            "persona_id": "airbnb_u_009",
+            "segment": "remote_worker_business_traveler",
+            "goal": "Identify a practical Lake Tahoe stay candidate for a solo work trip based on price, rating, and efficient search flow.",
+            "steps": [
+              {
+                "step": 1,
+                "observation": "Homepage shows Homes, Experiences, Services, plus Where, When, Who, Search.",
+                "persona_thought": "I need a stay in Lake Tahoe, so I will start with the main search controls.",
+                "intent": "orient_on_homepage",
+                "action": "scan visible header search",
+                "target_ui": "Homepage search area",
+                "expected_result": "Understand the quickest path to a stay search.",
+                "friction": 0.08
+              },
+              {
+                "step": 2,
+                "observation": "The Where field is empty and prominent.",
+                "persona_thought": "My destination is Lake Tahoe; I expect search suggestions or a direct query.",
+                "intent": "enter_destination",
+                "action": "type 'Lake Tahoe' into Where",
+                "target_ui": "Where searchbox",
+                "expected_result": "Destination query is ready.",
+                "friction": 0.12
+              },
+              {
+                "step": 3,
+                "observation": "The When control says Add dates.",
+                "persona_thought": "Dates matter, but I do not want to spend too long in a calendar.",
+                "intent": "choose_dates",
+                "action": "choose a flexible weekend date range",
+                "target_ui": "When button and date picker",
+                "expected_result": "A short trip date range is selected or the date step is identified as friction.",
+                "friction": 0.28
+              },
+              {
+                "step": 4,
+                "observation": "The Who control says Add guests.",
+                "persona_thought": "I need the results to match 1 guest(s).",
+                "intent": "set_guests",
+                "action": "set guests to 1",
+                "target_ui": "Who guest selector",
+                "expected_result": "Guest count is reflected in the search.",
+                "friction": 0.16
+              },
+              {
+                "step": 5,
+                "observation": "Search button is visible after destination, dates, and guests.",
+                "persona_thought": "Now I want result cards I can compare quickly.",
+                "intent": "submit_search",
+                "action": "click Search",
+                "target_ui": "Search button",
+                "expected_result": "Results or relevant listing cards are displayed.",
+                "friction": 0.1
+              },
+              {
+                "step": 6,
+                "observation": "Visible Lake Tahoe cards include prices for 2 nights and ratings.",
+                "persona_thought": "I will compare value using price, rating, and Guest favorite labels.",
+                "intent": "compare_listing_cards",
+                "action": "compare Cabin in Kings Beach, Condo in South Lake Tahoe, and Home in Carnelian Bay",
+                "target_ui": "Listing cards",
+                "expected_result": "Shortlist one or two options without committing.",
+                "friction": 0.19
+              },
+              {
+                "step": 7,
+                "observation": "The listing cards show nightly-like totals but not a full checkout-style breakdown.",
+                "persona_thought": "I can see rough value, but I still wonder about fees and final total.",
+                "intent": "evaluate_price_clarity",
+                "action": "inspect price text and note missing total-price detail",
+                "target_ui": "Price text on listing cards",
+                "expected_result": "Decide whether price information is enough to continue.",
+                "friction": 0.39
+              },
+              {
+                "step": 8,
+                "observation": "Ratings and Guest favorite labels provide trust signals.",
+                "persona_thought": "The cards make me comfortable browsing, but I need details before a real decision.",
+                "intent": "assess_trust",
+                "action": "use ratings and Guest favorite labels as trust signals",
+                "target_ui": "Rating and badge text",
+                "expected_result": "Estimate confidence in the shortlisted listings.",
+                "friction": 0.15
+              }
+            ],
+            "final_feedback": {
+              "task_success": true,
+              "scores": {
+                "ease_of_search": 8,
+                "price_clarity": 5,
+                "trust": 8,
+                "purchase_intent": 6
+              },
+              "liked_features": [
+                "Destination and guest search path is fast."
+              ],
+              "confusion_points": [
+                "Work-readiness is hard to judge from the first listing cards."
+              ],
+              "friction_themes": [
+                "price_clarity"
+              ],
+              "recommendation": "Expose work-trip filters such as Wi-Fi, desk, quietness, and commute area earlier."
+            }
+          },
+          {
+            "persona_id": "airbnb_u_013",
+            "segment": "experience_seeker",
+            "goal": "Discover whether Airbnb Experiences are prominent enough for a Tahoe activity-focused trip.",
+            "steps": [
+              {
+                "step": 1,
+                "observation": "Homepage defaults to Homes, while Experiences and Services are marked new.",
+                "persona_thought": "I am more interested in activities than lodging, so I need to switch context.",
+                "intent": "orient_on_homepage",
+                "action": "scan top tabs",
+                "target_ui": "Homes, Experiences, Services tabs",
+                "expected_result": "Find the non-stay discovery entry point.",
+                "friction": 0.14
+              },
+              {
+                "step": 2,
+                "observation": "Experiences is visible next to Homes.",
+                "persona_thought": "The new label catches my eye; I expect activity search to live there.",
+                "intent": "switch_to_experiences",
+                "action": "click Experiences tab",
+                "target_ui": "Experiences tab",
+                "expected_result": "Experience search mode becomes active.",
+                "friction": 0.18
+              },
+              {
+                "step": 3,
+                "observation": "Search still begins with a Where-style location field.",
+                "persona_thought": "I want activity ideas around Lake Tahoe.",
+                "intent": "enter_destination",
+                "action": "type 'Lake Tahoe' into Where",
+                "target_ui": "Where searchbox",
+                "expected_result": "Activity discovery is scoped to a destination.",
+                "friction": 0.14
+              },
+              {
+                "step": 4,
+                "observation": "Date and guest controls remain relevant for activities.",
+                "persona_thought": "I need availability for 2 participant(s), but flexible timing is okay.",
+                "intent": "set_group_context",
+                "action": "set participants to 2 and keep timing flexible",
+                "target_ui": "When and Who controls",
+                "expected_result": "The search reflects activity group size.",
+                "friction": 0.24
+              },
+              {
+                "step": 5,
+                "observation": "Search is the primary action after setting context.",
+                "persona_thought": "I want to see whether Airbnb clearly separates stays from activities.",
+                "intent": "submit_search",
+                "action": "click Search",
+                "target_ui": "Search button",
+                "expected_result": "Activity or service results are displayed.",
+                "friction": 0.12
+              },
+              {
+                "step": 6,
+                "observation": "The page model highlights that Experiences and Services may be missed.",
+                "persona_thought": "The entry point exists, but it competes with the stronger Homes default.",
+                "intent": "evaluate_discoverability",
+                "action": "compare tab clarity and result relevance",
+                "target_ui": "Top navigation and result area",
+                "expected_result": "Judge whether activity discovery is obvious enough.",
+                "friction": 0.34
+              }
+            ],
+            "final_feedback": {
+              "task_success": true,
+              "scores": {
+                "ease_of_search": 7,
+                "price_clarity": 6,
+                "trust": 8,
+                "purchase_intent": 6
+              },
+              "liked_features": [
+                "The new tab gives a clear entry point once noticed."
+              ],
+              "confusion_points": [
+                "Experiences are visible but secondary to the stronger Homes default."
+              ],
+              "friction_themes": [
+                "price_clarity",
+                "experiences_discoverability"
+              ],
+              "recommendation": "Make Experiences and Services more discoverable from the default Homes flow."
+            }
+          },
+          {
+            "persona_id": "airbnb_u_017",
+            "segment": "first_time_cautious_user",
+            "goal": "Understand how to search for a safe-looking Tahoe stay without creating an account.",
+            "steps": [
+              {
+                "step": 1,
+                "observation": "Homepage shows polished listing cards, prices, ratings, and wishlist buttons.",
+                "persona_thought": "I am new, so I want to understand value before giving any account details.",
+                "intent": "orient_on_homepage",
+                "action": "scan search controls and visible listings",
+                "target_ui": "Homepage and Lake Tahoe carousel",
+                "expected_result": "Build enough confidence to explore safely.",
+                "friction": 0.1
+              },
+              {
+                "step": 2,
+                "observation": "The Where searchbox is the clearest starting point.",
+                "persona_thought": "I will search Lake Tahoe but keep my commitment low.",
+                "intent": "enter_destination",
+                "action": "type 'Lake Tahoe' into Where",
+                "target_ui": "Where searchbox",
+                "expected_result": "Destination query is ready.",
+                "friction": 0.16
+              },
+              {
+                "step": 3,
+                "observation": "The date picker may require several choices.",
+                "persona_thought": "I am willing to try, but calendar complexity could slow me down.",
+                "intent": "choose_dates",
+                "action": "choose a flexible weekend date range",
+                "target_ui": "When button and date picker",
+                "expected_result": "A low-commitment trip window is selected.",
+                "friction": 0.38
+              },
+              {
+                "step": 4,
+                "observation": "Guest count affects suitability and price.",
+                "persona_thought": "I need results for 2 guest(s).",
+                "intent": "set_guests",
+                "action": "set guests to 2",
+                "target_ui": "Who guest selector",
+                "expected_result": "Guest context is included.",
+                "friction": 0.18
+              },
+              {
+                "step": 5,
+                "observation": "Cards show ratings and Guest favorite labels.",
+                "persona_thought": "I trust visible reviews more than beautiful photos.",
+                "intent": "assess_trust",
+                "action": "compare rating and badge signals across listing cards",
+                "target_ui": "Rating and badge text",
+                "expected_result": "Identify whether the marketplace feels credible.",
+                "friction": 0.2
+              },
+              {
+                "step": 6,
+                "observation": "Wishlist buttons are visible on cards.",
+                "persona_thought": "Saving looks useful, but an account wall would interrupt my evaluation.",
+                "intent": "identify_account_wall_risk",
+                "action": "avoid wishlist and continue comparing visible card information",
+                "target_ui": "Wishlist button",
+                "expected_result": "Recognize account-wall friction without triggering it.",
+                "friction": 0.42
+              },
+              {
+                "step": 7,
+                "observation": "Prices are visible but final cost details are not fully explained on the cards.",
+                "persona_thought": "Before I continue, I need clearer total-cost confidence.",
+                "intent": "evaluate_price_clarity",
+                "action": "inspect price text and compare against budget preference",
+                "target_ui": "Price text on listing cards",
+                "expected_result": "Decide whether the search experience gives enough confidence.",
+                "friction": 0.44
+              }
+            ],
+            "final_feedback": {
+              "task_success": true,
+              "scores": {
+                "ease_of_search": 7,
+                "price_clarity": 5,
+                "trust": 8,
+                "purchase_intent": 6
+              },
+              "liked_features": [
+                "Ratings and Guest favorite badges help establish trust."
+              ],
+              "confusion_points": [
+                "Final cost is not clear enough from listing cards.",
+                "Wishlist appears useful but may interrupt evaluation."
+              ],
+              "friction_themes": [
+                "price_clarity",
+                "wishlist_account_wall"
+              ],
+              "recommendation": "Explain total cost and account-wall moments before users try to save listings."
+            }
+          }
+        ],
+        "summary": {
+          "top_findings": [
+            {
+              "theme": "Price clarity is the main blocker to stronger intent",
+              "affected_users": 5,
+              "severity": "high",
+              "evidence": "price_clarity appeared in 5 of 5 runs; average price_clarity score was 5.0 while purchase_intent averaged 6.0.",
+              "suggestion": "Show estimated total price, fees, taxes, and what is not included directly on listing cards or in a quick-expand price breakdown."
+            },
+            {
+              "theme": "Core search and trust signals work for initial shortlisting",
+              "affected_users": 5,
+              "severity": "low",
+              "evidence": "task_success_rate was 1.0; average ease_of_search was 7.2 and average trust was 8.0.",
+              "suggestion": "Preserve the visible rating and Guest favorite signals, then add the missing decision details around cost and fit."
+            },
+            {
+              "theme": "Experiences discovery is visible but secondary",
+              "affected_users": 1,
+              "severity": "medium",
+              "evidence": "experiences_discoverability appeared in 1 run; the experience seeker noted that Experiences are visible but secondary to the Homes default.",
+              "suggestion": "Add stronger cross-links from Homes to Experiences for destination-led trips, especially after a user searches a place."
+            },
+            {
+              "theme": "Wishlist may create account-wall anxiety",
+              "affected_users": 1,
+              "severity": "medium",
+              "evidence": "wishlist_account_wall appeared in 1 run; the cautious first-time user avoided saving because it looked like it might trigger sign-in.",
+              "suggestion": "Clarify whether saving requires an account before the user clicks, or offer a lightweight anonymous compare option."
+            }
+          ],
+          "segment_notes": [
+            {
+              "segment": "budget_weekend_couple",
+              "note": "Strongly price-sensitive users can shortlist from cards, but incomplete totals make budget confidence weak."
+            },
+            {
+              "segment": "family_planner",
+              "note": "Family planners trust ratings and guest count controls, but need sleeping setup, cancellation, and family-fit details earlier."
+            },
+            {
+              "segment": "remote_worker_business_traveler",
+              "note": "Solo work travelers find the destination and guest flow efficient, but work-readiness signals like Wi-Fi, desk, and quietness are missing from first-pass cards."
+            },
+            {
+              "segment": "experience_seeker",
+              "note": "Experience seekers notice the new tab once scanning, but Homes remains the dominant default path."
+            },
+            {
+              "segment": "first_time_cautious_user",
+              "note": "Cautious first-time users value ratings and Guest favorite badges, but need clearer cost transparency and account-wall expectations."
+            }
+          ],
+          "recommendations": [
+            "Prioritize a card-level total-price treatment with estimated fees and taxes.",
+            "Add quick-fit attributes to cards for common intents: family space, work setup, cancellation, and quietness.",
+            "Make Experiences and Services more discoverable from destination searches without forcing users to leave Homes context.",
+            "Clarify save/wishlist account requirements before interaction, or provide an anonymous compare mode.",
+            "Keep the current search controls and trust badges; they support successful first-pass evaluation."
+          ],
+          "demo_readout": "Across 5 synthetic runs, task_success_rate was 1.0 with avg_steps of 7.4. Users rated ease_of_search 7.2, trust 8.0, price_clarity 5.0, and purchase_intent 6.0. The demo story is clear: Airbnb gets users to a credible shortlist quickly, but hidden final costs and missing context keep them from moving beyond intent-to-consider.",
+          "metrics": {
+            "run_count": 5,
+            "task_success_rate": 1.0,
+            "avg_steps": 7.4,
+            "avg_scores": {
+              "ease_of_search": 7.2,
+              "price_clarity": 5.0,
+              "trust": 8.0,
+              "purchase_intent": 6.0
+            },
+            "friction_counts": {
+              "experiences_discoverability": 1,
+              "price_clarity": 5,
+              "wishlist_account_wall": 1
+            },
+            "segments_run": [
+              "budget_weekend_couple",
+              "experience_seeker",
+              "family_planner",
+              "first_time_cautious_user",
+              "remote_worker_business_traveler"
+            ]
+          }
+        }
+      },
+      "summary_stats": [
+        {
+          "id": "success",
+          "label": "Success",
+          "value": "100%",
+          "detail": "+/-4.0%",
+          "icon": "circle-check"
+        },
+        {
+          "id": "avg_steps",
+          "label": "Avg Steps",
+          "value": "7.4",
+          "detail": "+/-1.1",
+          "icon": "footprints"
+        },
+        {
+          "id": "ease",
+          "label": "Ease (1-5)",
+          "value": "3.6",
+          "detail": "+/-1.1",
+          "icon": "smile"
+        },
+        {
+          "id": "intent",
+          "label": "Intent (1-5)",
+          "value": "3.0",
+          "detail": "+/-0.5",
+          "icon": "target"
+        }
+      ],
+      "metric_snapshot": [
+        {
+          "id": "conversion",
+          "label": "Conversion",
+          "value": "52%",
+          "detail": "+/-2.8%"
+        },
+        {
+          "id": "dropoff",
+          "label": "Drop-off",
+          "value": "18%",
+          "detail": "+/-2.1%"
+        },
+        {
+          "id": "time_to_task",
+          "label": "Time to Task",
+          "value": "2.7m",
+          "detail": "+/-1.1m"
+        },
+        {
+          "id": "satisfaction",
+          "label": "Satisfaction (1-5)",
+          "value": "4.0",
+          "detail": "+/-0.7"
+        }
+      ],
+      "derived_metrics": {
+        "conversion": 0.52,
+        "dropoff": 0.18,
+        "time_to_task": 2.66,
+        "satisfaction": 4.04
+      },
+      "feedback": [
+        {
+          "icon": "circle-dollar-sign",
+          "title": "Price clarity is the main blocker t...",
+          "body": "price clarity appeared in 5 of 5 runs; average price clarity score was 5.0 while purchase...",
+          "level": "high",
+          "badge": "High Evidence"
+        },
+        {
+          "icon": "triangle-alert",
+          "title": "Core search and trust signals work...",
+          "body": "task success rate was 1.0; average ease of search was 7.2 and average trust was 8.0.",
+          "level": "low",
+          "badge": "Low Evidence"
+        },
+        {
+          "icon": "shield-check",
+          "title": "Experiences discovery is visible bu...",
+          "body": "experiences discoverability appeared in 1 run; the experience seeker noted that Experienc...",
+          "level": "medium",
+          "badge": "Medium Evidence"
+        }
+      ],
+      "logs": [
+        {
+          "persona": "airbnb_u_001",
+          "segment": "budget_weekend_couple",
+          "step": 1,
+          "intent": "Orient On Homepage",
+          "action": "scan visible header search.",
+          "friction": "None",
+          "observation": "Homepage shows Homes, Experiences, Services, plus Where, When, Who, Search."
+        },
+        {
+          "persona": "airbnb_u_001",
+          "segment": "budget_weekend_couple",
+          "step": 2,
+          "intent": "Enter Destination",
+          "action": "type 'Lake Tahoe' into Where.",
+          "friction": "None",
+          "observation": "The Where field is empty and prominent."
+        },
+        {
+          "persona": "airbnb_u_001",
+          "segment": "budget_weekend_couple",
+          "step": 3,
+          "intent": "Choose Dates",
+          "action": "choose a flexible weekend date range.",
+          "friction": "Medium",
+          "observation": "The When control says Add dates."
+        },
+        {
+          "persona": "airbnb_u_001",
+          "segment": "budget_weekend_couple",
+          "step": 4,
+          "intent": "Set Guests",
+          "action": "set guests to 2.",
+          "friction": "None",
+          "observation": "The Who control says Add guests."
+        },
+        {
+          "persona": "airbnb_u_001",
+          "segment": "budget_weekend_couple",
+          "step": 5,
+          "intent": "Submit Search",
+          "action": "click Search.",
+          "friction": "None",
+          "observation": "Search button is visible after destination, dates, and guests."
+        },
+        {
+          "persona": "airbnb_u_001",
+          "segment": "budget_weekend_couple",
+          "step": 6,
+          "intent": "Compare Listing Cards",
+          "action": "compare Cabin in Kings Beach, Condo in South Lake Tahoe, and Home in Carnelian Bay.",
+          "friction": "Medium",
+          "observation": "Visible Lake Tahoe cards include prices for 2 nights and ratings."
+        },
+        {
+          "persona": "airbnb_u_001",
+          "segment": "budget_weekend_couple",
+          "step": 7,
+          "intent": "Evaluate Price Clarity",
+          "action": "inspect price text and note missing total-price detail.",
+          "friction": "High",
+          "observation": "The listing cards show nightly-like totals but not a full checkout-style breakdown."
+        },
+        {
+          "persona": "airbnb_u_001",
+          "segment": "budget_weekend_couple",
+          "step": 8,
+          "intent": "Assess Trust",
+          "action": "use ratings and Guest favorite labels as trust signals.",
+          "friction": "None",
+          "observation": "Ratings and Guest favorite labels provide trust signals."
+        },
+        {
+          "persona": "airbnb_u_005",
+          "segment": "family_planner",
+          "step": 1,
+          "intent": "Orient On Homepage",
+          "action": "scan visible header search.",
+          "friction": "None",
+          "observation": "Homepage shows Homes, Experiences, Services, plus Where, When, Who, Search."
+        },
+        {
+          "persona": "airbnb_u_005",
+          "segment": "family_planner",
+          "step": 2,
+          "intent": "Enter Destination",
+          "action": "type 'Lake Tahoe' into Where.",
+          "friction": "None",
+          "observation": "The Where field is empty and prominent."
+        },
+        {
+          "persona": "airbnb_u_005",
+          "segment": "family_planner",
+          "step": 3,
+          "intent": "Choose Dates",
+          "action": "choose a flexible weekend date range.",
+          "friction": "Medium",
+          "observation": "The When control says Add dates."
+        },
+        {
+          "persona": "airbnb_u_005",
+          "segment": "family_planner",
+          "step": 4,
+          "intent": "Set Guests",
+          "action": "set guests to 4.",
+          "friction": "None",
+          "observation": "The Who control says Add guests."
+        },
+        {
+          "persona": "airbnb_u_005",
+          "segment": "family_planner",
+          "step": 5,
+          "intent": "Submit Search",
+          "action": "click Search.",
+          "friction": "None",
+          "observation": "Search button is visible after destination, dates, and guests."
+        },
+        {
+          "persona": "airbnb_u_005",
+          "segment": "family_planner",
+          "step": 6,
+          "intent": "Compare Listing Cards",
+          "action": "compare Cabin in Kings Beach, Condo in South Lake Tahoe, and Home in Carnelian Bay.",
+          "friction": "Medium",
+          "observation": "Visible Lake Tahoe cards include prices for 2 nights and ratings."
+        },
+        {
+          "persona": "airbnb_u_005",
+          "segment": "family_planner",
+          "step": 7,
+          "intent": "Evaluate Price Clarity",
+          "action": "inspect price text and note missing total-price detail.",
+          "friction": "High",
+          "observation": "The listing cards show nightly-like totals but not a full checkout-style breakdown."
+        },
+        {
+          "persona": "airbnb_u_005",
+          "segment": "family_planner",
+          "step": 8,
+          "intent": "Assess Trust",
+          "action": "use ratings and Guest favorite labels as trust signals.",
+          "friction": "None",
+          "observation": "Ratings and Guest favorite labels provide trust signals."
+        },
+        {
+          "persona": "airbnb_u_009",
+          "segment": "remote_worker_business_traveler",
+          "step": 1,
+          "intent": "Orient On Homepage",
+          "action": "scan visible header search.",
+          "friction": "None",
+          "observation": "Homepage shows Homes, Experiences, Services, plus Where, When, Who, Search."
+        },
+        {
+          "persona": "airbnb_u_009",
+          "segment": "remote_worker_business_traveler",
+          "step": 2,
+          "intent": "Enter Destination",
+          "action": "type 'Lake Tahoe' into Where.",
+          "friction": "None",
+          "observation": "The Where field is empty and prominent."
+        },
+        {
+          "persona": "airbnb_u_009",
+          "segment": "remote_worker_business_traveler",
+          "step": 3,
+          "intent": "Choose Dates",
+          "action": "choose a flexible weekend date range.",
+          "friction": "Medium",
+          "observation": "The When control says Add dates."
+        },
+        {
+          "persona": "airbnb_u_009",
+          "segment": "remote_worker_business_traveler",
+          "step": 4,
+          "intent": "Set Guests",
+          "action": "set guests to 1.",
+          "friction": "None",
+          "observation": "The Who control says Add guests."
+        },
+        {
+          "persona": "airbnb_u_009",
+          "segment": "remote_worker_business_traveler",
+          "step": 5,
+          "intent": "Submit Search",
+          "action": "click Search.",
+          "friction": "None",
+          "observation": "Search button is visible after destination, dates, and guests."
+        },
+        {
+          "persona": "airbnb_u_009",
+          "segment": "remote_worker_business_traveler",
+          "step": 6,
+          "intent": "Compare Listing Cards",
+          "action": "compare Cabin in Kings Beach, Condo in South Lake Tahoe, and Home in Carnelian Bay.",
+          "friction": "None",
+          "observation": "Visible Lake Tahoe cards include prices for 2 nights and ratings."
+        },
+        {
+          "persona": "airbnb_u_009",
+          "segment": "remote_worker_business_traveler",
+          "step": 7,
+          "intent": "Evaluate Price Clarity",
+          "action": "inspect price text and note missing total-price detail.",
+          "friction": "High",
+          "observation": "The listing cards show nightly-like totals but not a full checkout-style breakdown."
+        },
+        {
+          "persona": "airbnb_u_009",
+          "segment": "remote_worker_business_traveler",
+          "step": 8,
+          "intent": "Assess Trust",
+          "action": "use ratings and Guest favorite labels as trust signals.",
+          "friction": "None",
+          "observation": "Ratings and Guest favorite labels provide trust signals."
+        },
+        {
+          "persona": "airbnb_u_013",
+          "segment": "experience_seeker",
+          "step": 1,
+          "intent": "Orient On Homepage",
+          "action": "scan top tabs.",
+          "friction": "None",
+          "observation": "Homepage defaults to Homes, while Experiences and Services are marked new."
+        },
+        {
+          "persona": "airbnb_u_013",
+          "segment": "experience_seeker",
+          "step": 2,
+          "intent": "Switch To Experiences",
+          "action": "click Experiences tab.",
+          "friction": "None",
+          "observation": "Experiences is visible next to Homes."
+        },
+        {
+          "persona": "airbnb_u_013",
+          "segment": "experience_seeker",
+          "step": 3,
+          "intent": "Enter Destination",
+          "action": "type 'Lake Tahoe' into Where.",
+          "friction": "None",
+          "observation": "Search still begins with a Where-style location field."
+        },
+        {
+          "persona": "airbnb_u_013",
+          "segment": "experience_seeker",
+          "step": 4,
+          "intent": "Set Group Context",
+          "action": "set participants to 2 and keep timing flexible.",
+          "friction": "Medium",
+          "observation": "Date and guest controls remain relevant for activities."
+        },
+        {
+          "persona": "airbnb_u_013",
+          "segment": "experience_seeker",
+          "step": 5,
+          "intent": "Submit Search",
+          "action": "click Search.",
+          "friction": "None",
+          "observation": "Search is the primary action after setting context."
+        },
+        {
+          "persona": "airbnb_u_013",
+          "segment": "experience_seeker",
+          "step": 6,
+          "intent": "Evaluate Discoverability",
+          "action": "compare tab clarity and result relevance.",
+          "friction": "Medium",
+          "observation": "The page model highlights that Experiences and Services may be missed."
+        },
+        {
+          "persona": "airbnb_u_017",
+          "segment": "first_time_cautious_user",
+          "step": 1,
+          "intent": "Orient On Homepage",
+          "action": "scan search controls and visible listings.",
+          "friction": "None",
+          "observation": "Homepage shows polished listing cards, prices, ratings, and wishlist buttons."
+        },
+        {
+          "persona": "airbnb_u_017",
+          "segment": "first_time_cautious_user",
+          "step": 2,
+          "intent": "Enter Destination",
+          "action": "type 'Lake Tahoe' into Where.",
+          "friction": "None",
+          "observation": "The Where searchbox is the clearest starting point."
+        },
+        {
+          "persona": "airbnb_u_017",
+          "segment": "first_time_cautious_user",
+          "step": 3,
+          "intent": "Choose Dates",
+          "action": "choose a flexible weekend date range.",
+          "friction": "High",
+          "observation": "The date picker may require several choices."
+        },
+        {
+          "persona": "airbnb_u_017",
+          "segment": "first_time_cautious_user",
+          "step": 4,
+          "intent": "Set Guests",
+          "action": "set guests to 2.",
+          "friction": "None",
+          "observation": "Guest count affects suitability and price."
+        },
+        {
+          "persona": "airbnb_u_017",
+          "segment": "first_time_cautious_user",
+          "step": 5,
+          "intent": "Assess Trust",
+          "action": "compare rating and badge signals across listing cards.",
+          "friction": "Medium",
+          "observation": "Cards show ratings and Guest favorite labels."
+        },
+        {
+          "persona": "airbnb_u_017",
+          "segment": "first_time_cautious_user",
+          "step": 6,
+          "intent": "Identify Account Wall Risk",
+          "action": "avoid wishlist and continue comparing visible card information.",
+          "friction": "High",
+          "observation": "Wishlist buttons are visible on cards."
+        },
+        {
+          "persona": "airbnb_u_017",
+          "segment": "first_time_cautious_user",
+          "step": 7,
+          "intent": "Evaluate Price Clarity",
+          "action": "inspect price text and compare against budget preference.",
+          "friction": "High",
+          "observation": "Prices are visible but final cost details are not fully explained on the cards."
+        }
+      ],
+      "profiles": [
+        {
+          "persona": "airbnb_u_001",
+          "segment": "Budget Weekend Couple",
+          "goal": "Find a low-cost two-night Lake Tahoe stay for two people and decide whether any visible o...",
+          "tags": [
+            "Price",
+            "Trust"
+          ]
+        },
+        {
+          "persona": "airbnb_u_002",
+          "segment": "Budget Weekend Couple",
+          "goal": "Check whether a weekend cabin near Lake Tahoe looks affordable enough to continue researc...",
+          "tags": [
+            "Price",
+            "Patience"
+          ]
+        },
+        {
+          "persona": "airbnb_u_003",
+          "segment": "Budget Weekend Couple",
+          "goal": "Decide whether Kings Beach is a better value than South Lake Tahoe for a short couple trip.",
+          "tags": [
+            "Price",
+            "Trust"
+          ]
+        },
+        {
+          "persona": "airbnb_u_004",
+          "segment": "Budget Weekend Couple",
+          "goal": "Assess whether the homepage offers any realistic budget stay for a spontaneous two-night...",
+          "tags": [
+            "Price",
+            "Trust"
+          ]
+        },
+        {
+          "persona": "airbnb_u_005",
+          "segment": "Family Planner",
+          "goal": "Find a reliable Lake Tahoe stay candidate for a family that values ratings and enough space.",
+          "tags": [
+            "Trust",
+            "Detail Orientation"
+          ]
+        },
+        {
+          "persona": "airbnb_u_006",
+          "segment": "Family Planner",
+          "goal": "Evaluate whether a highly rated larger home is worth the higher visible price for a famil...",
+          "tags": [
+            "Trust",
+            "Detail Orientation"
+          ]
+        },
+        {
+          "persona": "airbnb_u_007",
+          "segment": "Family Planner",
+          "goal": "Check whether the search flow can support a family planning dates before comparing options.",
+          "tags": [
+            "Detail Orientation",
+            "Patience"
+          ]
+        },
+        {
+          "persona": "airbnb_u_008",
+          "segment": "Family Planner",
+          "goal": "Compare family trip options by balancing cost, rating, and confidence signals.",
+          "tags": [
+            "Trust",
+            "Detail Orientation"
+          ]
+        },
+        {
+          "persona": "airbnb_u_009",
+          "segment": "Remote Worker Business Traveler",
+          "goal": "Identify a practical Lake Tahoe stay candidate for a solo work trip based on price, ratin...",
+          "tags": [
+            "Trust",
+            "Detail Orientation"
+          ]
+        },
+        {
+          "persona": "airbnb_u_010",
+          "segment": "Remote Worker Business Traveler",
+          "goal": "Quickly decide whether a high-rated Tahoe cabin is suitable enough to save for later busi...",
+          "tags": [
+            "Trust",
+            "Detail Orientation"
+          ]
+        },
+        {
+          "persona": "airbnb_u_011",
+          "segment": "Remote Worker Business Traveler",
+          "goal": "Assess whether Airbnb Services are discoverable for a work trip without losing the lodgin...",
+          "tags": [
+            "Trust",
+            "Exploration"
+          ]
+        },
+        {
+          "persona": "airbnb_u_012",
+          "segment": "Remote Worker Business Traveler",
+          "goal": "Compare visible Tahoe options for a quiet, efficient solo stay and avoid time-consuming e...",
+          "tags": [
+            "Trust",
+            "Price"
+          ]
+        },
+        {
+          "persona": "airbnb_u_013",
+          "segment": "Experience Seeker",
+          "goal": "Discover whether Airbnb Experiences are prominent enough for a Tahoe activity-focused trip.",
+          "tags": [
+            "Exploration",
+            "Patience"
+          ]
+        },
+        {
+          "persona": "airbnb_u_014",
+          "segment": "Experience Seeker",
+          "goal": "Compare whether Homes or Experiences better supports planning a short Tahoe getaway.",
+          "tags": [
+            "Exploration",
+            "Patience"
+          ]
+        },
+        {
+          "persona": "airbnb_u_015",
+          "segment": "Experience Seeker",
+          "goal": "Find an inspiring high-trust stay as a base for an experience-led trip.",
+          "tags": [
+            "Exploration",
+            "Trust"
+          ]
+        },
+        {
+          "persona": "airbnb_u_016",
+          "segment": "Experience Seeker",
+          "goal": "Assess whether new Airbnb tabs invite exploration beyond stays.",
+          "tags": [
+            "Exploration",
+            "Patience"
+          ]
+        },
+        {
+          "persona": "airbnb_u_017",
+          "segment": "First Time Cautious User",
+          "goal": "Understand how to search for a safe-looking Tahoe stay without creating an account.",
+          "tags": [
+            "Trust",
+            "Detail Orientation"
+          ]
+        },
+        {
+          "persona": "airbnb_u_018",
+          "segment": "First Time Cautious User",
+          "goal": "Determine whether a visible Guest favorite listing is trustworthy enough to investigate l...",
+          "tags": [
+            "Trust",
+            "Detail Orientation"
+          ]
+        },
+        {
+          "persona": "airbnb_u_019",
+          "segment": "First Time Cautious User",
+          "goal": "Check whether the Airbnb homepage can be used safely without submitting personal informat...",
+          "tags": [
+            "Trust",
+            "Detail Orientation"
+          ]
+        },
+        {
+          "persona": "airbnb_u_020",
+          "segment": "First Time Cautious User",
+          "goal": "Compare visible Tahoe listings and learn what information is missing before deciding to c...",
+          "tags": [
+            "Trust",
+            "Detail Orientation"
+          ]
+        }
+      ],
+      "recommendations": [
+        "Prioritize a card-level total-price treatment with estimated fees and taxes.",
+        "Add quick-fit attributes to cards for common intents: family space, work setup, cancellation, and quietness.",
+        "Make Experiences and Services more discoverable from destination searches without forcing users to leave Homes context.",
+        "Clarify save/wishlist account requirements before interaction, or provide an anonymous compare mode.",
+        "Keep the current search controls and trust badges; they support successful first-pass evaluation."
+      ]
+    },
+    "B": {
+      "label": "Variant B",
+      "url": "https://www.airbnb.com",
+      "raw": {
+        "profiles": [
+          {
+            "id": "airbnb_u_001",
+            "segment": "budget_weekend_couple",
+            "goal": "Find a low-cost two-night Lake Tahoe stay for two people and decide whether any visible option is worth investigating further.",
+            "task": "On the Airbnb homepage, keep the Homes tab active, review the Popular homes in Lake Tahoe carousel, compare the visible condo and cabin cards by total displayed price, rating, and Guest favorite signal, then identify the best intent-to-consider option without opening checkout or saving to a wishlist.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 2,
+              "budget_preference": "Prefer the lowest visible two-night total under $550."
+            },
+            "behavior_style": {
+              "patience": 0.48,
+              "exploration": 0.42,
+              "price_sensitivity": 0.92,
+              "trust_sensitivity": 0.62,
+              "detail_orientation": 0.58
+            },
+            "success_criteria": [
+              "Compares at least three visible Lake Tahoe cards.",
+              "Selects one best candidate based on displayed price and rating.",
+              "Notes that fees or full total are not confirmed from the card."
+            ],
+            "frustration_triggers": [
+              "Prices change after opening a listing.",
+              "Fees are not visible on the card.",
+              "Wishlist prompts require signing in."
+            ]
+          },
+          {
+            "id": "airbnb_u_002",
+            "segment": "budget_weekend_couple",
+            "goal": "Check whether a weekend cabin near Lake Tahoe looks affordable enough to continue researching.",
+            "task": "Use the Where searchbox to search Lake Tahoe, open date selection only far enough to assess a two-night weekend search flow, set Who to two guests if available, submit Search, and compare budget-friendly visible stays without booking or entering personal data.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 2,
+              "budget_preference": "Target stays around $500 for two nights before unknown fees."
+            },
+            "behavior_style": {
+              "patience": 0.55,
+              "exploration": 0.5,
+              "price_sensitivity": 0.95,
+              "trust_sensitivity": 0.55,
+              "detail_orientation": 0.52
+            },
+            "success_criteria": [
+              "Search is submitted for Lake Tahoe with two guests.",
+              "At least two lower-priced results are compared.",
+              "Decision stops at shortlist or no-shortlist assessment."
+            ],
+            "frustration_triggers": [
+              "Date picker takes too long to use.",
+              "Displayed totals do not include fees clearly.",
+              "Search results feel more expensive than homepage cards."
+            ]
+          },
+          {
+            "id": "airbnb_u_003",
+            "segment": "budget_weekend_couple",
+            "goal": "Decide whether Kings Beach is a better value than South Lake Tahoe for a short couple trip.",
+            "task": "From the Lake Tahoe homepage carousel, compare the Cabin in Kings Beach against South Lake Tahoe options using price, rating, and Guest favorite indicators, then state which area appears better for value based only on visible listing information.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 2,
+              "budget_preference": "Prefer Guest favorite listings under $600 for two nights."
+            },
+            "behavior_style": {
+              "patience": 0.44,
+              "exploration": 0.36,
+              "price_sensitivity": 0.9,
+              "trust_sensitivity": 0.7,
+              "detail_orientation": 0.46
+            },
+            "success_criteria": [
+              "Reviews both Kings Beach and South Lake Tahoe visible listings.",
+              "Identifies the strongest value candidate.",
+              "Does not click wishlist or attempt account creation."
+            ],
+            "frustration_triggers": [
+              "Area names are hard to compare quickly.",
+              "Guest favorite competes with a lower price option.",
+              "Total costs are incomplete from the carousel."
+            ]
+          },
+          {
+            "id": "airbnb_u_004",
+            "segment": "budget_weekend_couple",
+            "goal": "Assess whether the homepage offers any realistic budget stay for a spontaneous two-night getaway.",
+            "task": "Scan the visible Lake Tahoe cards, sort mentally by displayed two-night price, ignore listings above the budget comfort range, and decide whether to continue searching or abandon based on visible price and rating signals.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 2,
+              "budget_preference": "Avoid options above $700 for two nights unless the rating signal is exceptional."
+            },
+            "behavior_style": {
+              "patience": 0.35,
+              "exploration": 0.3,
+              "price_sensitivity": 0.98,
+              "trust_sensitivity": 0.5,
+              "detail_orientation": 0.4
+            },
+            "success_criteria": [
+              "Recognizes the cheapest visible listing.",
+              "Filters out visibly expensive options.",
+              "Produces an intent assessment instead of starting a booking."
+            ],
+            "frustration_triggers": [
+              "High displayed prices dominate the carousel.",
+              "Fees are not exposed before deeper browsing.",
+              "Account-wall appears when trying to save."
+            ]
+          },
+          {
+            "id": "airbnb_u_005",
+            "segment": "family_planner",
+            "goal": "Find a reliable Lake Tahoe stay candidate for a family that values ratings and enough space.",
+            "task": "Use the homepage Homes search controls to search Lake Tahoe, set Who to four guests if possible, submit the search, and compare family-suitable visible homes by rating, price, and trust signals without contacting hosts or booking.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 4,
+              "budget_preference": "Comfortable paying more for high ratings, but compare against lower-cost options."
+            },
+            "behavior_style": {
+              "patience": 0.78,
+              "exploration": 0.58,
+              "price_sensitivity": 0.63,
+              "trust_sensitivity": 0.88,
+              "detail_orientation": 0.82
+            },
+            "success_criteria": [
+              "Search reflects four guests or notes if guest selection is unclear.",
+              "Compares at least three listings by rating and price.",
+              "Shortlists one or two options for later review only."
+            ],
+            "frustration_triggers": [
+              "Guest controls are ambiguous for family size.",
+              "Fees and taxes are not visible early.",
+              "Listings lack enough family-relevant detail on cards."
+            ]
+          },
+          {
+            "id": "airbnb_u_006",
+            "segment": "family_planner",
+            "goal": "Evaluate whether a highly rated larger home is worth the higher visible price for a family trip.",
+            "task": "Review the Lake Tahoe carousel and compare Home in Carnelian Bay with lower-priced cabin and condo options, focusing on rating, Guest favorite signal, and displayed two-night price, then decide whether the premium appears justified.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 4,
+              "budget_preference": "Can consider premium options if trust signals are strong."
+            },
+            "behavior_style": {
+              "patience": 0.72,
+              "exploration": 0.52,
+              "price_sensitivity": 0.58,
+              "trust_sensitivity": 0.93,
+              "detail_orientation": 0.76
+            },
+            "success_criteria": [
+              "Uses the Carnelian Bay card as the premium comparison point.",
+              "Compares it with at least two less expensive options.",
+              "Stops at value assessment, not reservation flow."
+            ],
+            "frustration_triggers": [
+              "High price lacks visible explanation.",
+              "Card does not show bedrooms or family amenities.",
+              "Full trip cost is hidden until later."
+            ]
+          },
+          {
+            "id": "airbnb_u_007",
+            "segment": "family_planner",
+            "goal": "Check whether the search flow can support a family planning dates before comparing options.",
+            "task": "Click When from the homepage, assess how easy it is to add travel dates for a family trip, set a broad date range if practical, set Who to four guests, and determine whether the resulting search feels usable enough for planning.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 4,
+              "budget_preference": "Prefer predictable total pricing over lowest price."
+            },
+            "behavior_style": {
+              "patience": 0.86,
+              "exploration": 0.46,
+              "price_sensitivity": 0.55,
+              "trust_sensitivity": 0.84,
+              "detail_orientation": 0.9
+            },
+            "success_criteria": [
+              "Interacts with date and guest controls.",
+              "Assesses whether planning friction is acceptable.",
+              "Does not provide real personal information or proceed to book."
+            ],
+            "frustration_triggers": [
+              "Date selection slows down comparison.",
+              "Guest count options are hard to confirm.",
+              "Price totals remain incomplete after search."
+            ]
+          },
+          {
+            "id": "airbnb_u_008",
+            "segment": "family_planner",
+            "goal": "Compare family trip options by balancing cost, rating, and confidence signals.",
+            "task": "From the visible Popular homes in Lake Tahoe section, compare the Cabin in Kings Beach, Cabin in South Lake Tahoe, and Home in Carnelian Bay, then rank them for a family shortlist based on visible trust and cost information only.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 5,
+              "budget_preference": "Moderate budget; avoid the most expensive option unless it clearly looks safer or better."
+            },
+            "behavior_style": {
+              "patience": 0.7,
+              "exploration": 0.55,
+              "price_sensitivity": 0.68,
+              "trust_sensitivity": 0.9,
+              "detail_orientation": 0.8
+            },
+            "success_criteria": [
+              "Ranks three named visible listings.",
+              "Mentions rating and Guest favorite signals in the ranking.",
+              "Leaves booking, messaging, and wishlist actions untouched."
+            ],
+            "frustration_triggers": [
+              "No bedroom count visible on the card.",
+              "Expensive listings may still hide fees.",
+              "Family suitability is hard to infer from homepage cards."
+            ]
+          },
+          {
+            "id": "airbnb_u_009",
+            "segment": "remote_worker_business_traveler",
+            "goal": "Identify a practical Lake Tahoe stay candidate for a solo work trip based on price, rating, and efficient search flow.",
+            "task": "Use the Homes tab, search Lake Tahoe, set Who to one guest if available, submit Search, and compare the visible results for a reliable, reasonably priced stay without booking or entering work details.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 1,
+              "budget_preference": "Prefer mid-priced options with strong ratings over the cheapest option."
+            },
+            "behavior_style": {
+              "patience": 0.52,
+              "exploration": 0.38,
+              "price_sensitivity": 0.62,
+              "trust_sensitivity": 0.76,
+              "detail_orientation": 0.65
+            },
+            "success_criteria": [
+              "Completes a destination and guest search.",
+              "Compares price and rating on at least two listings.",
+              "Identifies one practical candidate or explains why none is clear."
+            ],
+            "frustration_triggers": [
+              "Search requires too many clicks.",
+              "Cards do not expose workspace or Wi-Fi details.",
+              "Fees are hidden until later."
+            ]
+          },
+          {
+            "id": "airbnb_u_010",
+            "segment": "remote_worker_business_traveler",
+            "goal": "Quickly decide whether a high-rated Tahoe cabin is suitable enough to save for later business-trip review outside Airbnb.",
+            "task": "Scan the Lake Tahoe carousel for Guest favorite and high-rating signals, prioritize the Cabin in Kings Beach and Cabin in South Lake Tahoe, and decide which listing to manually note as a candidate without using the wishlist button.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 1,
+              "budget_preference": "Accept higher price if rating and trust signals reduce risk."
+            },
+            "behavior_style": {
+              "patience": 0.4,
+              "exploration": 0.28,
+              "price_sensitivity": 0.5,
+              "trust_sensitivity": 0.82,
+              "detail_orientation": 0.55
+            },
+            "success_criteria": [
+              "Identifies the most efficient visible candidate.",
+              "Avoids wishlist account-wall risk.",
+              "Stops after intent assessment."
+            ],
+            "frustration_triggers": [
+              "Wishlist asks for login.",
+              "Listing cards lack work-specific amenities.",
+              "Too many leisure-oriented options appear first."
+            ]
+          },
+          {
+            "id": "airbnb_u_011",
+            "segment": "remote_worker_business_traveler",
+            "goal": "Assess whether Airbnb Services are discoverable for a work trip without losing the lodging search context.",
+            "task": "From the homepage, note the Homes search controls, click the Services tab, observe whether service discovery appears relevant to a business stay, then return to Homes and compare one visible Lake Tahoe lodging option by rating and price.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 1,
+              "budget_preference": "Keep lodging cost reasonable; services are secondary."
+            },
+            "behavior_style": {
+              "patience": 0.57,
+              "exploration": 0.66,
+              "price_sensitivity": 0.56,
+              "trust_sensitivity": 0.7,
+              "detail_orientation": 0.6
+            },
+            "success_criteria": [
+              "Checks the Services tab without making purchases or sharing data.",
+              "Returns focus to lodging comparison.",
+              "Reports whether the new tab was useful or distracting."
+            ],
+            "frustration_triggers": [
+              "New tabs are easy to miss or confusing.",
+              "Switching tabs disrupts the lodging search.",
+              "Service options imply purchase flows."
+            ]
+          },
+          {
+            "id": "airbnb_u_012",
+            "segment": "remote_worker_business_traveler",
+            "goal": "Compare visible Tahoe options for a quiet, efficient solo stay and avoid time-consuming exploratory flows.",
+            "task": "Stay on the homepage carousel, compare the lowest priced condo with the higher-rated cabin options, and decide which listing is worth opening later based on displayed price, rating, and Guest favorite status.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 1,
+              "budget_preference": "Prefer a sensible balance of price and reliability."
+            },
+            "behavior_style": {
+              "patience": 0.32,
+              "exploration": 0.22,
+              "price_sensitivity": 0.67,
+              "trust_sensitivity": 0.78,
+              "detail_orientation": 0.5
+            },
+            "success_criteria": [
+              "Compares condo versus cabin options.",
+              "Chooses one candidate for later investigation.",
+              "Does not enter booking, payment, or messaging flows."
+            ],
+            "frustration_triggers": [
+              "Important amenities are not visible on cards.",
+              "Homepage carousel requires extra scanning.",
+              "Full cost is not available immediately."
+            ]
+          },
+          {
+            "id": "airbnb_u_013",
+            "segment": "experience_seeker",
+            "goal": "Discover whether Airbnb Experiences are prominent enough for a Tahoe activity-focused trip.",
+            "task": "Click the Experiences tab from the homepage, search or inspect Lake Tahoe-related options if available, and assess whether Experiences are easier to explore than Homes without reserving or sharing personal details.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 2,
+              "budget_preference": "Flexible for memorable activities; lodging cost is secondary."
+            },
+            "behavior_style": {
+              "patience": 0.69,
+              "exploration": 0.92,
+              "price_sensitivity": 0.42,
+              "trust_sensitivity": 0.64,
+              "detail_orientation": 0.58
+            },
+            "success_criteria": [
+              "Finds and evaluates the Experiences tab.",
+              "Determines whether relevant activities are discoverable.",
+              "Stops before booking or account creation."
+            ],
+            "frustration_triggers": [
+              "Experiences tab is missed or unclear.",
+              "Search defaults back to Homes.",
+              "Activity pricing or availability is not obvious."
+            ]
+          },
+          {
+            "id": "airbnb_u_014",
+            "segment": "experience_seeker",
+            "goal": "Compare whether Homes or Experiences better supports planning a short Tahoe getaway.",
+            "task": "Inspect the Homes carousel for Lake Tahoe stays, then switch to Experiences and compare the perceived usefulness of each tab for a two-person getaway, ending with an intent recommendation rather than a transaction.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 2,
+              "budget_preference": "Willing to trade lodging quality for better local activities."
+            },
+            "behavior_style": {
+              "patience": 0.74,
+              "exploration": 0.88,
+              "price_sensitivity": 0.45,
+              "trust_sensitivity": 0.6,
+              "detail_orientation": 0.62
+            },
+            "success_criteria": [
+              "Reviews both Homes and Experiences.",
+              "Compares lodging value against activity discovery.",
+              "Gives a non-booking intent assessment."
+            ],
+            "frustration_triggers": [
+              "New tabs do not clearly explain their scope.",
+              "Switching tabs loses search context.",
+              "Visible home prices make activity planning feel secondary."
+            ]
+          },
+          {
+            "id": "airbnb_u_015",
+            "segment": "experience_seeker",
+            "goal": "Find an inspiring high-trust stay as a base for an experience-led trip.",
+            "task": "On the Homes tab, review the Guest favorite Tahoe listings, compare ratings and displayed prices, and identify which stay would best support an experience-focused weekend without interacting with wishlist or reservation controls.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 2,
+              "budget_preference": "Moderate flexibility; avoid very high-priced stays unless clearly exceptional."
+            },
+            "behavior_style": {
+              "patience": 0.61,
+              "exploration": 0.76,
+              "price_sensitivity": 0.52,
+              "trust_sensitivity": 0.75,
+              "detail_orientation": 0.56
+            },
+            "success_criteria": [
+              "Focuses on Guest favorite and high-rating cards.",
+              "Compares at least three visible stays.",
+              "Selects a base candidate for later exploration only."
+            ],
+            "frustration_triggers": [
+              "Listings do not show proximity to activities.",
+              "Price differences are large without context.",
+              "Wishlist prompts interrupt browsing."
+            ]
+          },
+          {
+            "id": "airbnb_u_016",
+            "segment": "experience_seeker",
+            "goal": "Assess whether new Airbnb tabs invite exploration beyond stays.",
+            "task": "Starting from the homepage, inspect the primary tabs Homes, Experiences, and Services, note what each appears to offer, then decide which path to pursue for a trip plan without submitting payment, account, or booking actions.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 2,
+              "budget_preference": "Flexible, but wants clear value before deeper browsing."
+            },
+            "behavior_style": {
+              "patience": 0.67,
+              "exploration": 0.95,
+              "price_sensitivity": 0.38,
+              "trust_sensitivity": 0.58,
+              "detail_orientation": 0.5
+            },
+            "success_criteria": [
+              "Visits or inspects all three primary tabs.",
+              "Identifies which tab best matches an experience-led trip.",
+              "Avoids purchases, reservations, and personal data entry."
+            ],
+            "frustration_triggers": [
+              "New tabs are visually subtle.",
+              "Services appear unrelated to travel planning.",
+              "The page does not preserve context across tabs."
+            ]
+          },
+          {
+            "id": "airbnb_u_017",
+            "segment": "first_time_cautious_user",
+            "goal": "Understand how to search for a safe-looking Tahoe stay without creating an account.",
+            "task": "On the Airbnb homepage, identify the Where, When, Who, and Search controls, search Lake Tahoe for two guests only if the steps are clear, and compare visible listing trust signals while avoiding wishlist, booking, host messaging, and sign-in prompts.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 2,
+              "budget_preference": "Prefer clearly rated options over lowest price."
+            },
+            "behavior_style": {
+              "patience": 0.64,
+              "exploration": 0.34,
+              "price_sensitivity": 0.6,
+              "trust_sensitivity": 0.96,
+              "detail_orientation": 0.86
+            },
+            "success_criteria": [
+              "Understands the basic search control sequence.",
+              "Compares ratings and Guest favorite labels.",
+              "Stops immediately if account creation is requested."
+            ],
+            "frustration_triggers": [
+              "Unclear control labels or popovers.",
+              "Login prompts appear unexpectedly.",
+              "Fees are hidden or hard to understand."
+            ]
+          },
+          {
+            "id": "airbnb_u_018",
+            "segment": "first_time_cautious_user",
+            "goal": "Determine whether a visible Guest favorite listing is trustworthy enough to investigate later.",
+            "task": "Review the Lake Tahoe homepage carousel, focus on listings marked Guest favorite, compare their ratings and prices, and choose one to investigate later without clicking wishlist or starting a reservation.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 2,
+              "budget_preference": "Accept moderate cost for stronger trust signals."
+            },
+            "behavior_style": {
+              "patience": 0.58,
+              "exploration": 0.27,
+              "price_sensitivity": 0.57,
+              "trust_sensitivity": 0.98,
+              "detail_orientation": 0.78
+            },
+            "success_criteria": [
+              "Identifies all visible Guest favorite listings.",
+              "Compares them against at least one non-Guest favorite option.",
+              "Makes a cautious shortlist decision only."
+            ],
+            "frustration_triggers": [
+              "Trust labels are not explained.",
+              "Wishlist button resembles a required next step.",
+              "Full price details are not visible."
+            ]
+          },
+          {
+            "id": "airbnb_u_019",
+            "segment": "first_time_cautious_user",
+            "goal": "Check whether the Airbnb homepage can be used safely without submitting personal information.",
+            "task": "Interact lightly with the Where, When, and Who controls to understand the search flow, back out of any step that requests sign-in or personal information, and assess whether browsing listings can continue anonymously.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 1,
+              "budget_preference": "Price matters, but safety and clarity matter more."
+            },
+            "behavior_style": {
+              "patience": 0.73,
+              "exploration": 0.31,
+              "price_sensitivity": 0.5,
+              "trust_sensitivity": 0.94,
+              "detail_orientation": 0.88
+            },
+            "success_criteria": [
+              "Tests search controls without submitting personal data.",
+              "Confirms whether anonymous browsing is possible.",
+              "Ends with a confidence assessment, not a booking."
+            ],
+            "frustration_triggers": [
+              "Unexpected account wall.",
+              "Date picker feels irreversible or confusing.",
+              "Buttons imply commitment before the user is ready."
+            ]
+          },
+          {
+            "id": "airbnb_u_020",
+            "segment": "first_time_cautious_user",
+            "goal": "Compare visible Tahoe listings and learn what information is missing before deciding to continue.",
+            "task": "Stay on the Homes tab, review each visible Popular homes in Lake Tahoe card, record title, displayed price, rating, and Guest favorite status, then list what is still unknown before any booking decision.",
+            "constraints": {
+              "destination": "Lake Tahoe",
+              "guests": 2,
+              "budget_preference": "Prefer transparent pricing and strong ratings."
+            },
+            "behavior_style": {
+              "patience": 0.8,
+              "exploration": 0.25,
+              "price_sensitivity": 0.64,
+              "trust_sensitivity": 0.97,
+              "detail_orientation": 0.95
+            },
+            "success_criteria": [
+              "Captures the visible details from all four provided cards.",
+              "Identifies missing information such as fees or policies.",
+              "Does not click booking, payment, messaging, or account actions."
+            ],
+            "frustration_triggers": [
+              "Important cost details are missing from cards.",
+              "Safety or cancellation information is not visible.",
+              "The site nudges toward account-based actions."
+            ]
+          }
+        ],
+        "traces": [
+          {
+            "persona_id": "airbnb_u_001",
+            "segment": "budget_weekend_couple",
+            "goal": "Find a low-cost two-night Lake Tahoe stay for two people and decide whether any visible option is worth investigating further.",
+            "steps": [
+              {
+                "step": 1,
+                "observation": "Homepage shows Homes, Experiences, Services, plus Where, When, Who, Search.",
+                "persona_thought": "I need a stay in Lake Tahoe, so I will start with the main search controls.",
+                "intent": "orient_on_homepage",
+                "action": "scan visible header search",
+                "target_ui": "Homepage search area",
+                "expected_result": "Understand the quickest path to a stay search.",
+                "friction": 0.08
+              },
+              {
+                "step": 2,
+                "observation": "The Where field is empty and prominent.",
+                "persona_thought": "My destination is Lake Tahoe; I expect search suggestions or a direct query.",
+                "intent": "enter_destination",
+                "action": "type 'Lake Tahoe' into Where",
+                "target_ui": "Where searchbox",
+                "expected_result": "Destination query is ready.",
+                "friction": 0.12
+              },
+              {
+                "step": 3,
+                "observation": "The When control says Add dates.",
+                "persona_thought": "Dates matter, but I do not want to spend too long in a calendar.",
+                "intent": "choose_dates",
+                "action": "choose a flexible weekend date range",
+                "target_ui": "When button and date picker",
+                "expected_result": "A short trip date range is selected or the date step is identified as friction.",
+                "friction": 0.28
+              },
+              {
+                "step": 4,
+                "observation": "The Who control says Add guests.",
+                "persona_thought": "I need the results to match 2 guest(s).",
+                "intent": "set_guests",
+                "action": "set guests to 2",
+                "target_ui": "Who guest selector",
+                "expected_result": "Guest count is reflected in the search.",
+                "friction": 0.16
+              },
+              {
+                "step": 5,
+                "observation": "Search button is visible after destination, dates, and guests.",
+                "persona_thought": "Now I want result cards I can compare quickly.",
+                "intent": "submit_search",
+                "action": "click Search",
+                "target_ui": "Search button",
+                "expected_result": "Results or relevant listing cards are displayed.",
+                "friction": 0.1
+              },
+              {
+                "step": 6,
+                "observation": "Visible Lake Tahoe cards include prices for 2 nights and ratings.",
+                "persona_thought": "I will compare value using price, rating, and Guest favorite labels.",
+                "intent": "compare_listing_cards",
+                "action": "compare Cabin in Kings Beach, Condo in South Lake Tahoe, and Home in Carnelian Bay",
+                "target_ui": "Listing cards",
+                "expected_result": "Shortlist one or two options without committing.",
+                "friction": 0.23
+              },
+              {
+                "step": 7,
+                "observation": "The listing cards show nightly-like totals but not a full checkout-style breakdown.",
+                "persona_thought": "I can see rough value, but I still wonder about fees and final total.",
+                "intent": "evaluate_price_clarity",
+                "action": "inspect price text and note missing total-price detail",
+                "target_ui": "Price text on listing cards",
+                "expected_result": "Decide whether price information is enough to continue.",
+                "friction": 0.48
+              },
+              {
+                "step": 8,
+                "observation": "Ratings and Guest favorite labels provide trust signals.",
+                "persona_thought": "The cards make me comfortable browsing, but I need details before a real decision.",
+                "intent": "assess_trust",
+                "action": "use ratings and Guest favorite labels as trust signals",
+                "target_ui": "Rating and badge text",
+                "expected_result": "Estimate confidence in the shortlisted listings.",
+                "friction": 0.15
+              }
+            ],
+            "final_feedback": {
+              "task_success": true,
+              "scores": {
+                "ease_of_search": 7,
+                "price_clarity": 4,
+                "trust": 8,
+                "purchase_intent": 6
+              },
+              "liked_features": [
+                "Price and rating are visible enough to build an initial shortlist."
+              ],
+              "confusion_points": [
+                "Budget comparison is slowed by incomplete total-price detail."
+              ],
+              "friction_themes": [
+                "price_clarity"
+              ],
+              "recommendation": "Show estimated total price and fees earlier in the listing-card comparison flow."
+            }
+          },
+          {
+            "persona_id": "airbnb_u_005",
+            "segment": "family_planner",
+            "goal": "Find a reliable Lake Tahoe stay candidate for a family that values ratings and enough space.",
+            "steps": [
+              {
+                "step": 1,
+                "observation": "Homepage shows Homes, Experiences, Services, plus Where, When, Who, Search.",
+                "persona_thought": "I need a stay in Lake Tahoe, so I will start with the main search controls.",
+                "intent": "orient_on_homepage",
+                "action": "scan visible header search",
+                "target_ui": "Homepage search area",
+                "expected_result": "Understand the quickest path to a stay search.",
+                "friction": 0.08
+              },
+              {
+                "step": 2,
+                "observation": "The Where field is empty and prominent.",
+                "persona_thought": "My destination is Lake Tahoe; I expect search suggestions or a direct query.",
+                "intent": "enter_destination",
+                "action": "type 'Lake Tahoe' into Where",
+                "target_ui": "Where searchbox",
+                "expected_result": "Destination query is ready.",
+                "friction": 0.12
+              },
+              {
+                "step": 3,
+                "observation": "The When control says Add dates.",
+                "persona_thought": "Dates matter, but I do not want to spend too long in a calendar.",
+                "intent": "choose_dates",
+                "action": "choose a flexible weekend date range",
+                "target_ui": "When button and date picker",
+                "expected_result": "A short trip date range is selected or the date step is identified as friction.",
+                "friction": 0.28
+              },
+              {
+                "step": 4,
+                "observation": "The Who control says Add guests.",
+                "persona_thought": "I need the results to match 4 guest(s).",
+                "intent": "set_guests",
+                "action": "set guests to 4",
+                "target_ui": "Who guest selector",
+                "expected_result": "Guest count is reflected in the search.",
+                "friction": 0.16
+              },
+              {
+                "step": 5,
+                "observation": "Search button is visible after destination, dates, and guests.",
+                "persona_thought": "Now I want result cards I can compare quickly.",
+                "intent": "submit_search",
+                "action": "click Search",
+                "target_ui": "Search button",
+                "expected_result": "Results or relevant listing cards are displayed.",
+                "friction": 0.1
+              },
+              {
+                "step": 6,
+                "observation": "Visible Lake Tahoe cards include prices for 2 nights and ratings.",
+                "persona_thought": "I will compare value using price, rating, and Guest favorite labels.",
+                "intent": "compare_listing_cards",
+                "action": "compare Cabin in Kings Beach, Condo in South Lake Tahoe, and Home in Carnelian Bay",
+                "target_ui": "Listing cards",
+                "expected_result": "Shortlist one or two options without committing.",
+                "friction": 0.2
+              },
+              {
+                "step": 7,
+                "observation": "The listing cards show nightly-like totals but not a full checkout-style breakdown.",
+                "persona_thought": "I can see rough value, but I still wonder about fees and final total.",
+                "intent": "evaluate_price_clarity",
+                "action": "inspect price text and note missing total-price detail",
+                "target_ui": "Price text on listing cards",
+                "expected_result": "Decide whether price information is enough to continue.",
+                "friction": 0.4
+              },
+              {
+                "step": 8,
+                "observation": "Ratings and Guest favorite labels provide trust signals.",
+                "persona_thought": "The cards make me comfortable browsing, but I need details before a real decision.",
+                "intent": "assess_trust",
+                "action": "use ratings and Guest favorite labels as trust signals",
+                "target_ui": "Rating and badge text",
+                "expected_result": "Estimate confidence in the shortlisted listings.",
+                "friction": 0.17
+              }
+            ],
+            "final_feedback": {
+              "task_success": true,
+              "scores": {
+                "ease_of_search": 7,
+                "price_clarity": 5,
+                "trust": 8,
+                "purchase_intent": 6
+              },
+              "liked_features": [
+                "Guest count is easy to include in the search intent."
+              ],
+              "confusion_points": [
+                "Family suitability requires more detail than the card provides."
+              ],
+              "friction_themes": [
+                "price_clarity"
+              ],
+              "recommendation": "Surface family-fit signals, sleeping setup, and flexible cancellation earlier."
+            }
+          },
+          {
+            "persona_id": "airbnb_u_009",
+            "segment": "remote_worker_business_traveler",
+            "goal": "Identify a practical Lake Tahoe stay candidate for a solo work trip based on price, rating, and efficient search flow.",
+            "steps": [
+              {
+                "step": 1,
+                "observation": "Homepage shows Homes, Experiences, Services, plus Where, When, Who, Search.",
+                "persona_thought": "I need a stay in Lake Tahoe, so I will start with the main search controls.",
+                "intent": "orient_on_homepage",
+                "action": "scan visible header search",
+                "target_ui": "Homepage search area",
+                "expected_result": "Understand the quickest path to a stay search.",
+                "friction": 0.08
+              },
+              {
+                "step": 2,
+                "observation": "The Where field is empty and prominent.",
+                "persona_thought": "My destination is Lake Tahoe; I expect search suggestions or a direct query.",
+                "intent": "enter_destination",
+                "action": "type 'Lake Tahoe' into Where",
+                "target_ui": "Where searchbox",
+                "expected_result": "Destination query is ready.",
+                "friction": 0.12
+              },
+              {
+                "step": 3,
+                "observation": "The When control says Add dates.",
+                "persona_thought": "Dates matter, but I do not want to spend too long in a calendar.",
+                "intent": "choose_dates",
+                "action": "choose a flexible weekend date range",
+                "target_ui": "When button and date picker",
+                "expected_result": "A short trip date range is selected or the date step is identified as friction.",
+                "friction": 0.28
+              },
+              {
+                "step": 4,
+                "observation": "The Who control says Add guests.",
+                "persona_thought": "I need the results to match 1 guest(s).",
+                "intent": "set_guests",
+                "action": "set guests to 1",
+                "target_ui": "Who guest selector",
+                "expected_result": "Guest count is reflected in the search.",
+                "friction": 0.16
+              },
+              {
+                "step": 5,
+                "observation": "Search button is visible after destination, dates, and guests.",
+                "persona_thought": "Now I want result cards I can compare quickly.",
+                "intent": "submit_search",
+                "action": "click Search",
+                "target_ui": "Search button",
+                "expected_result": "Results or relevant listing cards are displayed.",
+                "friction": 0.1
+              },
+              {
+                "step": 6,
+                "observation": "Visible Lake Tahoe cards include prices for 2 nights and ratings.",
+                "persona_thought": "I will compare value using price, rating, and Guest favorite labels.",
+                "intent": "compare_listing_cards",
+                "action": "compare Cabin in Kings Beach, Condo in South Lake Tahoe, and Home in Carnelian Bay",
+                "target_ui": "Listing cards",
+                "expected_result": "Shortlist one or two options without committing.",
+                "friction": 0.19
+              },
+              {
+                "step": 7,
+                "observation": "The listing cards show nightly-like totals but not a full checkout-style breakdown.",
+                "persona_thought": "I can see rough value, but I still wonder about fees and final total.",
+                "intent": "evaluate_price_clarity",
+                "action": "inspect price text and note missing total-price detail",
+                "target_ui": "Price text on listing cards",
+                "expected_result": "Decide whether price information is enough to continue.",
+                "friction": 0.39
+              },
+              {
+                "step": 8,
+                "observation": "Ratings and Guest favorite labels provide trust signals.",
+                "persona_thought": "The cards make me comfortable browsing, but I need details before a real decision.",
+                "intent": "assess_trust",
+                "action": "use ratings and Guest favorite labels as trust signals",
+                "target_ui": "Rating and badge text",
+                "expected_result": "Estimate confidence in the shortlisted listings.",
+                "friction": 0.15
+              }
+            ],
+            "final_feedback": {
+              "task_success": true,
+              "scores": {
+                "ease_of_search": 8,
+                "price_clarity": 5,
+                "trust": 8,
+                "purchase_intent": 6
+              },
+              "liked_features": [
+                "Destination and guest search path is fast."
+              ],
+              "confusion_points": [
+                "Work-readiness is hard to judge from the first listing cards."
+              ],
+              "friction_themes": [
+                "price_clarity"
+              ],
+              "recommendation": "Expose work-trip filters such as Wi-Fi, desk, quietness, and commute area earlier."
+            }
+          },
+          {
+            "persona_id": "airbnb_u_013",
+            "segment": "experience_seeker",
+            "goal": "Discover whether Airbnb Experiences are prominent enough for a Tahoe activity-focused trip.",
+            "steps": [
+              {
+                "step": 1,
+                "observation": "Homepage defaults to Homes, while Experiences and Services are marked new.",
+                "persona_thought": "I am more interested in activities than lodging, so I need to switch context.",
+                "intent": "orient_on_homepage",
+                "action": "scan top tabs",
+                "target_ui": "Homes, Experiences, Services tabs",
+                "expected_result": "Find the non-stay discovery entry point.",
+                "friction": 0.14
+              },
+              {
+                "step": 2,
+                "observation": "Experiences is visible next to Homes.",
+                "persona_thought": "The new label catches my eye; I expect activity search to live there.",
+                "intent": "switch_to_experiences",
+                "action": "click Experiences tab",
+                "target_ui": "Experiences tab",
+                "expected_result": "Experience search mode becomes active.",
+                "friction": 0.18
+              },
+              {
+                "step": 3,
+                "observation": "Search still begins with a Where-style location field.",
+                "persona_thought": "I want activity ideas around Lake Tahoe.",
+                "intent": "enter_destination",
+                "action": "type 'Lake Tahoe' into Where",
+                "target_ui": "Where searchbox",
+                "expected_result": "Activity discovery is scoped to a destination.",
+                "friction": 0.14
+              },
+              {
+                "step": 4,
+                "observation": "Date and guest controls remain relevant for activities.",
+                "persona_thought": "I need availability for 2 participant(s), but flexible timing is okay.",
+                "intent": "set_group_context",
+                "action": "set participants to 2 and keep timing flexible",
+                "target_ui": "When and Who controls",
+                "expected_result": "The search reflects activity group size.",
+                "friction": 0.24
+              },
+              {
+                "step": 5,
+                "observation": "Search is the primary action after setting context.",
+                "persona_thought": "I want to see whether Airbnb clearly separates stays from activities.",
+                "intent": "submit_search",
+                "action": "click Search",
+                "target_ui": "Search button",
+                "expected_result": "Activity or service results are displayed.",
+                "friction": 0.12
+              },
+              {
+                "step": 6,
+                "observation": "The page model highlights that Experiences and Services may be missed.",
+                "persona_thought": "The entry point exists, but it competes with the stronger Homes default.",
+                "intent": "evaluate_discoverability",
+                "action": "compare tab clarity and result relevance",
+                "target_ui": "Top navigation and result area",
+                "expected_result": "Judge whether activity discovery is obvious enough.",
+                "friction": 0.34
+              }
+            ],
+            "final_feedback": {
+              "task_success": true,
+              "scores": {
+                "ease_of_search": 7,
+                "price_clarity": 6,
+                "trust": 8,
+                "purchase_intent": 6
+              },
+              "liked_features": [
+                "The new tab gives a clear entry point once noticed."
+              ],
+              "confusion_points": [
+                "Experiences are visible but secondary to the stronger Homes default."
+              ],
+              "friction_themes": [
+                "price_clarity",
+                "experiences_discoverability"
+              ],
+              "recommendation": "Make Experiences and Services more discoverable from the default Homes flow."
+            }
+          },
+          {
+            "persona_id": "airbnb_u_017",
+            "segment": "first_time_cautious_user",
+            "goal": "Understand how to search for a safe-looking Tahoe stay without creating an account.",
+            "steps": [
+              {
+                "step": 1,
+                "observation": "Homepage shows polished listing cards, prices, ratings, and wishlist buttons.",
+                "persona_thought": "I am new, so I want to understand value before giving any account details.",
+                "intent": "orient_on_homepage",
+                "action": "scan search controls and visible listings",
+                "target_ui": "Homepage and Lake Tahoe carousel",
+                "expected_result": "Build enough confidence to explore safely.",
+                "friction": 0.1
+              },
+              {
+                "step": 2,
+                "observation": "The Where searchbox is the clearest starting point.",
+                "persona_thought": "I will search Lake Tahoe but keep my commitment low.",
+                "intent": "enter_destination",
+                "action": "type 'Lake Tahoe' into Where",
+                "target_ui": "Where searchbox",
+                "expected_result": "Destination query is ready.",
+                "friction": 0.16
+              },
+              {
+                "step": 3,
+                "observation": "The date picker may require several choices.",
+                "persona_thought": "I am willing to try, but calendar complexity could slow me down.",
+                "intent": "choose_dates",
+                "action": "choose a flexible weekend date range",
+                "target_ui": "When button and date picker",
+                "expected_result": "A low-commitment trip window is selected.",
+                "friction": 0.38
+              },
+              {
+                "step": 4,
+                "observation": "Guest count affects suitability and price.",
+                "persona_thought": "I need results for 2 guest(s).",
+                "intent": "set_guests",
+                "action": "set guests to 2",
+                "target_ui": "Who guest selector",
+                "expected_result": "Guest context is included.",
+                "friction": 0.18
+              },
+              {
+                "step": 5,
+                "observation": "Cards show ratings and Guest favorite labels.",
+                "persona_thought": "I trust visible reviews more than beautiful photos.",
+                "intent": "assess_trust",
+                "action": "compare rating and badge signals across listing cards",
+                "target_ui": "Rating and badge text",
+                "expected_result": "Identify whether the marketplace feels credible.",
+                "friction": 0.2
+              },
+              {
+                "step": 6,
+                "observation": "Wishlist buttons are visible on cards.",
+                "persona_thought": "Saving looks useful, but an account wall would interrupt my evaluation.",
+                "intent": "identify_account_wall_risk",
+                "action": "avoid wishlist and continue comparing visible card information",
+                "target_ui": "Wishlist button",
+                "expected_result": "Recognize account-wall friction without triggering it.",
+                "friction": 0.42
+              },
+              {
+                "step": 7,
+                "observation": "Prices are visible but final cost details are not fully explained on the cards.",
+                "persona_thought": "Before I continue, I need clearer total-cost confidence.",
+                "intent": "evaluate_price_clarity",
+                "action": "inspect price text and compare against budget preference",
+                "target_ui": "Price text on listing cards",
+                "expected_result": "Decide whether the search experience gives enough confidence.",
+                "friction": 0.44
+              }
+            ],
+            "final_feedback": {
+              "task_success": true,
+              "scores": {
+                "ease_of_search": 7,
+                "price_clarity": 5,
+                "trust": 8,
+                "purchase_intent": 6
+              },
+              "liked_features": [
+                "Ratings and Guest favorite badges help establish trust."
+              ],
+              "confusion_points": [
+                "Final cost is not clear enough from listing cards.",
+                "Wishlist appears useful but may interrupt evaluation."
+              ],
+              "friction_themes": [
+                "price_clarity",
+                "wishlist_account_wall"
+              ],
+              "recommendation": "Explain total cost and account-wall moments before users try to save listings."
+            }
+          }
+        ],
+        "summary": {
+          "top_findings": [
+            {
+              "theme": "Price clarity is the main blocker to stronger intent",
+              "affected_users": 5,
+              "severity": "high",
+              "evidence": "price_clarity appeared in 5 of 5 runs; average price_clarity score was 5.0 while purchase_intent averaged 6.0.",
+              "suggestion": "Show estimated total price, fees, taxes, and what is not included directly on listing cards or in a quick-expand price breakdown."
+            },
+            {
+              "theme": "Core search and trust signals work for initial shortlisting",
+              "affected_users": 5,
+              "severity": "low",
+              "evidence": "task_success_rate was 1.0; average ease_of_search was 7.2 and average trust was 8.0.",
+              "suggestion": "Preserve the visible rating and Guest favorite signals, then add the missing decision details around cost and fit."
+            },
+            {
+              "theme": "Experiences discovery is visible but secondary",
+              "affected_users": 1,
+              "severity": "medium",
+              "evidence": "experiences_discoverability appeared in 1 run; the experience seeker noted that Experiences are visible but secondary to the Homes default.",
+              "suggestion": "Add stronger cross-links from Homes to Experiences for destination-led trips, especially after a user searches a place."
+            },
+            {
+              "theme": "Wishlist may create account-wall anxiety",
+              "affected_users": 1,
+              "severity": "medium",
+              "evidence": "wishlist_account_wall appeared in 1 run; the cautious first-time user avoided saving because it looked like it might trigger sign-in.",
+              "suggestion": "Clarify whether saving requires an account before the user clicks, or offer a lightweight anonymous compare option."
+            }
+          ],
+          "segment_notes": [
+            {
+              "segment": "budget_weekend_couple",
+              "note": "Strongly price-sensitive users can shortlist from cards, but incomplete totals make budget confidence weak."
+            },
+            {
+              "segment": "family_planner",
+              "note": "Family planners trust ratings and guest count controls, but need sleeping setup, cancellation, and family-fit details earlier."
+            },
+            {
+              "segment": "remote_worker_business_traveler",
+              "note": "Solo work travelers find the destination and guest flow efficient, but work-readiness signals like Wi-Fi, desk, and quietness are missing from first-pass cards."
+            },
+            {
+              "segment": "experience_seeker",
+              "note": "Experience seekers notice the new tab once scanning, but Homes remains the dominant default path."
+            },
+            {
+              "segment": "first_time_cautious_user",
+              "note": "Cautious first-time users value ratings and Guest favorite badges, but need clearer cost transparency and account-wall expectations."
+            }
+          ],
+          "recommendations": [
+            "Prioritize a card-level total-price treatment with estimated fees and taxes.",
+            "Add quick-fit attributes to cards for common intents: family space, work setup, cancellation, and quietness.",
+            "Make Experiences and Services more discoverable from destination searches without forcing users to leave Homes context.",
+            "Clarify save/wishlist account requirements before interaction, or provide an anonymous compare mode.",
+            "Keep the current search controls and trust badges; they support successful first-pass evaluation."
+          ],
+          "demo_readout": "Across 5 synthetic runs, task_success_rate was 1.0 with avg_steps of 7.4. Users rated ease_of_search 7.2, trust 8.0, price_clarity 5.0, and purchase_intent 6.0. The demo story is clear: Airbnb gets users to a credible shortlist quickly, but hidden final costs and missing context keep them from moving beyond intent-to-consider.",
+          "metrics": {
+            "run_count": 5,
+            "task_success_rate": 1.0,
+            "avg_steps": 7.4,
+            "avg_scores": {
+              "ease_of_search": 7.2,
+              "price_clarity": 5.0,
+              "trust": 8.0,
+              "purchase_intent": 6.0
+            },
+            "friction_counts": {
+              "experiences_discoverability": 1,
+              "price_clarity": 5,
+              "wishlist_account_wall": 1
+            },
+            "segments_run": [
+              "budget_weekend_couple",
+              "experience_seeker",
+              "family_planner",
+              "first_time_cautious_user",
+              "remote_worker_business_traveler"
+            ]
+          }
+        }
+      },
+      "summary_stats": [
+        {
+          "id": "success",
+          "label": "Success",
+          "value": "100%",
+          "detail": "+/-5.0%",
+          "icon": "circle-check"
+        },
+        {
+          "id": "avg_steps",
+          "label": "Avg Steps",
+          "value": "7.4",
+          "detail": "+/-0.7",
+          "icon": "footprints"
+        },
+        {
+          "id": "ease",
+          "label": "Ease (1-5)",
+          "value": "3.6",
+          "detail": "+/-1.1",
+          "icon": "smile"
+        },
+        {
+          "id": "intent",
+          "label": "Intent (1-5)",
+          "value": "3.0",
+          "detail": "+/-0.7",
+          "icon": "target"
+        }
+      ],
+      "metric_snapshot": [
+        {
+          "id": "conversion",
+          "label": "Conversion",
+          "value": "52%",
+          "detail": "+/-5.3%"
+        },
+        {
+          "id": "dropoff",
+          "label": "Drop-off",
+          "value": "18%",
+          "detail": "+/-1.9%"
+        },
+        {
+          "id": "time_to_task",
+          "label": "Time to Task",
+          "value": "2.7m",
+          "detail": "+/-1.2m"
+        },
+        {
+          "id": "satisfaction",
+          "label": "Satisfaction (1-5)",
+          "value": "4.0",
+          "detail": "+/-0.9"
+        }
+      ],
+      "derived_metrics": {
+        "conversion": 0.52,
+        "dropoff": 0.18,
+        "time_to_task": 2.66,
+        "satisfaction": 4.04
+      },
+      "feedback": [
+        {
+          "icon": "circle-dollar-sign",
+          "title": "Price clarity is the main blocker t...",
+          "body": "price clarity appeared in 5 of 5 runs; average price clarity score was 5.0 while purchase...",
+          "level": "high",
+          "badge": "High Evidence"
+        },
+        {
+          "icon": "triangle-alert",
+          "title": "Core search and trust signals work...",
+          "body": "task success rate was 1.0; average ease of search was 7.2 and average trust was 8.0.",
+          "level": "low",
+          "badge": "Low Evidence"
+        },
+        {
+          "icon": "shield-check",
+          "title": "Experiences discovery is visible bu...",
+          "body": "experiences discoverability appeared in 1 run; the experience seeker noted that Experienc...",
+          "level": "medium",
+          "badge": "Medium Evidence"
+        }
+      ],
+      "logs": [
+        {
+          "persona": "airbnb_u_001",
+          "segment": "budget_weekend_couple",
+          "step": 1,
+          "intent": "Orient On Homepage",
+          "action": "scan visible header search.",
+          "friction": "None",
+          "observation": "Homepage shows Homes, Experiences, Services, plus Where, When, Who, Search."
+        },
+        {
+          "persona": "airbnb_u_001",
+          "segment": "budget_weekend_couple",
+          "step": 2,
+          "intent": "Enter Destination",
+          "action": "type 'Lake Tahoe' into Where.",
+          "friction": "None",
+          "observation": "The Where field is empty and prominent."
+        },
+        {
+          "persona": "airbnb_u_001",
+          "segment": "budget_weekend_couple",
+          "step": 3,
+          "intent": "Choose Dates",
+          "action": "choose a flexible weekend date range.",
+          "friction": "Medium",
+          "observation": "The When control says Add dates."
+        },
+        {
+          "persona": "airbnb_u_001",
+          "segment": "budget_weekend_couple",
+          "step": 4,
+          "intent": "Set Guests",
+          "action": "set guests to 2.",
+          "friction": "None",
+          "observation": "The Who control says Add guests."
+        },
+        {
+          "persona": "airbnb_u_001",
+          "segment": "budget_weekend_couple",
+          "step": 5,
+          "intent": "Submit Search",
+          "action": "click Search.",
+          "friction": "None",
+          "observation": "Search button is visible after destination, dates, and guests."
+        },
+        {
+          "persona": "airbnb_u_001",
+          "segment": "budget_weekend_couple",
+          "step": 6,
+          "intent": "Compare Listing Cards",
+          "action": "compare Cabin in Kings Beach, Condo in South Lake Tahoe, and Home in Carnelian Bay.",
+          "friction": "Medium",
+          "observation": "Visible Lake Tahoe cards include prices for 2 nights and ratings."
+        },
+        {
+          "persona": "airbnb_u_001",
+          "segment": "budget_weekend_couple",
+          "step": 7,
+          "intent": "Evaluate Price Clarity",
+          "action": "inspect price text and note missing total-price detail.",
+          "friction": "High",
+          "observation": "The listing cards show nightly-like totals but not a full checkout-style breakdown."
+        },
+        {
+          "persona": "airbnb_u_001",
+          "segment": "budget_weekend_couple",
+          "step": 8,
+          "intent": "Assess Trust",
+          "action": "use ratings and Guest favorite labels as trust signals.",
+          "friction": "None",
+          "observation": "Ratings and Guest favorite labels provide trust signals."
+        },
+        {
+          "persona": "airbnb_u_005",
+          "segment": "family_planner",
+          "step": 1,
+          "intent": "Orient On Homepage",
+          "action": "scan visible header search.",
+          "friction": "None",
+          "observation": "Homepage shows Homes, Experiences, Services, plus Where, When, Who, Search."
+        },
+        {
+          "persona": "airbnb_u_005",
+          "segment": "family_planner",
+          "step": 2,
+          "intent": "Enter Destination",
+          "action": "type 'Lake Tahoe' into Where.",
+          "friction": "None",
+          "observation": "The Where field is empty and prominent."
+        },
+        {
+          "persona": "airbnb_u_005",
+          "segment": "family_planner",
+          "step": 3,
+          "intent": "Choose Dates",
+          "action": "choose a flexible weekend date range.",
+          "friction": "Medium",
+          "observation": "The When control says Add dates."
+        },
+        {
+          "persona": "airbnb_u_005",
+          "segment": "family_planner",
+          "step": 4,
+          "intent": "Set Guests",
+          "action": "set guests to 4.",
+          "friction": "None",
+          "observation": "The Who control says Add guests."
+        },
+        {
+          "persona": "airbnb_u_005",
+          "segment": "family_planner",
+          "step": 5,
+          "intent": "Submit Search",
+          "action": "click Search.",
+          "friction": "None",
+          "observation": "Search button is visible after destination, dates, and guests."
+        },
+        {
+          "persona": "airbnb_u_005",
+          "segment": "family_planner",
+          "step": 6,
+          "intent": "Compare Listing Cards",
+          "action": "compare Cabin in Kings Beach, Condo in South Lake Tahoe, and Home in Carnelian Bay.",
+          "friction": "Medium",
+          "observation": "Visible Lake Tahoe cards include prices for 2 nights and ratings."
+        },
+        {
+          "persona": "airbnb_u_005",
+          "segment": "family_planner",
+          "step": 7,
+          "intent": "Evaluate Price Clarity",
+          "action": "inspect price text and note missing total-price detail.",
+          "friction": "High",
+          "observation": "The listing cards show nightly-like totals but not a full checkout-style breakdown."
+        },
+        {
+          "persona": "airbnb_u_005",
+          "segment": "family_planner",
+          "step": 8,
+          "intent": "Assess Trust",
+          "action": "use ratings and Guest favorite labels as trust signals.",
+          "friction": "None",
+          "observation": "Ratings and Guest favorite labels provide trust signals."
+        },
+        {
+          "persona": "airbnb_u_009",
+          "segment": "remote_worker_business_traveler",
+          "step": 1,
+          "intent": "Orient On Homepage",
+          "action": "scan visible header search.",
+          "friction": "None",
+          "observation": "Homepage shows Homes, Experiences, Services, plus Where, When, Who, Search."
+        },
+        {
+          "persona": "airbnb_u_009",
+          "segment": "remote_worker_business_traveler",
+          "step": 2,
+          "intent": "Enter Destination",
+          "action": "type 'Lake Tahoe' into Where.",
+          "friction": "None",
+          "observation": "The Where field is empty and prominent."
+        },
+        {
+          "persona": "airbnb_u_009",
+          "segment": "remote_worker_business_traveler",
+          "step": 3,
+          "intent": "Choose Dates",
+          "action": "choose a flexible weekend date range.",
+          "friction": "Medium",
+          "observation": "The When control says Add dates."
+        },
+        {
+          "persona": "airbnb_u_009",
+          "segment": "remote_worker_business_traveler",
+          "step": 4,
+          "intent": "Set Guests",
+          "action": "set guests to 1.",
+          "friction": "None",
+          "observation": "The Who control says Add guests."
+        },
+        {
+          "persona": "airbnb_u_009",
+          "segment": "remote_worker_business_traveler",
+          "step": 5,
+          "intent": "Submit Search",
+          "action": "click Search.",
+          "friction": "None",
+          "observation": "Search button is visible after destination, dates, and guests."
+        },
+        {
+          "persona": "airbnb_u_009",
+          "segment": "remote_worker_business_traveler",
+          "step": 6,
+          "intent": "Compare Listing Cards",
+          "action": "compare Cabin in Kings Beach, Condo in South Lake Tahoe, and Home in Carnelian Bay.",
+          "friction": "None",
+          "observation": "Visible Lake Tahoe cards include prices for 2 nights and ratings."
+        },
+        {
+          "persona": "airbnb_u_009",
+          "segment": "remote_worker_business_traveler",
+          "step": 7,
+          "intent": "Evaluate Price Clarity",
+          "action": "inspect price text and note missing total-price detail.",
+          "friction": "High",
+          "observation": "The listing cards show nightly-like totals but not a full checkout-style breakdown."
+        },
+        {
+          "persona": "airbnb_u_009",
+          "segment": "remote_worker_business_traveler",
+          "step": 8,
+          "intent": "Assess Trust",
+          "action": "use ratings and Guest favorite labels as trust signals.",
+          "friction": "None",
+          "observation": "Ratings and Guest favorite labels provide trust signals."
+        },
+        {
+          "persona": "airbnb_u_013",
+          "segment": "experience_seeker",
+          "step": 1,
+          "intent": "Orient On Homepage",
+          "action": "scan top tabs.",
+          "friction": "None",
+          "observation": "Homepage defaults to Homes, while Experiences and Services are marked new."
+        },
+        {
+          "persona": "airbnb_u_013",
+          "segment": "experience_seeker",
+          "step": 2,
+          "intent": "Switch To Experiences",
+          "action": "click Experiences tab.",
+          "friction": "None",
+          "observation": "Experiences is visible next to Homes."
+        },
+        {
+          "persona": "airbnb_u_013",
+          "segment": "experience_seeker",
+          "step": 3,
+          "intent": "Enter Destination",
+          "action": "type 'Lake Tahoe' into Where.",
+          "friction": "None",
+          "observation": "Search still begins with a Where-style location field."
+        },
+        {
+          "persona": "airbnb_u_013",
+          "segment": "experience_seeker",
+          "step": 4,
+          "intent": "Set Group Context",
+          "action": "set participants to 2 and keep timing flexible.",
+          "friction": "Medium",
+          "observation": "Date and guest controls remain relevant for activities."
+        },
+        {
+          "persona": "airbnb_u_013",
+          "segment": "experience_seeker",
+          "step": 5,
+          "intent": "Submit Search",
+          "action": "click Search.",
+          "friction": "None",
+          "observation": "Search is the primary action after setting context."
+        },
+        {
+          "persona": "airbnb_u_013",
+          "segment": "experience_seeker",
+          "step": 6,
+          "intent": "Evaluate Discoverability",
+          "action": "compare tab clarity and result relevance.",
+          "friction": "Medium",
+          "observation": "The page model highlights that Experiences and Services may be missed."
+        },
+        {
+          "persona": "airbnb_u_017",
+          "segment": "first_time_cautious_user",
+          "step": 1,
+          "intent": "Orient On Homepage",
+          "action": "scan search controls and visible listings.",
+          "friction": "None",
+          "observation": "Homepage shows polished listing cards, prices, ratings, and wishlist buttons."
+        },
+        {
+          "persona": "airbnb_u_017",
+          "segment": "first_time_cautious_user",
+          "step": 2,
+          "intent": "Enter Destination",
+          "action": "type 'Lake Tahoe' into Where.",
+          "friction": "None",
+          "observation": "The Where searchbox is the clearest starting point."
+        },
+        {
+          "persona": "airbnb_u_017",
+          "segment": "first_time_cautious_user",
+          "step": 3,
+          "intent": "Choose Dates",
+          "action": "choose a flexible weekend date range.",
+          "friction": "High",
+          "observation": "The date picker may require several choices."
+        },
+        {
+          "persona": "airbnb_u_017",
+          "segment": "first_time_cautious_user",
+          "step": 4,
+          "intent": "Set Guests",
+          "action": "set guests to 2.",
+          "friction": "None",
+          "observation": "Guest count affects suitability and price."
+        },
+        {
+          "persona": "airbnb_u_017",
+          "segment": "first_time_cautious_user",
+          "step": 5,
+          "intent": "Assess Trust",
+          "action": "compare rating and badge signals across listing cards.",
+          "friction": "Medium",
+          "observation": "Cards show ratings and Guest favorite labels."
+        },
+        {
+          "persona": "airbnb_u_017",
+          "segment": "first_time_cautious_user",
+          "step": 6,
+          "intent": "Identify Account Wall Risk",
+          "action": "avoid wishlist and continue comparing visible card information.",
+          "friction": "High",
+          "observation": "Wishlist buttons are visible on cards."
+        },
+        {
+          "persona": "airbnb_u_017",
+          "segment": "first_time_cautious_user",
+          "step": 7,
+          "intent": "Evaluate Price Clarity",
+          "action": "inspect price text and compare against budget preference.",
+          "friction": "High",
+          "observation": "Prices are visible but final cost details are not fully explained on the cards."
+        }
+      ],
+      "profiles": [
+        {
+          "persona": "airbnb_u_001",
+          "segment": "Budget Weekend Couple",
+          "goal": "Find a low-cost two-night Lake Tahoe stay for two people and decide whether any visible o...",
+          "tags": [
+            "Price",
+            "Trust"
+          ]
+        },
+        {
+          "persona": "airbnb_u_002",
+          "segment": "Budget Weekend Couple",
+          "goal": "Check whether a weekend cabin near Lake Tahoe looks affordable enough to continue researc...",
+          "tags": [
+            "Price",
+            "Patience"
+          ]
+        },
+        {
+          "persona": "airbnb_u_003",
+          "segment": "Budget Weekend Couple",
+          "goal": "Decide whether Kings Beach is a better value than South Lake Tahoe for a short couple trip.",
+          "tags": [
+            "Price",
+            "Trust"
+          ]
+        },
+        {
+          "persona": "airbnb_u_004",
+          "segment": "Budget Weekend Couple",
+          "goal": "Assess whether the homepage offers any realistic budget stay for a spontaneous two-night...",
+          "tags": [
+            "Price",
+            "Trust"
+          ]
+        },
+        {
+          "persona": "airbnb_u_005",
+          "segment": "Family Planner",
+          "goal": "Find a reliable Lake Tahoe stay candidate for a family that values ratings and enough space.",
+          "tags": [
+            "Trust",
+            "Detail Orientation"
+          ]
+        },
+        {
+          "persona": "airbnb_u_006",
+          "segment": "Family Planner",
+          "goal": "Evaluate whether a highly rated larger home is worth the higher visible price for a famil...",
+          "tags": [
+            "Trust",
+            "Detail Orientation"
+          ]
+        },
+        {
+          "persona": "airbnb_u_007",
+          "segment": "Family Planner",
+          "goal": "Check whether the search flow can support a family planning dates before comparing options.",
+          "tags": [
+            "Detail Orientation",
+            "Patience"
+          ]
+        },
+        {
+          "persona": "airbnb_u_008",
+          "segment": "Family Planner",
+          "goal": "Compare family trip options by balancing cost, rating, and confidence signals.",
+          "tags": [
+            "Trust",
+            "Detail Orientation"
+          ]
+        },
+        {
+          "persona": "airbnb_u_009",
+          "segment": "Remote Worker Business Traveler",
+          "goal": "Identify a practical Lake Tahoe stay candidate for a solo work trip based on price, ratin...",
+          "tags": [
+            "Trust",
+            "Detail Orientation"
+          ]
+        },
+        {
+          "persona": "airbnb_u_010",
+          "segment": "Remote Worker Business Traveler",
+          "goal": "Quickly decide whether a high-rated Tahoe cabin is suitable enough to save for later busi...",
+          "tags": [
+            "Trust",
+            "Detail Orientation"
+          ]
+        },
+        {
+          "persona": "airbnb_u_011",
+          "segment": "Remote Worker Business Traveler",
+          "goal": "Assess whether Airbnb Services are discoverable for a work trip without losing the lodgin...",
+          "tags": [
+            "Trust",
+            "Exploration"
+          ]
+        },
+        {
+          "persona": "airbnb_u_012",
+          "segment": "Remote Worker Business Traveler",
+          "goal": "Compare visible Tahoe options for a quiet, efficient solo stay and avoid time-consuming e...",
+          "tags": [
+            "Trust",
+            "Price"
+          ]
+        },
+        {
+          "persona": "airbnb_u_013",
+          "segment": "Experience Seeker",
+          "goal": "Discover whether Airbnb Experiences are prominent enough for a Tahoe activity-focused trip.",
+          "tags": [
+            "Exploration",
+            "Patience"
+          ]
+        },
+        {
+          "persona": "airbnb_u_014",
+          "segment": "Experience Seeker",
+          "goal": "Compare whether Homes or Experiences better supports planning a short Tahoe getaway.",
+          "tags": [
+            "Exploration",
+            "Patience"
+          ]
+        },
+        {
+          "persona": "airbnb_u_015",
+          "segment": "Experience Seeker",
+          "goal": "Find an inspiring high-trust stay as a base for an experience-led trip.",
+          "tags": [
+            "Exploration",
+            "Trust"
+          ]
+        },
+        {
+          "persona": "airbnb_u_016",
+          "segment": "Experience Seeker",
+          "goal": "Assess whether new Airbnb tabs invite exploration beyond stays.",
+          "tags": [
+            "Exploration",
+            "Patience"
+          ]
+        },
+        {
+          "persona": "airbnb_u_017",
+          "segment": "First Time Cautious User",
+          "goal": "Understand how to search for a safe-looking Tahoe stay without creating an account.",
+          "tags": [
+            "Trust",
+            "Detail Orientation"
+          ]
+        },
+        {
+          "persona": "airbnb_u_018",
+          "segment": "First Time Cautious User",
+          "goal": "Determine whether a visible Guest favorite listing is trustworthy enough to investigate l...",
+          "tags": [
+            "Trust",
+            "Detail Orientation"
+          ]
+        },
+        {
+          "persona": "airbnb_u_019",
+          "segment": "First Time Cautious User",
+          "goal": "Check whether the Airbnb homepage can be used safely without submitting personal informat...",
+          "tags": [
+            "Trust",
+            "Detail Orientation"
+          ]
+        },
+        {
+          "persona": "airbnb_u_020",
+          "segment": "First Time Cautious User",
+          "goal": "Compare visible Tahoe listings and learn what information is missing before deciding to c...",
+          "tags": [
+            "Trust",
+            "Detail Orientation"
+          ]
+        }
+      ],
+      "recommendations": [
+        "Prioritize a card-level total-price treatment with estimated fees and taxes.",
+        "Add quick-fit attributes to cards for common intents: family space, work setup, cancellation, and quietness.",
+        "Make Experiences and Services more discoverable from destination searches without forcing users to leave Homes context.",
+        "Clarify save/wishlist account requirements before interaction, or provide an anonymous compare mode.",
+        "Keep the current search controls and trust badges; they support successful first-pass evaluation."
+      ]
+    }
+  },
+  "matrix_summary": {
+    "winner": "tie",
+    "title": "Variants are comparable",
+    "label": "No clear winner",
+    "summary_primary": "A and B show similar synthetic-user outcomes across conversion, satisfaction, time to task, and drop-off.",
+    "summary_secondary": "We are 62% confident based on the current synthetic runs.",
+    "date_range": "May 5 - May 12, 2025",
+    "summary_stats": [
+      {
+        "label": "Real lift",
+        "value": "+1.9%",
+        "detail": "vs A",
+        "kind": "lift"
+      },
+      {
+        "label": "Synthetic lift",
+        "value": "+0.0%",
+        "detail": "vs A",
+        "kind": "lift"
+      },
+      {
+        "label": "Confidence",
+        "value": "0.62",
+        "detail": "(62%)",
+        "kind": "confidence"
+      }
+    ],
+    "metrics": [
+      {
+        "id": "conversion",
+        "label": "Conversion",
+        "icon": "chart-line",
+        "winner": "tie",
+        "real": {
+          "a": "51%",
+          "b": "53%"
+        },
+        "synthetic": {
+          "a": "52%",
+          "b": "52%"
+        }
+      },
+      {
+        "id": "time_to_task",
+        "label": "Time to Task",
+        "icon": "clock-3",
+        "winner": "tie",
+        "real": {
+          "a": "2.6m",
+          "b": "2.7m"
+        },
+        "synthetic": {
+          "a": "2.7m",
+          "b": "2.7m"
+        }
+      },
+      {
+        "id": "dropoff",
+        "label": "Drop-off",
+        "icon": "chart-no-axes-combined",
+        "winner": "tie",
+        "real": {
+          "a": "17%",
+          "b": "17%"
+        },
+        "synthetic": {
+          "a": "18%",
+          "b": "18%"
+        }
+      },
+      {
+        "id": "satisfaction",
+        "label": "Satisfaction",
+        "icon": "smile",
+        "winner": "tie",
+        "real": {
+          "a": "4.0",
+          "b": "4.0"
+        },
+        "synthetic": {
+          "a": "4.0",
+          "b": "4.0"
+        }
+      }
+    ],
+    "attribution_conclusion": [
+      {
+        "icon": "target",
+        "title": "Price clarity is the main blocker t...",
+        "conclusion": "price clarity appeared in 5 of 5 runs; average price clarity score was 5.0 while purchase...",
+        "level": "high",
+        "badge": "High Evidence",
+        "badge_icon": "trending-up"
+      },
+      {
+        "icon": "badge-dollar-sign",
+        "title": "Core search and trust signals work...",
+        "conclusion": "task success rate was 1.0; average ease of search was 7.2 and average trust was 8.0.",
+        "level": "medium",
+        "badge": "Medium Evidence",
+        "badge_icon": "chart-column"
+      },
+      {
+        "icon": "smartphone",
+        "title": "Experiences discovery is visible bu...",
+        "conclusion": "experiences discoverability appeared in 1 run; the experience seeker noted that Experienc...",
+        "level": "low",
+        "badge": "Low Evidence",
+        "badge_icon": "chart-no-axes-combined"
+      }
+    ],
+    "suggestions": [
+      {
+        "title": "Tracking",
+        "icon": "code-2",
+        "items": [
+          "Log first CTA hover",
+          "Capture form idle time",
+          "Track price exposure"
+        ]
+      },
+      {
+        "title": "Experiment Design",
+        "icon": "flask-conical",
+        "items": [
+          "Add design-fit micro-survey",
+          "Verify hesitation reason",
+          "Trigger feedback after friction"
+        ]
+      },
+      {
+        "title": "Feature Changes",
+        "icon": "wand-sparkles",
+        "items": [
+          "A card-level total-price treatment with e...",
+          "Add quick-fit attributes to cards for com...",
+          "Make Experiences and Services more discov..."
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "source": "AB experiment/scripts/airbnb_synth_demo.py",
+    "data_status": {
+      "synthetic": "from_runner_stdout",
+      "real_user": "generated_placeholder"
+    }
+  }
+}

@@ -1,4 +1,4 @@
-const DATA_URL = "./data/results.json";
+const DATA_URL = "./data/latest_ab_run.json";
 
 const refs = {
   title: document.getElementById("experimentTitle"),
@@ -13,11 +13,16 @@ const refs = {
   evidenceTable: document.getElementById("evidenceTable"),
   suggestionGrid: document.getElementById("suggestionGrid"),
   exportButton: document.getElementById("exportButton"),
+  runnerButton: document.getElementById("runnerButton"),
 };
 
 let dashboardData = null;
 
 loadDashboard();
+
+refs.runnerButton.addEventListener("click", () => {
+  window.location.href = "./synthetic_user/";
+});
 
 refs.exportButton.addEventListener("click", () => {
   if (!dashboardData) {
@@ -29,7 +34,7 @@ refs.exportButton.addEventListener("click", () => {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "ab-experiment-results.json";
+  link.download = "synthetic-ab-run.json";
   link.click();
   URL.revokeObjectURL(url);
 });
@@ -44,18 +49,19 @@ async function loadDashboard() {
 }
 
 function render(data) {
-  refs.title.textContent = data.experiment.title;
-  refs.subtitle.textContent = data.experiment.subtitle;
-  refs.dateRange.textContent = data.experiment.date_range;
-  refs.winnerTitle.textContent = data.experiment.winner.title;
-  refs.winnerLabel.textContent = data.experiment.winner.label;
-  refs.summaryPrimary.textContent = data.experiment.summary.primary;
-  refs.summarySecondary.textContent = data.experiment.summary.secondary;
+  const matrix = data.matrix_summary;
+  refs.title.textContent = "Synthetic A/B Lab";
+  refs.subtitle.textContent = "Checkout copy test";
+  refs.dateRange.textContent = matrix.date_range;
+  refs.winnerTitle.textContent = matrix.title;
+  refs.winnerLabel.textContent = matrix.label;
+  refs.summaryPrimary.textContent = matrix.summary_primary;
+  refs.summarySecondary.textContent = matrix.summary_secondary;
 
-  renderSummaryStats(data.experiment.summary_stats);
-  renderMetricMatrix(data.metrics);
-  renderEvidence(data.attribution_conclusion);
-  renderSuggestions(data.suggestions);
+  renderSummaryStats(matrix.summary_stats);
+  renderMetricMatrix(matrix.metrics);
+  renderEvidence(matrix.attribution_conclusion);
+  renderSuggestions(matrix.suggestions);
 
   if (window.lucide) {
     window.lucide.createIcons();

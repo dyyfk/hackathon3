@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Synthetic User Runner</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="title-row">
+          <h1>Synthetic User Runner</h1>
+          <p>Run synthetic profiles against A/B URLs</p>
+        </div>
+        <div class="top-actions">
+          <button class="ghost-button" id="backButton" type="button">
+            <i data-lucide="arrow-left" aria-hidden="true"></i>
+            <span>Back to Matrix</span>
+          </button>
+          <button class="ghost-button" id="exportButton" type="button">
+            <i data-lucide="download" aria-hidden="true"></i>
+            <span>Export JSON</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="runner-shell">
+        <section class="run-config panel" aria-label="Run Configuration">
+          <h2>Run Configuration</h2>
+          <div class="url-grid">
+            <label>
+              <span>A URL</span>
+              <span class="input-wrap">
+                <i data-lucide="link" aria-hidden="true"></i>
+                <input id="aUrl" type="url" value="https://www.airbnb.com" />
+                <i data-lucide="external-link" aria-hidden="true"></i>
+              </span>
+            </label>
+            <label>
+              <span>B URL</span>
+              <span class="input-wrap">
+                <i data-lucide="link" aria-hidden="true"></i>
+                <input id="bUrl" type="url" value="https://www.airbnb.com" />
+                <i data-lucide="external-link" aria-hidden="true"></i>
+              </span>
+            </label>
+          </div>
+          <div class="control-row">
+            <label class="control-field">
+              <span><i data-lucide="users" aria-hidden="true"></i> Profiles</span>
+              <input id="profiles" type="number" min="5" max="200" value="20" />
+            </label>
+            <label class="control-field">
+              <span><i data-lucide="circle" aria-hidden="true"></i> Runs</span>
+              <input id="runs" type="number" min="1" max="200" value="5" />
+            </label>
+            <label class="control-field">
+              <span><i data-lucide="settings" aria-hidden="true"></i> Model</span>
+              <select id="model">
+                <option value="auto">auto</option>
+                <option value="gpt-5-codex">gpt-5-codex</option>
+              </select>
+            </label>
+            <label class="control-field">
+              <span><i data-lucide="clock" aria-hidden="true"></i> Timeout</span>
+              <select id="timeout">
+                <option value="120">120s</option>
+                <option value="240" selected>240s</option>
+                <option value="480">480s</option>
+              </select>
+            </label>
+            <span class="status-pill" id="statusPill"><span></span> Ready</span>
+            <button class="primary-run" id="startButton" type="button">
+              <i data-lucide="play" aria-hidden="true"></i>
+              <span>Start Run</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="variant-grid" aria-label="A/B synthetic user results">
+          <article class="variant-column" id="variantA"></article>
+          <article class="variant-column" id="variantB"></article>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
