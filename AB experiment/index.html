@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Synthetic A/B Lab</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="title-row">
+          <h1 id="experimentTitle">Synthetic A/B Lab</h1>
+          <p id="experimentSubtitle">Checkout copy test</p>
+        </div>
+        <div class="top-actions">
+          <button class="ghost-button date-button" type="button" aria-label="Experiment date range">
+            <i data-lucide="calendar-days" aria-hidden="true"></i>
+            <span id="dateRange">May 5 - May 12, 2025</span>
+            <i data-lucide="chevron-down" aria-hidden="true"></i>
+          </button>
+          <button class="ghost-button" id="exportButton" type="button">
+            <i data-lucide="download" aria-hidden="true"></i>
+            <span>Export</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="dashboard">
+        <section class="winner-panel" aria-label="Experiment summary">
+          <div class="winner-card">
+            <i data-lucide="trophy" aria-hidden="true"></i>
+            <div>
+              <h2 id="winnerTitle">Variant B leads</h2>
+              <p id="winnerLabel">Overall winner</p>
+            </div>
+          </div>
+          <div class="summary-copy">
+            <p id="summaryPrimary"></p>
+            <p id="summarySecondary"></p>
+          </div>
+          <div class="summary-stats" id="summaryStats"></div>
+        </section>
+
+        <section class="panel metric-panel" aria-label="Metric Matrix">
+          <h2>Metric Matrix</h2>
+          <div class="metric-grid" id="metricGrid"></div>
+        </section>
+
+        <section class="panel evidence-panel" aria-label="Common Attribution and Conclusion">
+          <h2>Common Attribution &amp; Conclusion</h2>
+          <div class="evidence-table" id="evidenceTable"></div>
+        </section>
+
+        <section class="panel suggestions-panel" aria-label="Common Suggestions from Synthetic Users">
+          <h2>Common Suggestions from Synthetic Users</h2>
+          <div class="suggestion-grid" id="suggestionGrid"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
