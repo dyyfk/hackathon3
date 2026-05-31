@@ -386,7 +386,7 @@ def create_generated_version(payload: Dict[str, Any]) -> Dict[str, Any]:
     return {
         "status": "completed",
         **result,
-        "url": f"{origin}/{result['slug']}",
+        "url": f"{origin}{result.get('route', '/' + result['slug'])}",
     }
 
 

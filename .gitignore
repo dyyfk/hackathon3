@@ -18,6 +18,7 @@
 # next.js
 /.next/
 /out/
+/src/app/generated/
 /src/app/generated-version/
 /src/app/versions[0-9]*/
 

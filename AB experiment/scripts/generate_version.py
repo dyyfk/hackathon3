@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Sequence
@@ -14,20 +15,22 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     repo_root = args.repo_root.resolve()
     candidate = read_candidate(args.payload_file)
-    slug = clean_slug(args.slug)
-    route_dir = repo_root / "src" / "app" / slug
+    generated_at = datetime.now(timezone.utc)
+    slug = clean_slug(args.slug) if args.slug else default_slug(candidate, generated_at)
+    route = f"/generated/{slug}"
+    route_dir = repo_root / "src" / "app" / "generated" / slug
     route_dir.mkdir(parents=True, exist_ok=True)
     page_path = route_dir / "page.tsx"
-    page_path.write_text(render_page(candidate, slug), encoding="utf-8")
+    page_path.write_text(render_page(candidate, slug, generated_at), encoding="utf-8")
 
     metadata_dir = repo_root / "AB experiment" / "data" / "generated_versions"
     metadata_dir.mkdir(parents=True, exist_ok=True)
     metadata = {
         "slug": slug,
-        "route": f"/{slug}",
+        "route": route,
         "path": str(page_path.relative_to(repo_root)),
         "candidate": candidate,
-        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "generated_at": generated_at.isoformat(),
     }
     (metadata_dir / f"{slug}.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
     print(json.dumps(metadata, indent=2))
@@ -38,7 +41,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Generate a local version route from AB suggestions.")
     parser.add_argument("--repo-root", type=Path, required=True)
     parser.add_argument("--payload-file", type=Path, required=True)
-    parser.add_argument("--slug", default="generated-version")
+    parser.add_argument("--slug", default="")
     return parser
 
 
@@ -70,21 +73,29 @@ def read_candidate(path: Path) -> Dict[str, Any]:
 
 
 def clean_slug(value: str) -> str:
-    slug = "".join(char for char in str(value or "").strip().strip("/") if char.isalnum() or char == "-")
-    return slug or "generated-version"
+    slug = re.sub(r"[^a-z0-9]+", "-", str(value or "").lower()).strip("-")
+    return slug[:72].strip("-") or "generated-version"
 
 
-def render_page(candidate: Dict[str, Any], slug: str) -> str:
+def default_slug(candidate: Dict[str, Any], generated_at: datetime) -> str:
+    title = clean_slug(str(candidate.get("title") or "generated-version"))
+    stamp = generated_at.strftime("%Y%m%d-%H%M%S-%f")[:-3]
+    return f"{title}-{stamp}"
+
+
+def render_page(candidate: Dict[str, Any], slug: str, generated_at: datetime) -> str:
     title = candidate["title"]
     problem = candidate["problem"]
     mvp = candidate["mvp"][:3]
     metrics = candidate["metrics"][:4]
     evidence = candidate["evidence"][:3]
+    generated_label = generated_at.strftime("%Y-%m-%d %H:%M:%S UTC")
     return f'''/* eslint-disable @next/next/no-img-element */
 
 const mvpItems = {json.dumps(mvp, indent=2)};
 const metricItems = {json.dumps(metrics, indent=2)};
 const evidenceItems = {json.dumps(evidence, indent=2)};
+const generatedAt = {json.dumps(generated_label)};
 
 const listings = [
   {{
@@ -111,7 +122,7 @@ export default function GeneratedSuggestionVersion() {{
       <section className="border-b border-stone-200 bg-white">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#e95f45]">
-            Generated {slug}
+            Generated {escape_jsx(slug)}
           </p>
           <h1 className="mt-3 text-5xl font-semibold tracking-normal sm:text-6xl">
             staybnb
@@ -209,7 +220,7 @@ export default function GeneratedSuggestionVersion() {{
           <p className="text-sm font-semibold text-emerald-700">Generated confidence</p>
           <p className="mt-2 text-4xl font-semibold">{escape_jsx(candidate["confidence"])}</p>
           <p className="mt-2 text-sm leading-6 text-stone-600">
-            This local page was generated from the AB suggestion panel. It is ignored by git.
+            This local page was regenerated at {{generatedAt}} from the AB suggestion panel. It is ignored by git.
           </p>
           <div className="mt-5 space-y-5">
             <div>
