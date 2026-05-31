@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import re
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Sequence
@@ -15,7 +14,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     repo_root = args.repo_root.resolve()
     candidate = read_candidate(args.payload_file)
-    slug = args.slug or next_slug(repo_root)
+    slug = clean_slug(args.slug)
     route_dir = repo_root / "src" / "app" / slug
     route_dir.mkdir(parents=True, exist_ok=True)
     page_path = route_dir / "page.tsx"
@@ -39,7 +38,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Generate a local version route from AB suggestions.")
     parser.add_argument("--repo-root", type=Path, required=True)
     parser.add_argument("--payload-file", type=Path, required=True)
-    parser.add_argument("--slug", default="")
+    parser.add_argument("--slug", default="generated-version")
     return parser
 
 
@@ -70,16 +69,9 @@ def read_candidate(path: Path) -> Dict[str, Any]:
     }
 
 
-def next_slug(repo_root: Path) -> str:
-    app_dir = repo_root / "src" / "app"
-    highest = 0
-    for item in app_dir.glob("versions*"):
-        if not item.is_dir():
-            continue
-        match = re.fullmatch(r"versions(\d+)", item.name)
-        if match:
-            highest = max(highest, int(match.group(1)))
-    return f"versions{highest + 1}"
+def clean_slug(value: str) -> str:
+    slug = "".join(char for char in str(value or "").strip().strip("/") if char.isalnum() or char == "-")
+    return slug or "generated-version"
 
 
 def render_page(candidate: Dict[str, Any], slug: str) -> str:
