@@ -1,6 +1,30 @@
 import { expect, test } from "@playwright/test";
 import { buildExperimentCases } from "../src/lib/buildExperimentCases";
 
+for (const variant of ["A", "B"] as const) {
+  test(`temporary Modal Version ${variant} page is available without a hyphen`, async ({
+    page,
+  }) => {
+    await page.goto(`/modalversion${variant}`);
+
+    await expect(page.getByTestId("variant-label")).toContainText(
+      `Variant ${variant}`,
+    );
+    await expect(page.getByTestId("client-ready")).toBeAttached();
+    await page.getByTestId("search-input").fill("San Francisco");
+    await page.getByTestId("search-button").click();
+    await page.getByTestId("filter-button").click();
+    await expect(page.getByTestId("listing-card-0")).toBeVisible();
+    await expect(page.getByTestId("listing-card-1")).toBeVisible();
+    await page.getByTestId("listing-card-0").click();
+    await expect(page.getByTestId("listing-detail")).toBeVisible();
+    await page.getByTestId("checkout-button").click();
+    await expect(page.getByTestId("checkout-summary")).toBeVisible();
+    await expect(page.getByTestId("total-price")).toBeVisible();
+    await expect(page.getByTestId("cancellation-policy")).toBeVisible();
+  });
+}
+
 test("dashboard defaults to the existing GitHub A/B website routes", async ({
   page,
 }) => {
