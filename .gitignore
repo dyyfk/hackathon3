@@ -19,7 +19,7 @@
 /.next/
 /out/
 /src/app/generated-version/
-/src/app/versions*/
+/src/app/versions[0-9]*/
 
 # production
 /build
