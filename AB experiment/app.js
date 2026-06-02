@@ -16,6 +16,7 @@ const refs = {
 };
 
 let dashboardData = null;
+const DATA_URL = "./data/latest_ab_run.json";
 
 loadDashboard();
 
@@ -40,16 +41,27 @@ refs.exportButton.addEventListener("click", () => {
 
 async function loadDashboard() {
   const runId = requestedRunId();
-  if (!runId) {
-    renderEmptyDashboard();
-    return;
+  if (runId) {
+    try {
+      const response = await fetch(`/api/synthetic-runs/${encodeURIComponent(runId)}`, { cache: "no-store" });
+      if (response.ok) {
+        const job = await response.json();
+        if (job.status === "completed" && job.result) {
+          dashboardData = job.result;
+          render(dashboardData);
+          return;
+        }
+      }
+    } catch (error) {
+      console.warn(error);
+    }
   }
   try {
-    const response = await fetch(`/api/synthetic-runs/${encodeURIComponent(runId)}`, { cache: "no-store" });
+    const response = await fetch(DATA_URL, { cache: "no-store" });
     if (response.ok) {
-      const job = await response.json();
-      if (job.status === "completed" && job.result) {
-        dashboardData = job.result;
+      const data = await response.json();
+      if (data?.matrix_summary) {
+        dashboardData = data;
         render(dashboardData);
         return;
       }
@@ -101,7 +113,7 @@ function render(data) {
   refs.summarySecondary.textContent = matrix.summary_secondary;
 
   renderSummaryStats(matrix.summary_stats);
-  renderMetricMatrix(matrix.metrics);
+  renderMetricMatrix(matrix.metrics, data.variants);
   renderEvidence(matrix.attribution_conclusion);
   renderFeatureCandidate(data);
   renderSuggestions(matrix.suggestions);
@@ -125,7 +137,7 @@ function renderSummaryStats(stats) {
   });
 }
 
-function renderMetricMatrix(metrics) {
+function renderMetricMatrix(metrics, variants = {}) {
   refs.metricGrid.replaceChildren();
   metrics.forEach((metric) => {
     const card = el("article", "metric-card");
@@ -141,7 +153,7 @@ function renderMetricMatrix(metrics) {
     titleWrap.append(iconWrap, document.createTextNode(metric.label));
     titleCell.append(titleWrap);
 
-    headRow.append(titleCell, variantHead("A"), variantHead("B"));
+    headRow.append(titleCell, variantHead(variantCode(variants.A?.label, "A")), variantHead(variantCode(variants.B?.label, "B")));
     thead.append(headRow);
 
     tbody.append(
@@ -152,6 +164,11 @@ function renderMetricMatrix(metrics) {
     card.append(table);
     refs.metricGrid.append(card);
   });
+}
+
+function variantCode(label, fallback) {
+  const match = String(label || "").match(/Variant\\s+([A-Z])/i);
+  return match ? match[1].toUpperCase() : fallback;
 }
 
 function variantHead(label) {
@@ -241,7 +258,7 @@ function renderFeatureCandidate(data) {
     row.append(icon("check"), document.createTextNode(item));
     evidence.append(row);
   });
-  refs.featurePanel.append(header, body, evidence);
+  refs.featurePanel.append(header, body, evidence, featureActions(candidate, () => dashboardData?.config?.a_url));
 }
 
 function featureConfidence(value) {
@@ -261,6 +278,45 @@ function featureList(title, items) {
   });
   section.append(list);
   return section;
+}
+
+function featureActions(candidate, sourceUrlFn) {
+  const wrap = el("div", "feature-actions");
+  const button = el("button", "feature-generate", "Generate a new version based on suggestions");
+  button.type = "button";
+  const status = el("p", "generated-version-status", "");
+  button.addEventListener("click", () => generateVersion(candidate, sourceUrlFn(), button, status));
+  wrap.append(button, status);
+  return wrap;
+}
+
+async function generateVersion(candidate, sourceUrl, button, status) {
+  const preview = window.open("about:blank", "_blank");
+  button.disabled = true;
+  button.textContent = "Generating version...";
+  status.textContent = "Writing a local Next.js route from this suggestion.";
+  try {
+    const result = await window.syntheticFeatureCandidate.requestGeneratedVersion(candidate, sourceUrl);
+    const link = document.createElement("a");
+    link.href = result.url;
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    link.textContent = result.route;
+    status.replaceChildren(document.createTextNode("Generated "), link, document.createTextNode(" - local only, ignored by git."));
+    if (preview) {
+      preview.location.href = result.url;
+    } else {
+      window.open(result.url, "_blank", "noreferrer");
+    }
+  } catch (error) {
+    if (preview) {
+      preview.close();
+    }
+    status.textContent = error.message || "Version generation failed.";
+  } finally {
+    button.disabled = false;
+    button.textContent = "Generate a new version based on suggestions";
+  }
 }
 
 function icon(name) {

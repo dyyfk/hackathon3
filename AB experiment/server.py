@@ -8,6 +8,7 @@ import json
 import shutil
 import subprocess
 import sys
+import tempfile
 import threading
 import uuid
 from concurrent.futures import ThreadPoolExecutor
@@ -20,6 +21,9 @@ from urllib.parse import unquote, urlparse
 
 from scripts.airbnb_synth_demo import (
     AirbnbPageModel,
+    CodexClient,
+    SyntheticUserGenerator,
+    SyntheticTraceGenerator,
     compute_metrics,
     local_feedback_summary,
     observe_page_context,
@@ -32,10 +36,10 @@ from scripts.normalize_ab_run import normalize_ab_run
 
 BASE_DIR = Path(__file__).resolve().parent
 REPO_DIR = BASE_DIR.parent
-SCRIPT_PATH = BASE_DIR / "scripts" / "airbnb_synth_demo.py"
 DATA_DIR = BASE_DIR / "data"
 RUNS_DIR = DATA_DIR / "runs"
 LATEST_PATH = DATA_DIR / "latest_ab_run.json"
+GENERATE_VERSION_SCRIPT = BASE_DIR / "scripts" / "generate_version.py"
 
 JOBS: Dict[str, Dict[str, Any]] = {}
 JOBS_LOCK = threading.Lock()
@@ -80,6 +84,12 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:
         parsed = urlparse(self.path)
+        if parsed.path == "/api/generated-versions":
+            try:
+                self.send_json(create_generated_version(self.read_json()), status=HTTPStatus.CREATED)
+            except Exception as exc:  # noqa: BLE001 - return readable API errors.
+                self.send_json({"status": "failed", "error": str(exc)}, status=HTTPStatus.BAD_REQUEST)
+            return
         if parsed.path != "/api/synthetic-runs":
             self.send_error(HTTPStatus.NOT_FOUND)
             return
@@ -151,7 +161,7 @@ def create_job(payload: Dict[str, Any]) -> Dict[str, Any]:
         "job_id": job_id,
         "status": "queued",
         "config": config,
-        "run_mode": "deterministic_rule",
+        "run_mode": "browser_observed_lm_trace",
         "phase_history": [],
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
@@ -183,7 +193,7 @@ def run_job(job_id: str, config: Dict[str, Any]) -> None:
             b_model = AirbnbPageModel(config["b_url"], b_context_future.result())
 
         begin_phase(job_id, "generating_profiles", 0.28)
-        profiles = rule_based_profiles(int(config["profiles"]))
+        profiles = generate_profiles(a_model, int(config["profiles"]), config)
         run_profiles = select_profiles_for_runs(profiles, min(int(config["runs"]), len(profiles)))
         begin_phase(
             job_id,
@@ -197,8 +207,8 @@ def run_job(job_id: str, config: Dict[str, Any]) -> None:
 
         begin_phase(job_id, "generating_trajectories", 0.58)
         with ThreadPoolExecutor(max_workers=2) as trace_executor:
-            a_trace_future = trace_executor.submit(generate_traces, a_model, run_profiles, "A")
-            b_trace_future = trace_executor.submit(generate_traces, b_model, run_profiles, "B")
+            a_trace_future = trace_executor.submit(generate_traces, a_model, run_profiles, "A", config)
+            b_trace_future = trace_executor.submit(generate_traces, b_model, run_profiles, "B", config)
             a_traces = a_trace_future.result()
             b_traces = b_trace_future.result()
         begin_phase(
@@ -231,7 +241,7 @@ def run_job(job_id: str, config: Dict[str, Any]) -> None:
         phase_history = complete_phase_history(job_id, completed_at)
         result["completed_at"] = completed_at
         result["phase_history"] = phase_history
-        result["metadata"]["run_mode"] = "deterministic_rule"
+        result["metadata"]["run_mode"] = "browser_observed_lm_trace"
         result_path = RUNS_DIR / f"{job_id}.json"
         result_path.write_text(json.dumps(result, indent=2), encoding="utf-8")
         LATEST_PATH.write_text(json.dumps(result, indent=2), encoding="utf-8")
@@ -242,7 +252,7 @@ def run_job(job_id: str, config: Dict[str, Any]) -> None:
             progress=1,
             completed_at=completed_at,
             phase_history=phase_history,
-            run_mode="deterministic_rule",
+            run_mode="browser_observed_lm_trace",
             result=result,
             result_path=str(result_path.relative_to(BASE_DIR)),
         )
@@ -279,58 +289,39 @@ def summarize_traces(
     return summary
 
 
+def generate_profiles(
+    page_model: AirbnbPageModel,
+    profile_count: int,
+    config: Dict[str, Any],
+) -> list[Dict[str, Any]]:
+    try:
+        codex = CodexClient(
+            cwd=BASE_DIR / "scripts",
+            timeout_seconds=int(config["codex_timeout"]),
+            model=None if config["model"] == "auto" else config["model"],
+        )
+        return SyntheticUserGenerator(codex, page_model).generate(profile_count)
+    except Exception as exc:  # noqa: BLE001 - keep Start Run usable without Codex CLI.
+        print(f"WARN: LM profile generation failed; using rule fallback: {exc}")
+        return rule_based_profiles(profile_count)
+
+
 def generate_traces(
     page_model: AirbnbPageModel,
     profiles: Sequence[Dict[str, Any]],
     variant: str,
+    config: Dict[str, Any],
 ) -> Sequence[Dict[str, Any]]:
-    return rule_based_traces(page_model, profiles, variant, "rule_ui_specific")
-
-
-def run_variant(label: str, config: Dict[str, Any]) -> str:
-    url = config["a_url"] if label == "A" else config["b_url"]
-    cmd = [
-        sys.executable,
-        str(SCRIPT_PATH),
-        "--url",
-        url,
-        "--variant",
-        label,
-        "--profile-mode",
-        "rule",
-        "--trace-mode",
-        "rule",
-        "--trace-batch-size",
-        "3",
-        "--summary-mode",
-        "rule",
-        "--profiles",
-        str(config["profiles"]),
-        "--runs",
-        str(config["runs"]),
-        "--codex-timeout",
-        str(config["codex_timeout"]),
-    ]
-    if config["model"] != "auto":
-        cmd.extend(["--model", config["model"]])
-    completed = subprocess.run(
-        cmd,
-        cwd=str(BASE_DIR),
-        text=True,
-        capture_output=True,
-        timeout=max(120, int(config["codex_timeout"]) * 4),
-        check=False,
-    )
-    if completed.returncode != 0:
-        raise RuntimeError(
-            "Variant {label} run failed.\nCommand: {cmd}\nSTDOUT:\n{stdout}\nSTDERR:\n{stderr}".format(
-                label=label,
-                cmd=" ".join(cmd),
-                stdout=tail(completed.stdout),
-                stderr=tail(completed.stderr),
-            )
+    try:
+        codex = CodexClient(
+            cwd=BASE_DIR / "scripts",
+            timeout_seconds=int(config["codex_timeout"]),
+            model=None if config["model"] == "auto" else config["model"],
         )
-    return completed.stdout
+        return SyntheticTraceGenerator(codex, page_model, variant, batch_size=3).generate(profiles)
+    except Exception as exc:  # noqa: BLE001 - keep local generation usable if LM/CLI fails.
+        print(f"WARN: LM trace generation failed for variant {variant}; using rule fallback: {exc}")
+        return rule_based_traces(page_model, profiles, variant, "rule_fallback")
 
 
 def normalize_config(payload: Dict[str, Any]) -> Dict[str, Any]:
@@ -354,6 +345,56 @@ def read_latest() -> Dict[str, Any]:
     if not LATEST_PATH.exists():
         return {"status": "missing", "error": "No latest run is available yet."}
     return {"status": "completed", "result": json.loads(LATEST_PATH.read_text(encoding="utf-8"))}
+
+
+def create_generated_version(payload: Dict[str, Any]) -> Dict[str, Any]:
+    candidate = payload.get("candidate") or {}
+    if not isinstance(candidate, dict):
+        raise ValueError("candidate must be an object.")
+
+    with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8") as handle:
+        json.dump({"candidate": candidate}, handle)
+        payload_path = Path(handle.name)
+    try:
+        completed = subprocess.run(
+            [
+                sys.executable,
+                str(GENERATE_VERSION_SCRIPT),
+                "--repo-root",
+                str(REPO_DIR),
+                "--payload-file",
+                str(payload_path),
+            ],
+            cwd=str(REPO_DIR),
+            text=True,
+            capture_output=True,
+            timeout=30,
+            check=False,
+        )
+    finally:
+        payload_path.unlink(missing_ok=True)
+
+    if completed.returncode != 0:
+        raise RuntimeError(
+            "Version generation failed.\nSTDOUT:\n{stdout}\nSTDERR:\n{stderr}".format(
+                stdout=tail(completed.stdout),
+                stderr=tail(completed.stderr),
+            )
+        )
+    result = json.loads(completed.stdout)
+    origin = app_origin(str(payload.get("source_url") or ""))
+    return {
+        "status": "completed",
+        **result,
+        "url": f"{origin}{result.get('route', '/' + result['slug'])}",
+    }
+
+
+def app_origin(source_url: str) -> str:
+    parsed = urlparse(source_url)
+    if parsed.scheme and parsed.netloc:
+        return f"{parsed.scheme}://{parsed.netloc}"
+    return "http://127.0.0.1:3000"
 
 
 def begin_phase(job_id: str, phase: str, progress: float, **updates: Any) -> None:
@@ -402,6 +443,10 @@ def phase_duration_ms(started_at: str, completed_at: str) -> int:
     return max(0, round((end - start).total_seconds() * 1000))
 
 
+def tail(text: str, limit: int = 4000) -> str:
+    return text if len(text) <= limit else text[-limit:]
+
+
 def update_job(job_id: str, **updates: Any) -> None:
     with JOBS_LOCK:
         JOBS.setdefault(job_id, {"job_id": job_id}).update(updates)
@@ -423,12 +468,6 @@ def content_type(path: Path) -> str:
         ".json": "application/json; charset=utf-8",
         ".svg": "image/svg+xml",
     }.get(path.suffix.lower(), "application/octet-stream")
-
-
-def tail(text: str, limit: int = 4000) -> str:
-    if len(text) <= limit:
-        return text
-    return text[-limit:]
 
 
 if __name__ == "__main__":

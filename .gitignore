@@ -18,6 +18,9 @@
 # next.js
 /.next/
 /out/
+/src/app/generated/
+/src/app/generated-version/
+/src/app/versions[0-9]*/
 
 # production
 /build
@@ -42,3 +45,6 @@ dev-server*.log
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local AB generated variants
+/AB experiment/data/generated_versions/
