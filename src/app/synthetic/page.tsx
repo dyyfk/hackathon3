@@ -17,6 +17,7 @@ import {
   type SyntheticABVariantSummary,
   type SyntheticFeatureCandidate,
   type SyntheticImprovementRecommendation,
+  type SyntheticIterationCandidate,
   type SyntheticIterationLabReport,
 } from "@/lib/syntheticOptimization";
 import {
@@ -43,6 +44,38 @@ const profileMetrics = [
   "filterAffinity",
   "checkoutConfidence",
 ] as const;
+
+type IterationRecipeCopy = {
+  label: string;
+  detail: string;
+};
+
+const iterationRecipeCopy: Record<string, IterationRecipeCopy> = {
+  checkout_assurance: {
+    label: "Checkout assurance lane",
+    detail: "Reserve, review price, and confirm actions become easier; checkout dwell drops.",
+  },
+  upfront_price_confidence: {
+    label: "Upfront price confidence",
+    detail: "Total-cost context moves earlier, reducing checkout price hesitation.",
+  },
+  task_ready_filter_rail: {
+    label: "Task-ready filter rail",
+    detail: "Likely filters are exposed before a modal, reducing filter/results friction.",
+  },
+  policy_trust_strip: {
+    label: "Policy trust strip",
+    detail: "Cancellation and trust cues sit near the listing decision, lowering backtracking.",
+  },
+  match_confidence_panel: {
+    label: "Match confidence panel",
+    detail: "The chosen stay explains its task fit, helping users commit from results/detail.",
+  },
+  fast_start_search: {
+    label: "Fast-start search defaults",
+    detail: "Likely intent is preloaded so the first meaningful search happens sooner.",
+  },
+};
 
 export default function SyntheticPage() {
   const [profileId, setProfileId] = useState(syntheticUserProfiles[0].id);
@@ -313,9 +346,52 @@ function IterationLabPanel({ report }: { report: SyntheticIterationLabReport }) 
           />
         </div>
 
+        <div className="synthetic-applied-strip" data-testid="synthetic-applied-changes">
+          <div className="synthetic-applied-strip-heading">
+            <Sparkles className="size-4" />
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">
+                Applied changes
+              </p>
+              <h3>What each generation actually changed</h3>
+            </div>
+          </div>
+          <div className="synthetic-applied-grid">
+            {report.generations.map((generation, index) => {
+              const previousGeneration = report.generations[index - 1];
+              const appliedCandidate = previousGeneration?.selectedCandidate;
+              const scoreDelta = previousGeneration
+                ? generation.summary.score - previousGeneration.summary.score
+                : 0;
+              const dwellDelta = previousGeneration
+                ? previousGeneration.summary.averageDwellMs -
+                  generation.summary.averageDwellMs
+                : 0;
+              const frictionDelta = previousGeneration
+                ? previousGeneration.summary.feedback.totalFrictionRate -
+                  generation.summary.feedback.totalFrictionRate
+                : 0;
+
+              return (
+                <AppliedChangeStep
+                  key={generation.generationId}
+                  generationId={generation.generationId}
+                  appliedCandidate={appliedCandidate}
+                  scoreDelta={scoreDelta}
+                  dwellDelta={dwellDelta}
+                  frictionDelta={frictionDelta}
+                />
+              );
+            })}
+          </div>
+        </div>
+
         <div className="synthetic-iteration-grid mt-5">
           {report.generations.map((generation, index) => {
-            const selected = generation.selectedCandidate;
+            const nextCandidate =
+              generation.selectedCandidate ?? generation.recommendedNextCandidate;
+            const previousGeneration = report.generations[index - 1];
+            const appliedCandidate = previousGeneration?.selectedCandidate;
             const scoreLift =
               index === 0
                 ? 0
@@ -371,15 +447,35 @@ function IterationLabPanel({ report }: { report: SyntheticIterationLabReport }) 
                   />
                 </dl>
 
-                <div className="synthetic-selected-candidate">
+                <div className="synthetic-applied-candidate">
                   <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">
-                    {selected ? "Promoted candidate" : "Next backlog"}
+                    {appliedCandidate ? "Applied in this version" : "Baseline setup"}
                   </p>
                   <p className="mt-1 font-semibold">
-                    {(selected ?? generation.recommendedNextCandidate)?.title}
+                    {appliedCandidate
+                      ? compactCandidateTitle(appliedCandidate)
+                      : "Task-first search, filters, listing details, checkout"}
+                  </p>
+                  <div className="synthetic-recipe-chip-row">
+                    {appliedCandidate
+                      ? uniqueRecipeIds(appliedCandidate.appliedRecommendationIds).map(
+                          (recipeId) => (
+                            <span key={recipeId}>{describeIterationRecipe(recipeId).label}</span>
+                          ),
+                        )
+                      : <span>Original flow</span>}
+                  </div>
+                </div>
+
+                <div className="synthetic-selected-candidate">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">
+                    {generation.selectedCandidate ? "Next winner" : "Next backlog"}
+                  </p>
+                  <p className="mt-1 font-semibold">
+                    {nextCandidate ? compactCandidateTitle(nextCandidate) : "No candidate"}
                   </p>
                   <p className="mt-2 text-sm leading-6 text-stone-600">
-                    {(selected ?? generation.recommendedNextCandidate)?.rationale}
+                    {nextCandidate?.rationale}
                   </p>
                 </div>
               </article>
@@ -687,6 +783,110 @@ function RecommendationCard({
   );
 }
 
+function AppliedChangeStep({
+  generationId,
+  appliedCandidate,
+  scoreDelta,
+  dwellDelta,
+  frictionDelta,
+}: {
+  generationId: string;
+  appliedCandidate?: SyntheticIterationCandidate;
+  scoreDelta: number;
+  dwellDelta: number;
+  frictionDelta: number;
+}) {
+  const recipeCopies = appliedCandidate
+    ? uniqueRecipeIds(appliedCandidate.appliedRecommendationIds).map(
+        describeIterationRecipe,
+      )
+    : [];
+
+  return (
+    <article className="synthetic-applied-step">
+      <div className="synthetic-applied-step-title">
+        <span>{generationId}</span>
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">
+            {appliedCandidate ? "Applied winner" : "Baseline"}
+          </p>
+          <strong>
+            {appliedCandidate
+              ? compactCandidateTitle(appliedCandidate)
+              : "Original booking flow"}
+          </strong>
+        </div>
+      </div>
+
+      {recipeCopies.length > 0 ? (
+        <ul className="synthetic-applied-recipe-list">
+          {recipeCopies.map((recipe) => (
+            <li key={recipe.label}>
+              <span>{recipe.label}</span>
+              <p>{recipe.detail}</p>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="synthetic-baseline-copy">
+          Search, filters, listing detail, and checkout are evaluated as the
+          unchanged control flow.
+        </p>
+      )}
+
+      <dl className="synthetic-applied-metrics">
+        <div>
+          <dt>Score</dt>
+          <dd>{appliedCandidate ? formatSigned(roundNumber(scoreDelta)) : "base"}</dd>
+        </div>
+        <div>
+          <dt>Dwell</dt>
+          <dd>{appliedCandidate ? formatDwellTrend(dwellDelta) : "base"}</dd>
+        </div>
+        <div>
+          <dt>Friction</dt>
+          <dd>{appliedCandidate ? formatRateTrend(frictionDelta) : "base"}</dd>
+        </div>
+      </dl>
+    </article>
+  );
+}
+
+function compactCandidateTitle(candidate: SyntheticIterationCandidate): string {
+  return candidate.title.replace(/^Variant [A-E] candidate \d+:\s*/, "");
+}
+
+function uniqueRecipeIds(ids: string[]): string[] {
+  return ids.filter((id, index) => ids.indexOf(id) === index);
+}
+
+function describeIterationRecipe(recipeId: string): IterationRecipeCopy {
+  if (recipeId.startsWith("compress_") && recipeId.endsWith("_screen")) {
+    const screen = recipeId.replace(/^compress_/, "").replace(/_screen$/, "");
+    const screenLabel = humanizeToken(screen);
+
+    return {
+      label: `Compress ${screenLabel} screen`,
+      detail: `The slowest ${screenLabel.toLowerCase()} screen gets a dwell multiplier cut.`,
+    };
+  }
+
+  return (
+    iterationRecipeCopy[recipeId] ?? {
+      label: humanizeToken(recipeId),
+      detail: "This candidate adjusts action confidence and screen dwell multipliers.",
+    }
+  );
+}
+
+function humanizeToken(value: string): string {
+  return value
+    .split("_")
+    .filter(Boolean)
+    .map((part) => `${part.charAt(0).toUpperCase()}${part.slice(1)}`)
+    .join(" ");
+}
+
 function MetricRow({
   label,
   value,
@@ -859,6 +1059,24 @@ function formatSigned(value: number): string {
 
 function formatSignedPercent(value: number): string {
   return value > 0 ? `+${formatPercent(value)}` : formatPercent(value);
+}
+
+function formatDwellTrend(value: number): string {
+  if (value > 0) return `${formatMs(value)} faster`;
+  if (value < 0) return `${formatMs(Math.abs(value))} slower`;
+  return "flat";
+}
+
+function formatRateTrend(value: number): string {
+  const points = Math.round(Math.abs(value) * 100);
+
+  if (value > 0) return `${points}pp lower`;
+  if (value < 0) return `${points}pp higher`;
+  return "flat";
+}
+
+function roundNumber(value: number): number {
+  return Number(value.toFixed(2));
 }
 
 function SyntheticCriticalStyles() {
@@ -1342,6 +1560,139 @@ function SyntheticCriticalStyles() {
         gap: 12px;
       }
 
+      [data-synthetic-dashboard] .synthetic-applied-strip {
+        margin-top: 20px;
+        border: 1px solid var(--synthetic-line);
+        border-radius: 8px;
+        background: #fbfaf7;
+        padding: 16px;
+      }
+
+      [data-synthetic-dashboard] .synthetic-applied-strip-heading {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      [data-synthetic-dashboard] .synthetic-applied-strip-heading svg {
+        width: 18px;
+        height: 18px;
+        flex: 0 0 18px;
+        color: var(--synthetic-accent);
+      }
+
+      [data-synthetic-dashboard] .synthetic-applied-strip-heading h3 {
+        margin-top: 2px;
+        color: var(--synthetic-ink);
+        font-size: 1.05rem;
+        line-height: 1.25;
+      }
+
+      [data-synthetic-dashboard] .synthetic-applied-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      [data-synthetic-dashboard] .synthetic-applied-step {
+        display: flex;
+        min-height: 268px;
+        flex-direction: column;
+        border: 1px solid #eadfd5;
+        border-left: 4px solid var(--synthetic-accent);
+        border-radius: 8px;
+        background: #ffffff;
+        padding: 12px;
+      }
+
+      [data-synthetic-dashboard] .synthetic-applied-step-title {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      [data-synthetic-dashboard] .synthetic-applied-step-title > span {
+        display: grid;
+        width: 34px;
+        height: 34px;
+        flex: 0 0 34px;
+        place-items: center;
+        border-radius: 999px;
+        background: var(--synthetic-ink);
+        color: #ffffff;
+        font-size: 0.9rem;
+        font-weight: 850;
+      }
+
+      [data-synthetic-dashboard] .synthetic-applied-step-title strong {
+        display: block;
+        margin-top: 2px;
+        color: var(--synthetic-ink);
+        font-size: 0.92rem;
+        line-height: 1.25;
+      }
+
+      [data-synthetic-dashboard] .synthetic-baseline-copy {
+        margin-top: 14px;
+        color: #5c544d;
+        font-size: 0.84rem;
+        line-height: 1.45;
+      }
+
+      [data-synthetic-dashboard] .synthetic-applied-recipe-list {
+        display: grid;
+        gap: 9px;
+        margin: 14px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      [data-synthetic-dashboard] .synthetic-applied-recipe-list li span {
+        display: block;
+        color: var(--synthetic-ink);
+        font-size: 0.84rem;
+        font-weight: 800;
+        line-height: 1.25;
+      }
+
+      [data-synthetic-dashboard] .synthetic-applied-recipe-list li p {
+        margin-top: 3px;
+        color: #6d625a;
+        font-size: 0.78rem;
+        line-height: 1.35;
+      }
+
+      [data-synthetic-dashboard] .synthetic-applied-metrics {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 6px;
+        margin-top: auto;
+        padding-top: 12px;
+      }
+
+      [data-synthetic-dashboard] .synthetic-applied-metrics div {
+        border-radius: 6px;
+        background: #f6f2ed;
+        padding: 7px;
+      }
+
+      [data-synthetic-dashboard] .synthetic-applied-metrics dt {
+        color: #7c736c;
+        font-size: 0.68rem;
+        font-weight: 800;
+        line-height: 1;
+        text-transform: uppercase;
+      }
+
+      [data-synthetic-dashboard] .synthetic-applied-metrics dd {
+        margin-top: 4px;
+        color: var(--synthetic-ink);
+        font-size: 0.76rem;
+        font-weight: 800;
+        line-height: 1.15;
+      }
+
       [data-synthetic-dashboard] .synthetic-iteration-grid {
         display: grid;
         grid-template-columns: repeat(5, minmax(180px, 1fr));
@@ -1350,7 +1701,7 @@ function SyntheticCriticalStyles() {
       }
 
       [data-synthetic-dashboard] .synthetic-generation-card {
-        min-height: 360px;
+        min-height: 520px;
       }
 
       [data-synthetic-dashboard] .synthetic-score-pill {
@@ -1384,6 +1735,36 @@ function SyntheticCriticalStyles() {
         margin-top: 16px;
         border-top: 1px solid var(--synthetic-line);
         padding-top: 14px;
+      }
+
+      [data-synthetic-dashboard] .synthetic-applied-candidate {
+        margin-top: 16px;
+        border-top: 1px solid var(--synthetic-line);
+        padding-top: 14px;
+      }
+
+      [data-synthetic-dashboard] .synthetic-applied-candidate p:nth-child(2) {
+        color: var(--synthetic-ink);
+        font-size: 0.92rem;
+        line-height: 1.35;
+      }
+
+      [data-synthetic-dashboard] .synthetic-recipe-chip-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 10px;
+      }
+
+      [data-synthetic-dashboard] .synthetic-recipe-chip-row span {
+        border: 1px solid #dfd4cb;
+        border-radius: 999px;
+        background: #fbfaf7;
+        padding: 5px 8px;
+        color: #5f554e;
+        font-size: 0.72rem;
+        font-weight: 750;
+        line-height: 1.1;
       }
 
       [data-synthetic-dashboard] .synthetic-selected-candidate p:nth-child(2) {
@@ -1688,6 +2069,7 @@ function SyntheticCriticalStyles() {
         [data-synthetic-dashboard] .synthetic-score-layout,
         [data-synthetic-dashboard] .synthetic-recommendation-grid,
         [data-synthetic-dashboard] .synthetic-loop-summary,
+        [data-synthetic-dashboard] .synthetic-applied-grid,
         [data-synthetic-dashboard] .synthetic-iteration-grid,
         [data-synthetic-dashboard] .synthetic-inspector-layout {
           grid-template-columns: 1fr;

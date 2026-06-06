@@ -167,6 +167,11 @@ test("synthetic inspector renders profile and candidate breakdowns", async ({
   await expect(page.getByTestId("synthetic-iteration-lab")).toBeVisible();
   await expect(page.getByText("A -> B -> C -> D -> E self-improvement loop")).toBeVisible();
   await expect(page.getByText("50 synthetic users x 500 candidates")).toBeVisible();
+  await expect(page.getByTestId("synthetic-applied-changes")).toBeVisible();
+  await expect(page.getByText("What each generation actually changed")).toBeVisible();
+  await expect(page.getByText("Checkout assurance lane").first()).toBeVisible();
+  await expect(page.getByText("Upfront price confidence").first()).toBeVisible();
+  await expect(page.getByText("Task-ready filter rail").first()).toBeVisible();
   await expect(page.getByTestId("synthetic-generation-E")).toBeVisible();
   await expect(page.getByTestId("synthetic-improvement-panel")).toBeVisible();
   await expect(page.getByText("Synthetic A/B feedback")).toBeVisible();
