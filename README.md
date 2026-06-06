@@ -66,20 +66,36 @@ User task -> A/B experiment -> synthetic feedback -> 100 candidate UX changes
 -> promoted variant -> repeat until A -> B -> C -> D -> E
 ```
 
-Open `/synthetic` for the live proof. The iteration lab keeps the evaluation
-budget fixed at **50 synthetic users per generation**, scores **100 generated
-UX candidates per generation**, and displays **500 total candidate evaluations**
-across five visible generations. The promoted line shows whether the system is
-actually making the product easier to use instead of only producing a single
-nice-looking variant.
+Open `/demos` first for a five-mode launcher, then jump into `/synthetic` for
+the live optimization proof. The iteration lab keeps the evaluation budget fixed
+at **50 synthetic users per generation**, scores **100 generated UX candidates
+per generation**, and displays **500 total candidate evaluations** across five
+visible generations. The promoted line shows whether the system is actually
+making the product easier to use instead of only producing a single nice-looking
+variant.
+
+The five prepared demo modes are:
+
+1. **A to E self-improvement cockpit**: show the full 50-agent / 500-candidate
+   loop and the applied recipe for each generation.
+2. **Checkout trust rescue**: show a concrete UI repair where total price,
+   policy, and confirmation confidence move earlier in the checkout path.
+3. **Task-ready filter rail**: show task-aware controls for pet-friendly,
+   parking, and cancellation constraints before users open a filter modal.
+4. **External page adapter challenge**: show how another page can use the same
+   loop once it provides observe, task, success, and friction adapters.
+5. **Agent trace to product ticket**: show Modal/fallback operation logs turning
+   into issue tags, recommendation cards, and backlog candidates.
 
 For a hackathon presentation, use this sequence:
 
-1. Start at `/versionA` and describe the user task.
-2. Open `/synthetic` and show the A/B scorecard.
-3. Point to the A -> B -> C -> D -> E iteration panel.
-4. Export the JSON evidence and show the top promoted candidate in each round.
-5. Explain that the same loop can wrap another page once an observer and task
+1. Start at `/demos` and pick the strongest story for the room.
+2. Jump to `/versionA`, `/versionB`, `/dashboard`, or `/synthetic` from the
+   selected demo's live-route button.
+3. Open `/synthetic` and show the A/B scorecard.
+4. Point to the A -> B -> C -> D -> E iteration panel.
+5. Export the JSON evidence and show the top promoted candidate in each round.
+6. Explain that the same loop can wrap another page once an observer and task
    adapter provide actions, friction signals, and success criteria.
 
 ## Product Under Test
@@ -92,6 +108,8 @@ The product is a simplified Airbnb-like booking flow.
   adapted from an earlier SPA.
 - `/dashboard` renders the Modal UserTwin dashboard for cloud agent runs across
   A/B URLs.
+- `/demos` renders a five-mode hackathon demo launcher with talk tracks,
+  proof metrics, and live-route links.
 - `/synthetic` renders the in-app synthetic behavior inspector, A/B feedback,
   and the 50-agent / 500-candidate A -> E self-improvement lab.
 - `/eval` renders an Airbnb-style archive/version browser.
@@ -197,6 +215,7 @@ Open:
 http://localhost:3000/versionA
 http://localhost:3000/versionB
 http://localhost:3000/dashboard
+http://localhost:3000/demos
 http://localhost:3000/synthetic
 http://localhost:3000/eval
 ```
@@ -216,6 +235,11 @@ The iteration demo assets live in `assets/iteration-lab/`:
 - `synthetic-iteration-lab-full.png`: full `/synthetic` page screenshot.
 - `agentic-ab-lab-demo.pptx`: five-slide demo deck covering the loop,
   implementation changes, proof screenshot, and pitch script.
+
+The five-mode demo launcher screenshots live in `assets/demo-lab/`:
+
+- `demo-launcher.png`: `/demos` default A -> E cockpit mode.
+- `demo-checkout-trust.png`: `/demos` checkout trust rescue mode.
 
 ## Run The Modal Agent Dashboard
 
