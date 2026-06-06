@@ -57,6 +57,31 @@ The prototype shows four useful properties:
 - **Scalable experimentation.** Modal can run cloud Playwright agents across
   public A/B URLs, while local fallback data keeps the demo reviewable.
 
+## WeaveHacks Demo Path
+
+The current demo is framed as a multi-agent product research loop:
+
+```text
+User task -> A/B experiment -> synthetic feedback -> 100 candidate UX changes
+-> promoted variant -> repeat until A -> B -> C -> D -> E
+```
+
+Open `/synthetic` for the live proof. The iteration lab keeps the evaluation
+budget fixed at **50 synthetic users per generation**, scores **100 generated
+UX candidates per generation**, and displays **500 total candidate evaluations**
+across five visible generations. The promoted line shows whether the system is
+actually making the product easier to use instead of only producing a single
+nice-looking variant.
+
+For a hackathon presentation, use this sequence:
+
+1. Start at `/versionA` and describe the user task.
+2. Open `/synthetic` and show the A/B scorecard.
+3. Point to the A -> B -> C -> D -> E iteration panel.
+4. Export the JSON evidence and show the top promoted candidate in each round.
+5. Explain that the same loop can wrap another page once an observer and task
+   adapter provide actions, friction signals, and success criteria.
+
 ## Product Under Test
 
 The product is a simplified Airbnb-like booking flow.
@@ -67,8 +92,8 @@ The product is a simplified Airbnb-like booking flow.
   adapted from an earlier SPA.
 - `/dashboard` renders the Modal UserTwin dashboard for cloud agent runs across
   A/B URLs.
-- `/synthetic` renders the in-app synthetic behavior inspector and
-  self-improvement projection.
+- `/synthetic` renders the in-app synthetic behavior inspector, A/B feedback,
+  and the 50-agent / 500-candidate A -> E self-improvement lab.
 - `/eval` renders an Airbnb-style archive/version browser.
 - `AB experiment/` contains a standalone synthetic A/B dashboard and runner for
   external A/B URLs.
@@ -89,9 +114,10 @@ flowchart LR
   B --> C["Run browsing agents"]
   C --> D["Normalize events and metrics"]
   D --> E["Compare outcomes and friction"]
-  E --> F["Generate feature recommendation"]
-  F --> G["Create candidate next version"]
-  G --> A
+  E --> F["Generate 100 candidate changes"]
+  F --> G["Promote best next version"]
+  G --> H["Repeat A -> B -> C -> D -> E"]
+  H --> A
 ```
 
 1. **Define synthetic users.** Profiles represent distinct browsing patterns:
@@ -107,8 +133,9 @@ flowchart LR
    time, friction, click behavior, likes/saves, satisfaction, and issue themes.
 5. **Explain the winner.** Dashboards show the winning variant, confidence,
    metric deltas, attribution themes, top issues, and suggested changes.
-6. **Close the loop.** The suggestion panel can generate a local next-version
-   route from the strongest synthetic feedback.
+6. **Close the loop.** The `/synthetic` page uses `runSyntheticIterationLab` to
+   evaluate 100 deterministic candidate changes per generation, promote the
+   strongest one, and repeat until the visible A -> E trajectory is available.
 
 ## Repository Map
 
@@ -179,6 +206,16 @@ If port `3000` is busy:
 ```bash
 npm run dev -- --hostname 127.0.0.1 --port 3100
 ```
+
+## Demo Assets
+
+The iteration demo assets live in `assets/iteration-lab/`:
+
+- `synthetic-iteration-lab-panel.png`: clean screenshot of the A -> E iteration
+  proof panel.
+- `synthetic-iteration-lab-full.png`: full `/synthetic` page screenshot.
+- `agentic-ab-lab-demo.pptx`: five-slide demo deck covering the loop,
+  implementation changes, proof screenshot, and pitch script.
 
 ## Run The Modal Agent Dashboard
 
@@ -280,6 +317,16 @@ listing opens, checkout starts, checkout success, and friction events. Add
 `?actor=agent&task=complete_checkout&variant=A` to a URL to label captured
 events for agent evaluation.
 
+The in-app iteration report is produced by `runSyntheticIterationLab` in
+`src/lib/syntheticOptimization.ts` and includes:
+
+- `agentCount`: fixed at 50 by default for every generation.
+- `generationCount`: five visible generations, A through E.
+- `candidatesPerGeneration`: 100 candidate UX changes per generation.
+- `totalCandidatesGenerated`: 500 candidate evaluations in the demo path.
+- `generations`: per-generation score, completion, dwell, friction, top
+  candidates, and the promoted candidate used to create the next generation.
+
 ## Synthetic Profiles
 
 There are three complementary profile systems:
@@ -297,6 +344,11 @@ preference match, effort penalty, risk penalty, experience adjustments, and
 seeded sampling. It also explains dwell time using screen complexity, policy
 pressure, price pressure, action uncertainty, profile patience, profile speed,
 and deterministic jitter.
+
+`runSyntheticABTest` and `runSyntheticIterationLab` both use a fixed 50-agent
+budget by default. That budget is sampled across the deterministic profiles,
+tasks, and seeds so every generation is compared against the same style of
+synthetic cohort.
 
 ## Validation
 

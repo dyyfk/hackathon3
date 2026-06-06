@@ -12,10 +12,12 @@ import {
 import { useMemo, useState } from "react";
 import {
   runSyntheticABTest,
+  runSyntheticIterationLab,
   type SyntheticABTestReport,
   type SyntheticABVariantSummary,
   type SyntheticFeatureCandidate,
   type SyntheticImprovementRecommendation,
+  type SyntheticIterationLabReport,
 } from "@/lib/syntheticOptimization";
 import {
   explainSyntheticJourney,
@@ -49,7 +51,17 @@ export default function SyntheticPage() {
   const [selectedStepIndex, setSelectedStepIndex] = useState(0);
 
   const abReport = useMemo(
-    () => runSyntheticABTest({ seedPrefix: seed || "profile-demo" }),
+    () => runSyntheticABTest({ seedPrefix: seed || "profile-demo", agentCount: 50 }),
+    [seed],
+  );
+  const iterationReport = useMemo(
+    () =>
+      runSyntheticIterationLab({
+        seedPrefix: seed || "profile-demo",
+        agentCount: 50,
+        candidatesPerGeneration: 100,
+        generationCount: 5,
+      }),
     [seed],
   );
   const explanation = useMemo(
@@ -77,7 +89,7 @@ export default function SyntheticPage() {
   }
 
   function downloadImprovementJson() {
-    const blob = new Blob([JSON.stringify(abReport, null, 2)], {
+    const blob = new Blob([JSON.stringify({ abReport, iterationReport }, null, 2)], {
       type: "application/json",
     });
     const url = URL.createObjectURL(blob);
@@ -169,6 +181,7 @@ export default function SyntheticPage() {
         </div>
       </section>
 
+      <IterationLabPanel report={iterationReport} />
       <ImprovementPanel report={abReport} onDownload={downloadImprovementJson} />
 
       <section className="synthetic-container synthetic-inspector-layout mx-auto grid max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[360px_minmax(0,1fr)] lg:px-8">
@@ -260,6 +273,139 @@ export default function SyntheticPage() {
         ) : null}
       </section>
     </main>
+  );
+}
+
+function IterationLabPanel({ report }: { report: SyntheticIterationLabReport }) {
+  const firstGeneration = report.generations[0];
+  const lastGeneration = report.generations[report.generations.length - 1];
+
+  return (
+    <section
+      data-testid="synthetic-iteration-lab"
+      className="border-b border-stone-200 bg-white"
+    >
+      <div className="synthetic-container mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <div className="synthetic-heading-row flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#e95f45]">
+              Iteration proof
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-normal">
+              A -&gt; B -&gt; C -&gt; D -&gt; E self-improvement loop
+            </h2>
+          </div>
+          <div className="synthetic-loop-badge">
+            {report.agentCount} synthetic users x {report.totalCandidatesGenerated} candidates
+          </div>
+        </div>
+
+        <div className="synthetic-loop-summary mt-5 grid gap-3 md:grid-cols-4">
+          <SummaryValue label="Agent budget" value={report.agentCount} />
+          <SummaryValue
+            label="Candidates"
+            value={report.totalCandidatesGenerated}
+          />
+          <SummaryValue label="Score lift" value={formatSigned(report.scoreLift)} />
+          <SummaryValue
+            label="Dwell saved"
+            value={formatMs(report.dwellReductionMs)}
+          />
+        </div>
+
+        <div className="synthetic-iteration-grid mt-5">
+          {report.generations.map((generation, index) => {
+            const selected = generation.selectedCandidate;
+            const scoreLift =
+              index === 0
+                ? 0
+                : Number(
+                    (
+                      generation.summary.score -
+                      report.generations[index - 1].summary.score
+                    ).toFixed(2),
+                  );
+
+            return (
+              <article
+                key={generation.generationId}
+                data-testid={`synthetic-generation-${generation.generationId}`}
+                className="synthetic-card synthetic-generation-card rounded-lg border border-stone-200 bg-white p-5"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">
+                      Generation {generation.generationId}
+                    </p>
+                    <h3 className="mt-1 text-lg font-semibold">
+                      {generation.label}
+                    </h3>
+                  </div>
+                  <span className="synthetic-score-pill">
+                    {generation.summary.score}
+                  </span>
+                </div>
+
+                <div className="synthetic-score-bar" aria-hidden="true">
+                  <span style={{ width: `${generation.summary.score}%` }} />
+                </div>
+
+                <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
+                  <SummaryValue
+                    label="Complete"
+                    value={formatPercent(generation.summary.completionRate)}
+                  />
+                  <SummaryValue
+                    label="Friction"
+                    value={formatPercent(
+                      generation.summary.feedback.totalFrictionRate,
+                    )}
+                  />
+                  <SummaryValue
+                    label="Dwell"
+                    value={formatMs(generation.summary.averageDwellMs)}
+                  />
+                  <SummaryValue
+                    label="Delta"
+                    value={index === 0 ? "base" : formatSigned(scoreLift)}
+                  />
+                </dl>
+
+                <div className="synthetic-selected-candidate">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">
+                    {selected ? "Promoted candidate" : "Next backlog"}
+                  </p>
+                  <p className="mt-1 font-semibold">
+                    {(selected ?? generation.recommendedNextCandidate)?.title}
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-stone-600">
+                    {(selected ?? generation.recommendedNextCandidate)?.rationale}
+                  </p>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+
+        <div className="synthetic-loop-footnote">
+          <CheckCircle2 className="size-4" />
+          <span>
+            The same 50-session agent budget evaluates every generation, while
+            each round scores 100 generated UX candidates before promoting the
+            strongest one.
+          </span>
+        </div>
+
+        {firstGeneration && lastGeneration ? (
+          <p className="synthetic-loop-claim">
+            Score moves from {firstGeneration.summary.score} to{" "}
+            {lastGeneration.summary.score}; completion moves from{" "}
+            {formatPercent(firstGeneration.summary.completionRate)} to{" "}
+            {formatPercent(lastGeneration.summary.completionRate)}.
+          </p>
+        ) : null}
+      </div>
+    </section>
   );
 }
 
@@ -1177,6 +1323,99 @@ function SyntheticCriticalStyles() {
         margin-top: 18px;
       }
 
+      [data-synthetic-dashboard] .synthetic-loop-badge {
+        display: inline-flex;
+        align-items: center;
+        width: fit-content;
+        border: 1px solid #f0c8bb;
+        border-radius: 999px;
+        background: #fff3ef;
+        padding: 9px 14px;
+        color: #a33d29;
+        font-size: 0.875rem;
+        font-weight: 800;
+      }
+
+      [data-synthetic-dashboard] .synthetic-loop-summary {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      [data-synthetic-dashboard] .synthetic-iteration-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(180px, 1fr));
+        gap: 12px;
+        margin-top: 20px;
+      }
+
+      [data-synthetic-dashboard] .synthetic-generation-card {
+        min-height: 360px;
+      }
+
+      [data-synthetic-dashboard] .synthetic-score-pill {
+        display: grid;
+        min-width: 48px;
+        height: 48px;
+        place-items: center;
+        border-radius: 999px;
+        background: var(--synthetic-ink);
+        color: #ffffff;
+        font-size: 1rem;
+        font-weight: 850;
+      }
+
+      [data-synthetic-dashboard] .synthetic-score-bar {
+        height: 10px;
+        margin-top: 18px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #eee8e0;
+      }
+
+      [data-synthetic-dashboard] .synthetic-score-bar span {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #e95f45, #1f7a6b);
+      }
+
+      [data-synthetic-dashboard] .synthetic-selected-candidate {
+        margin-top: 16px;
+        border-top: 1px solid var(--synthetic-line);
+        padding-top: 14px;
+      }
+
+      [data-synthetic-dashboard] .synthetic-selected-candidate p:nth-child(2) {
+        color: var(--synthetic-ink);
+        font-size: 0.92rem;
+        line-height: 1.35;
+      }
+
+      [data-synthetic-dashboard] .synthetic-loop-footnote,
+      [data-synthetic-dashboard] .synthetic-loop-claim {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        margin-top: 16px;
+        color: #5c544d;
+        font-size: 0.875rem;
+        line-height: 1.5;
+      }
+
+      [data-synthetic-dashboard] .synthetic-loop-footnote svg {
+        width: 16px;
+        height: 16px;
+        flex: 0 0 16px;
+        color: #1f7a6b;
+      }
+
+      [data-synthetic-dashboard] .synthetic-loop-claim {
+        display: block;
+        margin-top: 8px;
+        font-weight: 700;
+      }
+
       [data-synthetic-dashboard] .synthetic-inspector-layout {
         grid-template-columns: 360px minmax(0, 1fr);
       }
@@ -1448,6 +1687,8 @@ function SyntheticCriticalStyles() {
         [data-synthetic-dashboard] .synthetic-control-grid,
         [data-synthetic-dashboard] .synthetic-score-layout,
         [data-synthetic-dashboard] .synthetic-recommendation-grid,
+        [data-synthetic-dashboard] .synthetic-loop-summary,
+        [data-synthetic-dashboard] .synthetic-iteration-grid,
         [data-synthetic-dashboard] .synthetic-inspector-layout {
           grid-template-columns: 1fr;
         }

@@ -124,6 +124,7 @@ export type SyntheticABTestOptions = {
   taskIds?: SyntheticTaskId[];
   seeds?: string[];
   seedPrefix?: string;
+  agentCount?: number;
 };
 
 type SyntheticABSessionSignals = {
@@ -148,6 +149,66 @@ type SyntheticFeatureDefinition = Omit<
   "confidence" | "evidence" | "source"
 > & {
   themes: string[];
+};
+
+type SyntheticAgentSessionCase = {
+  profileId: string;
+  taskId: SyntheticTaskId;
+  seed: string;
+};
+
+export const syntheticIterationGenerationIds = ["A", "B", "C", "D", "E"] as const;
+
+export type SyntheticIterationGenerationId =
+  (typeof syntheticIterationGenerationIds)[number];
+
+export type SyntheticIterationCandidate = {
+  id: string;
+  candidateNumber: number;
+  title: string;
+  rationale: string;
+  score: number;
+  scoreDelta: number;
+  completionRateDelta: number;
+  dwellReductionMs: number;
+  config: SyntheticImprovedExperienceConfig;
+  appliedRecommendationIds: string[];
+};
+
+export type SyntheticIterationGeneration = {
+  generationId: SyntheticIterationGenerationId;
+  label: string;
+  summary: SyntheticABVariantSummary;
+  candidatesEvaluated: number;
+  topCandidates: SyntheticIterationCandidate[];
+  selectedCandidate?: SyntheticIterationCandidate;
+  recommendedNextCandidate?: SyntheticIterationCandidate;
+};
+
+export type SyntheticIterationLabReport = {
+  seedPrefix: string;
+  agentCount: number;
+  generationCount: number;
+  candidatesPerGeneration: number;
+  totalCandidatesGenerated: number;
+  generations: SyntheticIterationGeneration[];
+  bestGeneration: SyntheticIterationGeneration;
+  scoreLift: number;
+  completionRateLift: number;
+  dwellReductionMs: number;
+};
+
+export type SyntheticIterationLabOptions = SyntheticABTestOptions & {
+  generationCount?: number;
+  candidatesPerGeneration?: number;
+};
+
+type SyntheticIterationRecipe = {
+  id: string;
+  title: string;
+  rationale: string;
+  actionScoreAdjustments?: Partial<Record<SyntheticActionId, number>>;
+  screenDwellMultipliers?: Partial<Record<SyntheticScreen, number>>;
 };
 
 const syntheticFeatureDefinitions: SyntheticFeatureDefinition[] = [
@@ -258,10 +319,12 @@ export function runSyntheticABTest(
 ): SyntheticABTestReport {
   const variants = options.variants ?? syntheticABVariants;
   const seedPrefix = options.seedPrefix ?? "synthetic-ab";
+  const agentCount = options.agentCount ?? 50;
   const summaries = variants.map((variant) =>
     summarizeVariant(variant, {
       ...options,
       seedPrefix,
+      agentCount,
     }),
   );
   const ranked = [...summaries].sort((a, b) => b.score - a.score);
@@ -301,6 +364,456 @@ export function runSyntheticABTest(
   return {
     ...report,
     featureCandidate: buildSyntheticFeatureCandidate(report),
+  };
+}
+
+export function runSyntheticIterationLab(
+  options: SyntheticIterationLabOptions = {},
+): SyntheticIterationLabReport {
+  const seedPrefix = options.seedPrefix ?? "iteration-lab";
+  const agentCount = options.agentCount ?? 50;
+  const generationCount = Math.min(
+    syntheticIterationGenerationIds.length,
+    Math.max(2, options.generationCount ?? syntheticIterationGenerationIds.length),
+  );
+  const candidatesPerGeneration = Math.max(
+    1,
+    options.candidatesPerGeneration ?? 100,
+  );
+  const generationIds = syntheticIterationGenerationIds.slice(0, generationCount);
+  const generations: SyntheticIterationGeneration[] = [];
+  const initialVariant = options.variants?.[0] ?? syntheticABVariants[0];
+  let currentVariant: SyntheticExperienceConfig = relabelIterationVariant(
+    initialVariant,
+    generationIds[0],
+    initialVariant.description ?? "Original task-first booking flow",
+  );
+
+  for (const [generationIndex, generationId] of generationIds.entries()) {
+    const summary = summarizeVariant(currentVariant, {
+      ...options,
+      seedPrefix: `${seedPrefix}:${generationId}:eval`,
+      agentCount,
+    });
+    const rankedCandidates = generateIterationCandidates({
+      base: currentVariant,
+      currentSummary: summary,
+      generationId,
+      generationIndex,
+      count: candidatesPerGeneration,
+      options: {
+        ...options,
+        seedPrefix,
+        agentCount,
+      },
+    });
+    const topCandidates = rankedCandidates.slice(0, 5);
+    const selectedCandidate =
+      generationIndex < generationIds.length - 1 ? topCandidates[0] : undefined;
+
+    generations.push({
+      generationId,
+      label: currentVariant.label,
+      summary,
+      candidatesEvaluated: candidatesPerGeneration,
+      topCandidates,
+      selectedCandidate,
+      recommendedNextCandidate: topCandidates[0],
+    });
+
+    if (selectedCandidate) {
+      const nextGenerationId = generationIds[generationIndex + 1];
+      currentVariant = relabelIterationVariant(
+        selectedCandidate.config,
+        nextGenerationId,
+        selectedCandidate.title,
+      );
+    }
+  }
+
+  const bestGeneration = [...generations].sort(
+    (left, right) => right.summary.score - left.summary.score,
+  )[0];
+  const firstGeneration = generations[0];
+  const lastGeneration = generations[generations.length - 1];
+
+  return {
+    seedPrefix,
+    agentCount,
+    generationCount,
+    candidatesPerGeneration,
+    totalCandidatesGenerated: generationCount * candidatesPerGeneration,
+    generations,
+    bestGeneration,
+    scoreLift: round(lastGeneration.summary.score - firstGeneration.summary.score),
+    completionRateLift: round(
+      lastGeneration.summary.completionRate -
+        firstGeneration.summary.completionRate,
+    ),
+    dwellReductionMs: Math.max(
+      0,
+      Math.round(
+        firstGeneration.summary.averageDwellMs -
+          lastGeneration.summary.averageDwellMs,
+      ),
+    ),
+  };
+}
+
+function relabelIterationVariant(
+  variant: SyntheticExperienceConfig,
+  generationId: SyntheticIterationGenerationId,
+  description: string,
+): SyntheticExperienceConfig {
+  return {
+    ...variant,
+    id: generationId,
+    label: `Variant ${generationId}`,
+    description,
+  };
+}
+
+function generateIterationCandidates({
+  base,
+  currentSummary,
+  generationId,
+  generationIndex,
+  count,
+  options,
+}: {
+  base: SyntheticExperienceConfig;
+  currentSummary: SyntheticABVariantSummary;
+  generationId: SyntheticIterationGenerationId;
+  generationIndex: number;
+  count: number;
+  options: SyntheticABTestOptions & { seedPrefix: string; agentCount: number };
+}): SyntheticIterationCandidate[] {
+  const recipes = iterationRecipes(currentSummary);
+  const candidates: SyntheticIterationCandidate[] = [];
+  const controlConfig: SyntheticImprovedExperienceConfig = clampExperienceConfig({
+    ...base,
+    id: `${generationId.toLowerCase()}_candidate_000`,
+    label: `${base.label} control`,
+    basedOnVariantId: base.id,
+    appliedRecommendationIds: ["control"],
+  });
+
+  candidates.push(
+    scoreIterationCandidate({
+      candidateNumber: 1,
+      title: "Carry forward current winner",
+      rationale: "Control candidate used to prove each promotion beats or equals the current generation.",
+      config: controlConfig,
+      baseline: currentSummary,
+      options,
+    }),
+  );
+
+  for (let index = 1; index < count; index += 1) {
+    const primary = recipes[index % recipes.length];
+    const secondary =
+      index % 3 === 0
+        ? recipes[(index + generationIndex + 2) % recipes.length]
+        : undefined;
+    const tertiary =
+      index % 11 === 0
+        ? recipes[(index + generationIndex + 5) % recipes.length]
+        : undefined;
+    const strength = 0.65 + ((index * 37 + generationIndex * 19) % 61) / 100;
+    const config = buildCandidateConfig({
+      base,
+      generationId,
+      index,
+      strength,
+      recipes: [primary, secondary, tertiary].filter(
+        Boolean,
+      ) as SyntheticIterationRecipe[],
+    });
+
+    candidates.push(
+      scoreIterationCandidate({
+        candidateNumber: index + 1,
+        title: candidateTitle([primary, secondary, tertiary], generationId, index),
+        rationale: candidateRationale(
+          [primary, secondary, tertiary].filter(Boolean) as SyntheticIterationRecipe[],
+          currentSummary,
+        ),
+        config,
+        baseline: currentSummary,
+        options,
+      }),
+    );
+  }
+
+  return candidates.sort((left, right) => {
+    if (right.score !== left.score) return right.score - left.score;
+    if (right.completionRateDelta !== left.completionRateDelta) {
+      return right.completionRateDelta - left.completionRateDelta;
+    }
+    return right.dwellReductionMs - left.dwellReductionMs;
+  });
+}
+
+function iterationRecipes(
+  summary: SyntheticABVariantSummary,
+): SyntheticIterationRecipe[] {
+  const slowScreen: SyntheticScreen = summary.slowestScreen.screen === "success"
+    ? "checkout"
+    : summary.slowestScreen.screen;
+
+  return [
+    {
+      id: "upfront_price_confidence",
+      title: "Upfront price confidence",
+      rationale: "Move total-cost certainty earlier in the comparison and checkout path.",
+      actionScoreAdjustments: {
+        review_price_breakdown: 0.45,
+        confirm_reservation: 0.45,
+        abandon_task: -0.55,
+      },
+      screenDwellMultipliers: {
+        results: 0.94,
+        checkout: 0.8,
+      },
+    },
+    {
+      id: "task_ready_filter_rail",
+      title: "Task-ready filter rail",
+      rationale: "Expose the most likely filters before users need to open a modal.",
+      actionScoreAdjustments: {
+        open_filters: 0.32,
+        apply_task_filters: 0.72,
+        sort_lowest_price: 0.28,
+      },
+      screenDwellMultipliers: {
+        filters: 0.78,
+        results: 0.93,
+      },
+    },
+    {
+      id: "policy_trust_strip",
+      title: "Policy trust strip",
+      rationale: "Put cancellation and trust cues near the listing decision point.",
+      actionScoreAdjustments: {
+        scroll_to_policy: 0.5,
+        reserve_listing: 0.35,
+        back_to_results: -0.25,
+      },
+      screenDwellMultipliers: {
+        detail: 0.84,
+      },
+    },
+    {
+      id: "match_confidence_panel",
+      title: "Match confidence panel",
+      rationale: "Explain why the selected stay fits the current user task.",
+      actionScoreAdjustments: {
+        open_best_listing: 0.48,
+        reserve_listing: 0.24,
+        back_to_results: -0.58,
+      },
+      screenDwellMultipliers: {
+        results: 0.9,
+        detail: 0.91,
+      },
+    },
+    {
+      id: "fast_start_search",
+      title: "Fast-start search defaults",
+      rationale: "Preload the likely search intent so the first meaningful action happens sooner.",
+      actionScoreAdjustments: {
+        start_search: 0.48,
+        open_best_listing: 0.18,
+      },
+      screenDwellMultipliers: {
+        home: 0.76,
+        results: 0.95,
+      },
+    },
+    {
+      id: "checkout_assurance",
+      title: "Checkout assurance lane",
+      rationale: "Keep review, reserve, and confirmation steps legible for cautious users.",
+      actionScoreAdjustments: {
+        reserve_listing: 0.32,
+        review_price_breakdown: 0.36,
+        confirm_reservation: 0.62,
+        abandon_task: -0.7,
+      },
+      screenDwellMultipliers: {
+        checkout: 0.74,
+        success: 0.92,
+      },
+    },
+    {
+      id: `compress_${slowScreen}_screen`,
+      title: `Compress ${humanize(slowScreen)} screen`,
+      rationale: `The current slowest screen is ${humanize(slowScreen)}, so this candidate removes waiting there.`,
+      screenDwellMultipliers: {
+        [slowScreen]: 0.72,
+      },
+    },
+  ];
+}
+
+function buildCandidateConfig({
+  base,
+  generationId,
+  index,
+  strength,
+  recipes,
+}: {
+  base: SyntheticExperienceConfig;
+  generationId: SyntheticIterationGenerationId;
+  index: number;
+  strength: number;
+  recipes: SyntheticIterationRecipe[];
+}): SyntheticImprovedExperienceConfig {
+  const actionScoreAdjustments: Partial<Record<SyntheticActionId, number>> = {
+    ...(base.actionScoreAdjustments ?? {}),
+  };
+  const screenDwellMultipliers: Partial<Record<SyntheticScreen, number>> = {
+    ...(base.screenDwellMultipliers ?? {}),
+  };
+  const appliedRecommendationIds: string[] = [];
+
+  for (const [recipeIndex, recipe] of recipes.entries()) {
+    const weightedStrength = recipeIndex === 0 ? strength : strength * 0.55;
+    appliedRecommendationIds.push(recipe.id);
+    mergeScaledActionAdjustments(
+      actionScoreAdjustments,
+      recipe.actionScoreAdjustments,
+      weightedStrength,
+    );
+    mergeScaledScreenMultipliers(
+      screenDwellMultipliers,
+      recipe.screenDwellMultipliers,
+      weightedStrength,
+    );
+  }
+
+  return clampExperienceConfig({
+    ...base,
+    id: `${generationId.toLowerCase()}_candidate_${String(index).padStart(3, "0")}`,
+    label: `${base.label} candidate ${index}`,
+    description: recipes.map((recipe) => recipe.title).join(" + "),
+    basedOnVariantId: base.id,
+    appliedRecommendationIds,
+    actionScoreAdjustments,
+    screenDwellMultipliers,
+  });
+}
+
+function scoreIterationCandidate({
+  candidateNumber,
+  title,
+  rationale,
+  config,
+  baseline,
+  options,
+}: {
+  candidateNumber: number;
+  title: string;
+  rationale: string;
+  config: SyntheticImprovedExperienceConfig;
+  baseline: SyntheticABVariantSummary;
+  options: SyntheticABTestOptions & { seedPrefix: string; agentCount: number };
+}): SyntheticIterationCandidate {
+  const summary = summarizeVariant(config, {
+    ...options,
+    seedPrefix: `${options.seedPrefix}:${config.id}:candidate`,
+  });
+
+  return {
+    id: config.id,
+    candidateNumber,
+    title,
+    rationale,
+    score: summary.score,
+    scoreDelta: round(summary.score - baseline.score),
+    completionRateDelta: round(summary.completionRate - baseline.completionRate),
+    dwellReductionMs: Math.max(
+      0,
+      Math.round(baseline.averageDwellMs - summary.averageDwellMs),
+    ),
+    config,
+    appliedRecommendationIds: config.appliedRecommendationIds,
+  };
+}
+
+function candidateTitle(
+  recipes: Array<SyntheticIterationRecipe | undefined>,
+  generationId: SyntheticIterationGenerationId,
+  index: number,
+): string {
+  const titles = recipes.filter(Boolean).map((recipe) => recipe?.title);
+  return `Variant ${generationId} candidate ${index}: ${titles.join(" + ")}`;
+}
+
+function candidateRationale(
+  recipes: SyntheticIterationRecipe[],
+  summary: SyntheticABVariantSummary,
+): string {
+  const recipeText = recipes.map((recipe) => recipe.rationale).join(" ");
+  return `${recipeText} Baseline score ${summary.score}, friction ${formatRate(
+    summary.feedback.totalFrictionRate,
+  )}, slowest screen ${humanize(summary.slowestScreen.screen)}.`;
+}
+
+function mergeScaledActionAdjustments(
+  target: Partial<Record<SyntheticActionId, number>>,
+  source: Partial<Record<SyntheticActionId, number>> | undefined,
+  strength: number,
+): void {
+  if (!source) return;
+
+  for (const [actionId, adjustment] of Object.entries(source)) {
+    const key = actionId as SyntheticActionId;
+    target[key] = round(
+      clamp((target[key] ?? 0) + (adjustment ?? 0) * strength, -2.6, 2.6),
+    );
+  }
+}
+
+function mergeScaledScreenMultipliers(
+  target: Partial<Record<SyntheticScreen, number>>,
+  source: Partial<Record<SyntheticScreen, number>> | undefined,
+  strength: number,
+): void {
+  if (!source) return;
+
+  for (const [screen, multiplier] of Object.entries(source)) {
+    const key = screen as SyntheticScreen;
+    const current = target[key] ?? 1;
+    const weightedMultiplier = 1 + ((multiplier ?? 1) - 1) * strength;
+    target[key] = round(clamp(current * weightedMultiplier, 0.58, 1.35));
+  }
+}
+
+function clampExperienceConfig<T extends SyntheticExperienceConfig>(config: T): T {
+  const actionScoreAdjustments: Partial<Record<SyntheticActionId, number>> = {};
+  const screenDwellMultipliers: Partial<Record<SyntheticScreen, number>> = {};
+
+  for (const [actionId, adjustment] of Object.entries(
+    config.actionScoreAdjustments ?? {},
+  )) {
+    actionScoreAdjustments[actionId as SyntheticActionId] = round(
+      clamp(adjustment ?? 0, -2.6, 2.6),
+    );
+  }
+
+  for (const [screen, multiplier] of Object.entries(
+    config.screenDwellMultipliers ?? {},
+  )) {
+    screenDwellMultipliers[screen as SyntheticScreen] = round(
+      clamp(multiplier ?? 1, 0.58, 1.35),
+    );
+  }
+
+  return {
+    ...config,
+    actionScoreAdjustments,
+    screenDwellMultipliers,
   };
 }
 
@@ -566,26 +1079,66 @@ function summarizeVariant(
     options.profileIds ?? syntheticUserProfiles.map((profile) => profile.id);
   const taskIds = options.taskIds ?? syntheticABTaskIds;
   const seeds = options.seeds ?? syntheticABSeeds;
+  const cases = buildSyntheticAgentSessionCases({
+    profileIds,
+    taskIds,
+    seeds,
+    agentCount: options.agentCount ?? 50,
+  });
   const sessions: SyntheticABSessionResult[] = [];
 
-  for (const profileId of profileIds) {
-    for (const taskId of taskIds) {
-      for (const seed of seeds) {
-        sessions.push(
-          classifyJourney(
-            explainSyntheticJourney({
-              profile: profileId,
-              taskId,
-              seed: `${options.seedPrefix}:${variant.id}:${seed}`,
-              experience: variant,
-            }),
-          ),
-        );
-      }
-    }
+  for (const sessionCase of cases) {
+    sessions.push(
+      classifyJourney(
+        explainSyntheticJourney({
+          profile: sessionCase.profileId,
+          taskId: sessionCase.taskId,
+          seed: `${options.seedPrefix}:${variant.id}:${sessionCase.seed}`,
+          experience: variant,
+        }),
+      ),
+    );
   }
 
   return buildVariantSummary(variant, sessions);
+}
+
+function buildSyntheticAgentSessionCases({
+  profileIds,
+  taskIds,
+  seeds,
+  agentCount,
+}: {
+  profileIds: string[];
+  taskIds: SyntheticTaskId[];
+  seeds: string[];
+  agentCount: number;
+}): SyntheticAgentSessionCase[] {
+  const safeProfileIds = profileIds.length > 0
+    ? profileIds
+    : syntheticUserProfiles.map((profile) => profile.id);
+  const safeTaskIds = taskIds.length > 0 ? taskIds : syntheticABTaskIds;
+  const safeSeeds = seeds.length > 0 ? seeds : syntheticABSeeds;
+  const cases: SyntheticAgentSessionCase[] = [];
+
+  for (let index = 0; index < agentCount; index += 1) {
+    const profileId = safeProfileIds[index % safeProfileIds.length];
+    const taskId =
+      safeTaskIds[Math.floor(index / safeProfileIds.length) % safeTaskIds.length];
+    const seed =
+      safeSeeds[
+        Math.floor(index / (safeProfileIds.length * safeTaskIds.length)) %
+          safeSeeds.length
+      ];
+
+    cases.push({
+      profileId,
+      taskId,
+      seed: `${seed}:${index}`,
+    });
+  }
+
+  return cases;
 }
 
 function classifyJourney(
